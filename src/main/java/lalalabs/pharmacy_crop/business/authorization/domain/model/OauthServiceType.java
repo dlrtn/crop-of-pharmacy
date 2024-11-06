@@ -5,6 +5,8 @@ import static java.util.Locale.ENGLISH;
 public enum OauthServiceType {
 
     KAKAO,
+    GOOGLE,
+    APPLE,
     ;
 
     public static OauthServiceType fromName(String type) {
