@@ -2,6 +2,7 @@ package lalalabs.pharmacy_crop.business.authorization.infrastructure.kakao;
 
 import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoMemberResponse;
 import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoToken;
+import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoUriBuilder;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthUser;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.usecase.OauthServiceClient;

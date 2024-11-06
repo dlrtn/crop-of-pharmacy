@@ -1,12 +1,12 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.AuthorizationCodeRequestUriProvider;
+import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoUriBuilder;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.kakao.KakaoUriBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class KakaoAuthorizationCodeRequestUriProvider implements AuthorizationCodeRequestUriProvider {
 
