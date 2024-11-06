@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.domain;
+package lalalabs.pharmacy_crop.business.authorization.domain.common;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.AuthorizationCodeRequestUriProvider;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
 import org.springframework.stereotype.Component;
 
 @Component

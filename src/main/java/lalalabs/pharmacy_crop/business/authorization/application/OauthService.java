@@ -1,9 +1,10 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.AuthorizationCodeRequestUriProviderComposite;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthUser;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.AuthorizationCodeRequestUriProviderComposite;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.OauthServiceClientComposite;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.dto.OIDCPublicKeysResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,9 @@ public class OauthService {
 
     public void login(OauthServiceType serviceType, String code) {
         OauthUser member = oauthServiceClientComposite.fetch(serviceType, code);
+        OIDCPublicKeysResponse oidcPublicKeysResponse = oauthServiceClientComposite.getOIDCPublicKey(serviceType);
 
-        System.out.println(member.id());
-        System.out.println(member.oauthId().oauthServerId());
-        System.out.println(member.oauthId().oauthServer());
-        System.out.println(member.nickname());
+        oidcPublicKeysResponse.print();
 
         // save member
     }

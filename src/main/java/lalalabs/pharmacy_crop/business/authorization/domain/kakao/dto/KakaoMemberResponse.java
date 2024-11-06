@@ -1,12 +1,12 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.kakao;
+package lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto;
 
-import static lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType.KAKAO;
+import static lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType.KAKAO;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthId;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthUser;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthId;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
 
 @JsonNaming(SnakeCaseStrategy.class)
 public record KakaoMemberResponse(

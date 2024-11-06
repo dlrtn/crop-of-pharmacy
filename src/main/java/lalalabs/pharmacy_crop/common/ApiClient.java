@@ -12,6 +12,13 @@ public class ApiClient {
         this.restClient = RestClient.create();
     }
 
+    public <T> T get(String uri, Class<T> responseType) {
+        return restClient.get().uri(uri).retrieve()
+                .onStatus(HttpStatusCode::isError, ((request, response) -> {
+                    throw new RuntimeException(String.valueOf(response.getStatusCode()));
+                })).body(responseType);
+    }
+
     public <T> T get(String uri, Class<T> responseType, String accessToken) {
         return restClient.get().uri(uri).header("Authorization", "Bearer " + accessToken).retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {

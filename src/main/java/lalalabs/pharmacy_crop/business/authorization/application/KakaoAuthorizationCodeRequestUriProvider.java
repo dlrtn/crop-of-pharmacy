@@ -2,7 +2,7 @@ package lalalabs.pharmacy_crop.business.authorization.application;
 
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.AuthorizationCodeRequestUriProvider;
 import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoUriBuilder;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

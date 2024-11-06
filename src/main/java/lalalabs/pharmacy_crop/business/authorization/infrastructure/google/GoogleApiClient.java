@@ -3,8 +3,9 @@ package lalalabs.pharmacy_crop.business.authorization.infrastructure.google;
 import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleMemberResponse;
 import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleToken;
 import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleUriBuilder;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthUser;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.dto.OIDCPublicKeysResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.usecase.OauthServiceClient;
 import lalalabs.pharmacy_crop.common.ApiClient;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,10 @@ public class GoogleApiClient implements OauthServiceClient {
                 GoogleMemberResponse.class, token.accessToken());
 
         return googleMemberResponse.toDomain();
+    }
+
+    @Override
+    public OIDCPublicKeysResponse getOIDCPublicKey() {
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.kakao;
+package lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

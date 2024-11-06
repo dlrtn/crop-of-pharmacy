@@ -1,14 +1,16 @@
 package lalalabs.pharmacy_crop.business.authorization.infrastructure.kakao;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoMemberResponse;
-import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoToken;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
 import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoUriBuilder;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthUser;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto.KakaoMemberResponse;
+import lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto.KakaoToken;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.dto.OIDCPublicKeysResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.usecase.OauthServiceClient;
 import lalalabs.pharmacy_crop.common.ApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -36,5 +38,12 @@ public class KakaoApiClient implements OauthServiceClient {
                 KakaoMemberResponse.class, token.accessToken());
 
         return kakaoMemberResponse.toDomain();
+    }
+
+    @Override
+    @Cacheable(cacheNames = "kakao-oidc-public-key", cacheManager = "oidcCacheManager")
+    public OIDCPublicKeysResponse getOIDCPublicKey() {
+        return apiClient.get(kakaoUriBuilder.buildGetOIDCPublicKeyUri(),
+                OIDCPublicKeysResponse.class);
     }
 }

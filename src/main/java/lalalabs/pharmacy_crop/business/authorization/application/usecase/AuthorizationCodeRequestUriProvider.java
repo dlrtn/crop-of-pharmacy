@@ -1,6 +1,6 @@
 package lalalabs.pharmacy_crop.business.authorization.application.usecase;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
 
 public interface AuthorizationCodeRequestUriProvider {
 

@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.model;
+package lalalabs.pharmacy_crop.business.authorization.domain.common.model;
 
 import static lombok.AccessLevel.PROTECTED;
 

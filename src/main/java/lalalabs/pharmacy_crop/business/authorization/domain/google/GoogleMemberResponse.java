@@ -1,11 +1,11 @@
 package lalalabs.pharmacy_crop.business.authorization.domain.google;
 
-import static lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType.GOOGLE;
+import static lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType.GOOGLE;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthId;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthUser;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthId;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
 
 @JsonNaming(SnakeCaseStrategy.class)
 public record GoogleMemberResponse(

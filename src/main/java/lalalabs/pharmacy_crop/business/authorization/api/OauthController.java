@@ -2,7 +2,7 @@ package lalalabs.pharmacy_crop.business.authorization.api;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
