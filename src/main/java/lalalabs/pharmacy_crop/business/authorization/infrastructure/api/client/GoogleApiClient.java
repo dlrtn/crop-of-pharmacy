@@ -1,7 +1,7 @@
 package lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleMemberResponse;
-import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.GoogleMemberResponse;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.GoogleTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleUriBuilder;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
