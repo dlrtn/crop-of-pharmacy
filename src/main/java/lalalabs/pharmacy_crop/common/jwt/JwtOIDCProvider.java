@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.infrastructure;
+package lalalabs.pharmacy_crop.common.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
-import lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto.OIDCDecodePayload;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,10 +23,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class JwtOIDCProvider {
 
-    private final String KID = "kid";
-
     public String getKidFromUnsignedTokenHeader(String token, String iss, String aud) {
-        return (String) getUnsignedTokenClaims(token, iss, aud).getHeader().get(KID);
+        return (String) getUnsignedTokenClaims(token, iss, aud).getHeader().get("kid");
     }
 
     private Jwt<Header, Claims> getUnsignedTokenClaims(String token, String iss, String aud) {
@@ -44,7 +42,6 @@ public class JwtOIDCProvider {
         }
     }
 
-    // 공개키로 토큰 검증을 시도한다.
     public Jws<Claims> getOIDCTokenJws(String token, String modulus, String exponent) {
         try {
             return Jwts.parserBuilder()
@@ -59,19 +56,19 @@ public class JwtOIDCProvider {
         }
     }
 
-    // OIDCDecodePayload 를 가져온다. 스펙이라 공통으로 사용할 수 있다.
     public OIDCDecodePayload getOIDCTokenBody(String token, String modulus, String exponent) {
         Claims body = getOIDCTokenJws(token, modulus, exponent).getBody();
+
         return new OIDCDecodePayload(
-                body.getIssuer(),
-                body.getAudience(),
                 body.getSubject(),
-                body.get("email", String.class));
+                body.getIssuer(),
+                body.getAudience());
     }
 
     private Key getRSAPublicKey(String modulus, String exponent)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
         byte[] decodeN = Base64.getUrlDecoder().decode(modulus);
         byte[] decodeE = Base64.getUrlDecoder().decode(exponent);
         BigInteger n = new BigInteger(1, decodeN);

@@ -1,6 +1,5 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.common.converter;
+package lalalabs.pharmacy_crop.business.authorization.domain.model;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
 import org.springframework.core.convert.converter.Converter;
 
 public class OauthServiceTypeConverter implements Converter<String, OauthServiceType> {

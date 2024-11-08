@@ -1,29 +1,65 @@
 package lalalabs.pharmacy_crop.business.authorization.domain.kakao;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto.OIDCDecodePayload;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.OauthOIDCHelper;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.dto.OIDCPublicKeysResponse;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.kakao.KakaoApiClient;
+import java.util.Objects;
+import lalalabs.pharmacy_crop.business.authorization.domain.OauthHelper;
+import lalalabs.pharmacy_crop.business.authorization.domain.OauthOIDCHelper;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthTokenEntity;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.KakaoApiClient;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoUnlinkResponse;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OIDCPublicKeysResponse;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-public class KakaoOauthHelper {
+@Component
+public class KakaoOauthHelper implements OauthHelper {
 
     private final KakaoApiClient kakaoOauthClient;
     private final KakaoOauthProperties oauthProperties;
     private final OauthOIDCHelper oauthOIDCHelper;
+    private final OauthTokenRepository oauthTokenRepository;
 
-    public OIDCDecodePayload getOIDCDecodePayload(String token) {
-        // 공개키 목록을 조회한다. 캐싱이 되어있다.
-        OIDCPublicKeysResponse oidcPublicKeysResponse = kakaoOauthClient.getOIDCPublicKey();
+    public OauthServiceType supportServer() {
+        return OauthServiceType.KAKAO;
+    }
+
+    public KakaoTokenDto fetchToken(String code) {
+        return kakaoOauthClient.fetchToken(code);
+    }
+
+    public OauthUserInfoDto fetchUserInfo(OauthTokenDto oauthTokenDto) {
+        OauthUserInfoDto oauthUserInfoDto = kakaoOauthClient.fetchUserInfo(oauthTokenDto.getAccessToken());
+
+        oauthTokenRepository.save(oauthTokenDto.toEntity(oauthUserInfoDto.id()));
+
+        return oauthUserInfoDto;
+    }
+
+    public void unlink(String oauthId) {
+        OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(oauthId)
+                .orElseThrow(() -> new RuntimeException("Failed to find oauth token by oauthId: " + oauthId));
+
+        KakaoUnlinkResponse response = kakaoOauthClient.unlink(oauthTokenEntity.getAccessToken());
+        if (!Objects.equals(response.id(), oauthId)) {
+            throw new RuntimeException("Failed to unlink user from oauth server");
+        }
+
+        oauthTokenRepository.delete(oauthTokenEntity);
+    }
+
+    public OIDCDecodePayload decode(OauthTokenDto kakaoToken) {
+        OIDCPublicKeysResponse oidcPublicKeysResponse = kakaoOauthClient.fetchOIDCPublicKey();
+
         return oauthOIDCHelper.getPayloadFromIdToken(
-                //idToken
-                token,
-                // iss 와 대응되는 값
+                kakaoToken.getIdToken(),
                 oauthProperties.getBaseUrl(),
-                // aud 와 대응되는값
                 oauthProperties.getClientId(),
-                // 공개키 목록
                 oidcPublicKeysResponse);
     }
 }

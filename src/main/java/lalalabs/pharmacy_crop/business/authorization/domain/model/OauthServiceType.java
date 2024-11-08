@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.common.model;
+package lalalabs.pharmacy_crop.business.authorization.domain.model;
 
 import static java.util.Locale.ENGLISH;
 

@@ -1,10 +1,13 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.common.AuthorizationCodeRequestUriProviderComposite;
-import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
-import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.OauthServiceClientComposite;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.dto.OIDCPublicKeysResponse;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
+import lalalabs.pharmacy_crop.business.authorization.domain.AuthorizationCodeRequestUriProviderComposite;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
+import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +16,36 @@ import org.springframework.stereotype.Service;
 public class OauthService {
 
     private final AuthorizationCodeRequestUriProviderComposite uriProviderComposite;
-    private final OauthServiceClientComposite oauthServiceClientComposite;
+    private final OauthHelperComposite oauthHelperComposite;
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
 
-    public String getAuthorizationCodeRequestUri(OauthServiceType serviceType) {
-        return uriProviderComposite.provide(serviceType);
+    public String getAuthorizationCodeRequestUri(OauthServiceType oauthServiceType) {
+        return uriProviderComposite.provide(oauthServiceType);
     }
 
-    public void login(OauthServiceType serviceType, String code) {
-        OauthUser member = oauthServiceClientComposite.fetch(serviceType, code);
-        OIDCPublicKeysResponse oidcPublicKeysResponse = oauthServiceClientComposite.getOIDCPublicKey(serviceType);
+    public JwtTokens login(OauthServiceType oauthServiceType, String authorizationCode) {
+        OauthTokenDto oauthToken = oauthHelperComposite.fetchToken(oauthServiceType, authorizationCode);
 
-        oidcPublicKeysResponse.print();
+        OIDCDecodePayload oidcPayload = oauthHelperComposite.decode(oauthServiceType, oauthToken);
+        String oauthId = oidcPayload.sub();
 
-        // save member
+        OauthUser oauthUser = userRepository.findByOauthId(oauthId, oauthServiceType)
+                .orElseGet(() -> signUpUser(oauthServiceType, oauthToken));
+
+        return tokenService.issueTokensByUserId(oauthUser.getId());
+    }
+
+    private OauthUser signUpUser(OauthServiceType oauthServiceType, OauthTokenDto oauthTokenDto) {
+        OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType,
+                oauthTokenDto);
+        OauthUser newUser = OauthUser.create(oauthUserInfo);
+
+        return userRepository.save(newUser);
+    }
+
+    public void withdrawUser(OauthUser user) {
+        oauthHelperComposite.unlink(user.getOauthId());
+        userRepository.deleteById(user.getId());
     }
 }
