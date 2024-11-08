@@ -11,7 +11,7 @@ public class KakaoUriBuilder {
     private final KakaoOauthProperties properties;
 
     public String buildAuthorizeUri() {
-        return UriComponentsBuilder.fromUriString(properties.getKakaoOauthAuthorizeUri())
+        return UriComponentsBuilder.fromUriString(properties.getAuthorizeCodeUri())
                 .queryParam("response_type", "code")
                 .queryParam("client_id", properties.getClientId())
                 .queryParam("redirect_uri", properties.getRedirectUri())
@@ -35,6 +35,11 @@ public class KakaoUriBuilder {
 
     public String buildGetMemberUri() {
         return UriComponentsBuilder.fromUriString(properties.getUserInfoUri())
+                .toUriString();
+    }
+
+    public String buildUnlinkUri() {
+        return UriComponentsBuilder.fromUriString(properties.getUnlinkUri())
                 .toUriString();
     }
 }
