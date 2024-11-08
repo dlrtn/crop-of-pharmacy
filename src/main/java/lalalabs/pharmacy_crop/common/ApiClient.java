@@ -13,22 +13,57 @@ public class ApiClient {
     }
 
     public <T> T get(String uri, Class<T> responseType) {
-        return restClient.get().uri(uri).retrieve()
+        return restClient
+                .get()
+                .uri(uri)
+                .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {
                     throw new RuntimeException(String.valueOf(response.getStatusCode()));
-                })).body(responseType);
+                }))
+                .body(responseType);
     }
 
     public <T> T get(String uri, Class<T> responseType, String accessToken) {
-        return restClient.get().uri(uri).header("Authorization", "Bearer " + accessToken).retrieve()
+        return restClient
+                .get()
+                .uri(uri)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, ((request, response) -> {
+                    throw new RuntimeException(String.valueOf(response.getStatusCode()));
+                }))
+                .body(responseType);
+    }
+
+    public <T> T post(String uri, Class<T> responseType) {
+        return restClient
+                .post()
+                .uri(uri)
+                .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {
                     throw new RuntimeException(String.valueOf(response.getStatusCode()));
                 })).body(responseType);
     }
 
-    public <T> T post(String uri, Class<T> responseType) {
-        return restClient.post().uri(uri).retrieve().onStatus(HttpStatusCode::isError, ((request, response) -> {
-            throw new RuntimeException(String.valueOf(response.getStatusCode()));
-        })).body(responseType);
+    public <T> T post(String uri, String accessToken, Class<T> responseType) {
+        return restClient
+                .post()
+                .uri(uri)
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, ((request, response) -> {
+                    throw new RuntimeException(String.valueOf(response.getStatusCode()));
+                })).body(responseType);
+    }
+
+    public <T> T reissueTokenApi(String uri, Object dto, Class<T> responseType) {
+        return restClient
+                .post()
+                .uri(uri)
+                .body(dto)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, ((request, response) -> {
+                    throw new RuntimeException(String.valueOf(response.getStatusCode()));
+                })).body(responseType);
     }
 }
