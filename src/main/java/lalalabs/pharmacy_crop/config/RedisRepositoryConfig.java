@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.common.config;
+package lalalabs.pharmacy_crop.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

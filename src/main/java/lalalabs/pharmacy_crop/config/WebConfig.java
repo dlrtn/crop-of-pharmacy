@@ -1,6 +1,6 @@
-package lalalabs.pharmacy_crop.common.config;
+package lalalabs.pharmacy_crop.config;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.common.converter.OauthServiceTypeConverter;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceTypeConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;

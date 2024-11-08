@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.common.config;
+package lalalabs.pharmacy_crop.config;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

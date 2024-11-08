@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.common.config;
+package lalalabs.pharmacy_crop.config;
 
 import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
