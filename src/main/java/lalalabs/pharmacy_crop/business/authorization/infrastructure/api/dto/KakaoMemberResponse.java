@@ -1,12 +1,11 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.kakao.dto;
+package lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto;
 
-import static lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthServiceType.KAKAO;
+import static lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType.KAKAO;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
-import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthId;
-import lalalabs.pharmacy_crop.business.authorization.domain.common.model.OauthUser;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 
 @JsonNaming(SnakeCaseStrategy.class)
 public record KakaoMemberResponse(
@@ -16,10 +15,13 @@ public record KakaoMemberResponse(
         KakaoAccount kakaoAccount
 ) {
 
-    public OauthUser toDomain() {
-        return OauthUser.builder()
-                .oauthId(new OauthId(String.valueOf(id), KAKAO))
+    public OauthUserInfoDto toOauthUserInfoDto() {
+        return OauthUserInfoDto.builder()
+                .id(String.valueOf(id))
+                .oauthServerId(String.valueOf(id))
+                .oauthServiceType(KAKAO.name())
                 .nickname(kakaoAccount.profile.nickname)
+                .picture(kakaoAccount.profile.profileImageUrl)
                 .build();
     }
 
@@ -38,5 +40,6 @@ public record KakaoMemberResponse(
             boolean isDefaultImage
     ) {
     }
+
 
 }
