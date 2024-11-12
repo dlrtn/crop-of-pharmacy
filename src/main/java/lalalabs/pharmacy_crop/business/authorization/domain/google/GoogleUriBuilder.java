@@ -33,4 +33,10 @@ public class GoogleUriBuilder {
         return UriComponentsBuilder.fromUriString(properties.getUserInfoUri())
                 .toUriString();
     }
+
+    public String buildUnlinkUri(String accessToken) {
+        return UriComponentsBuilder.fromUriString(properties.getUnlinkUri())
+                .queryParam("token", accessToken)
+                .toUriString();
+    }
 }
