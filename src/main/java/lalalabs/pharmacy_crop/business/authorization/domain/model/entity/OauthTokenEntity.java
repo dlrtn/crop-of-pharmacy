@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.model;
+package lalalabs.pharmacy_crop.business.authorization.domain.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

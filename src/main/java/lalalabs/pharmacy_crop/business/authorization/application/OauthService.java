@@ -1,7 +1,6 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
 import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
-import lalalabs.pharmacy_crop.business.authorization.domain.AuthorizationCodeRequestUriProviderComposite;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;

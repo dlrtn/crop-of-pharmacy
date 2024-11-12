@@ -25,4 +25,7 @@ public class GoogleOauthProperties {
 
     @Value("${authorization.oauth.google.uri.user-info}")
     private String userInfoUri;
+
+    @Value("${authorization.oauth.google.uri.unlink}")
+    private String unlinkUri;
 }

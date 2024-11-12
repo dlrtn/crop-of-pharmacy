@@ -44,9 +44,6 @@ public class OauthController {
 
     @DeleteMapping("/withdraw")
     public ResponseEntity<Void> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser) {
-        log.info("withdraw user: {}", oauthUser.getAuthorities());
-        log.info("withdraw user: {}", oauthUser.getUser().getOauthId());
-
         oauthService.withdrawUser(oauthUser.getUser());
 
         return ResponseEntity.ok().build();

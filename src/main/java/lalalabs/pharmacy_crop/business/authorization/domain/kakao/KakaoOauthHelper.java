@@ -1,10 +1,10 @@
 package lalalabs.pharmacy_crop.business.authorization.domain.kakao;
 
 import java.util.Objects;
-import lalalabs.pharmacy_crop.business.authorization.domain.OauthHelper;
+import lalalabs.pharmacy_crop.business.authorization.application.usecase.OauthHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.OauthOIDCHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthTokenEntity;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.KakaoApiClient;

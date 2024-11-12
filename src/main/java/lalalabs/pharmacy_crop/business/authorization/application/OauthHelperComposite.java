@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.toMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import lalalabs.pharmacy_crop.business.authorization.domain.OauthHelper;
+import lalalabs.pharmacy_crop.business.authorization.application.usecase.OauthHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthId;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
