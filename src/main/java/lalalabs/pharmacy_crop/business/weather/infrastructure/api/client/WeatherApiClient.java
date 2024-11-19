@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.weather.infrastructure.api.clinet;
+package lalalabs.pharmacy_crop.business.weather.infrastructure.api.client;
 
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.builder.WeatherApiUriBuilder;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;

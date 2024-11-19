@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import lalalabs.pharmacy_crop.business.weather.domain.ForecastAreaCode;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.ForecastParser;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.clinet.WeatherApiClient;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.api.client.WeatherApiClient;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermOverlandForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermOverlandForecastItem.AfternoonShortTermOverlandForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermOverlandForecastItem.MorningShortTermOverlandForecastItem;

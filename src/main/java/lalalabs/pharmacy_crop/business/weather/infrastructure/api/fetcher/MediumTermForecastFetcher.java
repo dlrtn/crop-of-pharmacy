@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import lalalabs.pharmacy_crop.business.weather.domain.ForecastAreaCode;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.ForecastParser;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.clinet.WeatherApiClient;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.api.client.WeatherApiClient;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.MediumTermForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.MediumTermForecastItem.TemperatureForecastData;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.MediumTermForecastItem.WeatherForecastData;

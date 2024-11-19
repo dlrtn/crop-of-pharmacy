@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import lalalabs.pharmacy_crop.business.weather.domain.TodayWeatherForecast;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.BaseDateTimeUtils;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.ForecastConverter;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.clinet.WeatherApiClient;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.api.client.WeatherApiClient;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.WeatherApiDateTime;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermForecastData.CategoryData;

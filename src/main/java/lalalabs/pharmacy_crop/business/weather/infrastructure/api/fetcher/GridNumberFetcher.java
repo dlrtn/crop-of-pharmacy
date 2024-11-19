@@ -1,7 +1,7 @@
 package lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher;
 
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.WeatherFetchProperty;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.clinet.WeatherApiClient;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.api.client.WeatherApiClient;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
 import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
