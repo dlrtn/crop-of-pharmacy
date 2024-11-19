@@ -1,0 +1,40 @@
+name: Deploy to Cafe24
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build project
+        run: ./gradlew clean build
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.CAFE24_SSH_KEY }}
+
+      - name: Upload build files
+        run: |
+          scp -o StrictHostKeyChecking=no build/libs/*.jar developer@1.234.83.196:/home/developer/app/
+
+      - name: Restart application on Cafe24
+        run: |
+          ssh -o StrictHostKeyChecking=no developer@1.234.83.196 << EOF
+            cd /home/developer/app/
+            pkill -f 'java -jar' || true
+            nohup java -jar your-application.jar > app.log 2>&1 &
+          EOF
