@@ -22,7 +22,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Generate test YAML configuration
+        run: echo "${{ secrets.TEST_PROPERTIES }}" > src/test/resources/application-test.yml
+
       - name: Build project
+        env:
+          SPRING_PROFILES_ACTIVE: test
         run: ./gradlew clean build
 
       - name: Set up SSH
