@@ -40,6 +40,7 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
@@ -51,4 +52,10 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	systemProperty "spring.profiles.active", "test"
+	systemProperty "spring.datasource.url", "jdbc:h2:mem:testdb"
+	systemProperty "spring.datasource.username", "sa"
+	systemProperty "spring.datasource.password", ""
+	systemProperty "spring.data.redis.host", "localhost"
+	systemProperty "spring.data.redis.port", "6379"
 }
