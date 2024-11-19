@@ -36,5 +36,5 @@ jobs:
           ssh -o StrictHostKeyChecking=no developer@1.234.83.196 << EOF
             cd /home/developer/app/
             pkill -f 'java -jar' || true
-            nohup java -jar your-application.jar > app.log 2>&1 &
+            nohup java -jar your-application.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
           EOF
