@@ -4,7 +4,6 @@ import java.util.List;
 import lalalabs.pharmacy_crop.common.JwtAuthenticationFilter;
 import lalalabs.pharmacy_crop.common.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,7 +37,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests ->
                         requests
                                 .requestMatchers("/oauth/**", "/oauth/login/**", "/error").anonymous()
-                                .requestMatchers(PathRequest.toH2Console()).permitAll()
                                 .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(entryPoint))
