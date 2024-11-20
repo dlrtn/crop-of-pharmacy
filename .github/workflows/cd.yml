@@ -41,19 +41,36 @@ jobs:
           SPRING_PROFILES_ACTIVE: test
         run: ./gradlew clean build
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Deploy to Cafe24
+        uses: appleboy/ssh-action@v0.1.6
         with:
-          ssh-private-key: ${{ secrets.CAFE24_SSH_KEY }}
+          host: ${{ secrets.CAFE24_HOST }}
+          username: ${{ secrets.CAFE24_USERNAME }}
+          key: ${{ secrets.CAFE24_SSH_KEY }}
+          port: 22
+          script: |
+            mkdir -p /home/developer/app/
+            # 업로드할 파일을 받을 디렉토리 생성
+          envs:
+            SRC_FILE: build/libs/your-application.jar
+            DEST_PATH: /home/developer/app/
 
       - name: Upload build files
-        run: |
-          scp -o StrictHostKeyChecking=no build/libs/*.jar developer@1.234.83.196:/home/developer/app/
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.CAFE24_HOST }}
+          username: ${{ secrets.CAFE24_USERNAME }}
+          key: ${{ secrets.CAFE24_SSH_KEY }}
+          source: "build/libs/*.jar"
+          target: "/home/developer/app/"
 
       - name: Restart application on Cafe24
-        run: |
-          ssh -o StrictHostKeyChecking=no developer@1.234.83.196 << EOF
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.CAFE24_HOST }}
+          username: ${{ secrets.CAFE24_USERNAME }}
+          key: ${{ secrets.CAFE24_SSH_KEY }}
+          script: |
             cd /home/developer/app/
             pkill -f 'java -jar' || true
             nohup java -jar your-application.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
-          EOF
