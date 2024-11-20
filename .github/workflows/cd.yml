@@ -72,4 +72,5 @@ jobs:
           script: |
             cd /home/developer/app/
             pkill -f 'java -jar' || true
-            nohup java -jar your-application.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
+            nohup setsid java -jar your-application.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
+
