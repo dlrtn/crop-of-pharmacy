@@ -55,7 +55,7 @@ jobs:
             mkdir -p /home/developer/app/      
 
       - name: Upload build files
-        uses: appleboy/scp-action@v0.1.1
+        uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.CAFE24_HOST }}
           username: ${{ secrets.CAFE24_USERNAME }}
