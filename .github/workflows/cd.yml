@@ -22,11 +22,19 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Generate test YAML configuration
         run:
-          cat <<EOF > src/test/resources/application-test.yml
-          ${{ secrets.TEST_PROPERTIES }}
-          EOF
+          echo "${{ secrets.TEST_PROPERTIES }}" | base64 --decode > src/main/resources/application-test.yml
 
       - name: Build project
         env:
