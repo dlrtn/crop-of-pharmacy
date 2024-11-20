@@ -52,8 +52,7 @@ jobs:
           key: ${{ secrets.CAFE24_SSH_KEY }}
           port: 22
           script: |
-            mkdir -p /home/developer/app/
-            # 업로드할 파일을 받을 디렉토리 생성        
+            mkdir -p /home/developer/app/      
 
       - name: Upload build files
         uses: appleboy/scp-action@v0.1.1
