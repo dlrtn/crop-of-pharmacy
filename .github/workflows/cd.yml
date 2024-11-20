@@ -43,7 +43,7 @@ jobs:
 
       - name: Deploy to Cafe24
         uses: appleboy/ssh-action@v0.1.6
-        envs:
+        env:
           SRC_FILE: build/libs/your-application.jar
           DEST_PATH: /home/developer/app/
         with:
