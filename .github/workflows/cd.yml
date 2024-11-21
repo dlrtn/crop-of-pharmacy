@@ -44,7 +44,7 @@ jobs:
       - name: Deploy to Cafe24
         uses: appleboy/ssh-action@v0.1.6
         env:
-          SRC_FILE: build/libs/your-application.jar
+          SRC_FILE: build/libs/pharmacy-crop-0.0.1-SNAPSHOT.jar
           DEST_PATH: /home/developer/app/
         with:
           host: ${{ secrets.CAFE24_HOST }}
@@ -72,5 +72,5 @@ jobs:
           script: |
             cd /home/developer/app/
             pkill -f 'java -jar' || true
-            nohup setsid java -jar your-application.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
+            nohup setsid java -jar pharmacy-crop-0.0.1-SNAPSHOT.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
 
