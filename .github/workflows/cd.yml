@@ -62,7 +62,7 @@ jobs:
           username: ${{ secrets.CAFE24_USERNAME }}
           key: ${{ secrets.CAFE24_SSH_KEY }}
           script: |
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PUBLIC_KEY }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/pharmacy-crop:latest
             docker stop pharmacy-crop || true
             docker rm pharmacy-crop || true
