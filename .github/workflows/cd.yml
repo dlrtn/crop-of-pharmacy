@@ -66,4 +66,3 @@ jobs:
             docker stop pharmacy-crop || true
             docker rm pharmacy-crop || true
             docker run -d --name pharmacy-crop -p 8080:8080 -v /home/developer/config:/app/config username/pharmacy-crop:latest
-
