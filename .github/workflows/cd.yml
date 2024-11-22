@@ -49,11 +49,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t username/pharmacy-crop:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pharmacy-crop:latest .
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push username/pharmacy-crop:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/pharmacy-crop:latest
 
       - name: Deploy to Cafe24
         uses: appleboy/ssh-action@v0.1.6
