@@ -65,4 +65,4 @@ jobs:
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PUBLIC_KEY }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/pharmacy-crop:latest
             docker ps -aq --filter "name=pharmacy-crop" | grep -q . && docker stop pharmacy-crop && docker rm pharmacy-crop || true
-            docker run -d --name pharmacy-crop -p 8080:8080 -v /home/developer/config:/app/config ${{ secrets.DOCKER_USERNAME }}/pharmacy-crop:latest
+            docker run -d --name pharmacy-crop -p 8080:8080 -v /home/developer/config:/app/config ${{ secrets.DOCKER_USERNAME }}/pharmacy-crop:latest --spring.config.additional-location=file:/app/config/
