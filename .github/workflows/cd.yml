@@ -41,36 +41,29 @@ jobs:
           SPRING_PROFILES_ACTIVE: test
         run: ./gradlew clean build
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PUBLIC_KEY }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t username/pharmacy-crop:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push username/pharmacy-crop:latest
+
       - name: Deploy to Cafe24
         uses: appleboy/ssh-action@v0.1.6
-        env:
-          SRC_FILE: build/libs/pharmacy-crop-0.0.1-SNAPSHOT.jar
-          DEST_PATH: /home/developer/app/
-        with:
-          host: ${{ secrets.CAFE24_HOST }}
-          username: ${{ secrets.CAFE24_USERNAME }}
-          key: ${{ secrets.CAFE24_SSH_KEY }}
-          port: 22
-          script: |
-            mkdir -p /home/developer/app/      
-
-      - name: Upload build files
-        uses: appleboy/scp-action@v0.1.3
-        with:
-          host: ${{ secrets.CAFE24_HOST }}
-          username: ${{ secrets.CAFE24_USERNAME }}
-          key: ${{ secrets.CAFE24_SSH_KEY }}
-          source: "build/libs/*.jar"
-          target: "/home/developer/app/"
-
-      - name: Restart application on Cafe24
-        uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.CAFE24_HOST }}
           username: ${{ secrets.CAFE24_USERNAME }}
           key: ${{ secrets.CAFE24_SSH_KEY }}
           script: |
-            cd /home/developer/app/
-            pkill -f 'java -jar' || true
-            nohup setsid java -jar pharmacy-crop-0.0.1-SNAPSHOT.jar --spring.config.additional-location=/home/developer/config/ > app.log 2>&1 &
+            docker pull username/pharmacy-crop:latest
+            docker stop pharmacy-crop || true
+            docker rm pharmacy-crop || true
+            docker run -d --name pharmacy-crop -p 8080:8080 -v /home/developer/config:/app/config username/pharmacy-crop:latest
 
