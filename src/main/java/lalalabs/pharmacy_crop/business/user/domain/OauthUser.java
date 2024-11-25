@@ -49,11 +49,7 @@ public class OauthUser extends BaseTimeEntity {
                 .build();
     }
 
-    public void print() {
-        System.out.println(id);
-        System.out.println(oauthId.getOauthServiceType());
-        System.out.println(oauthId.getOauthServerId());
-        System.out.println(nickname);
-        System.out.println(picture);
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
