@@ -54,4 +54,10 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty "spring.profiles.active", "test"
+    systemProperty "spring.datasource.url", "jdbc:h2:mem:testdb"
+    systemProperty "spring.datasource.username", "sa"
+    systemProperty "spring.datasource.password", ""
+    systemProperty "spring.data.redis.host", "localhost"
+    systemProperty "spring.data.redis.port", "6379"
 }
