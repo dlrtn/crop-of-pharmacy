@@ -12,8 +12,6 @@ public class UserQueryService {
     private final UserRepository userRepository;
 
     public OauthUser findByUserId(String userId) {
-        return userRepository.findById(userId).orElseGet(() -> {
-            throw new IllegalArgumentException("User not found");
-        });
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }
