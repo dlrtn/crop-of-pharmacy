@@ -18,5 +18,4 @@ public interface UserRepository extends JpaRepository<OauthUser, String> {
 
     @Query("SELECT u FROM OauthUser u WHERE u.oauthId.oauthServerId = :oauthServerId AND u.oauthId.oauthServiceType = :oauthServiceType")
     Optional<OauthUser> findByOauthId(@Param("oauthServerId") String oauthServerId, @Param("oauthServiceType") OauthServiceType oauthServiceType);
-
 }

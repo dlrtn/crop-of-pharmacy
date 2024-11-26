@@ -14,5 +14,4 @@ public class TokenService {
     public JwtTokens issueTokensByUserId(String userId) {
         return jwtUtils.issueTokens(userId);
     }
-
 }

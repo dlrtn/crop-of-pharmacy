@@ -7,5 +7,4 @@ public interface AuthorizationCodeRequestUriProvider {
     OauthServiceType supportServer();
 
     String provide();
-
 }
