@@ -10,6 +10,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class ForecastAreaCode {
     private String code;
+    private String generalCode;
     private String name;
     private Coordinate coordinate;
 }

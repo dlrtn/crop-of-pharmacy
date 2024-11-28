@@ -3,6 +3,7 @@ package lalalabs.pharmacy_crop.business.weather.infrastructure.api.builder;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.WeatherFetchProperty;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.WeatherApiDateTime;
+import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,6 +17,14 @@ public class WeatherApiUriBuilder {
     private UriComponentsBuilder initializeUriBuilder(String baseUri) {
         return UriComponentsBuilder.fromUriString(baseUri)
                 .queryParam("authKey", weatherFetchProperty.getEncodingKey());
+    }
+
+    public String buildGridNumberUri(Coordinate coordinate) {
+        return UriComponentsBuilder.fromUriString(weatherFetchProperty.getGridNumberUri())
+                .queryParam("lon", coordinate.getLongitude())
+                .queryParam("lat", coordinate.getLatitude())
+                .queryParam("authKey", weatherFetchProperty.getEncodingKey())
+                .toUriString();
     }
 
     public String buildShortTermForecastUri(ForecastPoint forecastPoint, WeatherApiDateTime weatherApiDateTime) {
@@ -38,7 +47,7 @@ public class WeatherApiUriBuilder {
 
     public String buildMediumTermWeatherForecastUri(String regionCode) {
         return initializeUriBuilder(weatherFetchProperty.getMediumTermWeatherUri())
-                .queryParam("reg", "11" + regionCode.charAt(2) + "00000")
+                .queryParam("reg", regionCode)
                 .toUriString();
     }
 

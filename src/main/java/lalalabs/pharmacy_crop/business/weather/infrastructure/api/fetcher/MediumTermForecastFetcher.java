@@ -23,18 +23,14 @@ public class MediumTermForecastFetcher implements WeatherInformationFetcher {
 
     @Override
     public Map<LocalDate, MediumTermForecastItem> fetchWeatherInformation(ForecastAreaCode forecastAreaCode) {
-        Map<LocalDate, MediumTermForecastItem> data = getMediumTermForecastMap(forecastAreaCode.getCode());
-
-        data.forEach((dateTime, item) -> log.info("Medium term forecast for {}: {}", dateTime, item));
-
-        return data;
+        return getMediumTermForecastMap(forecastAreaCode);
     }
 
-    private Map<LocalDate, MediumTermForecastItem> getMediumTermForecastMap(String forecastAreaCode) {
+    private Map<LocalDate, MediumTermForecastItem> getMediumTermForecastMap(ForecastAreaCode forecastAreaCode) {
         LocalDate cutOffTime = LocalDate.now().plusDays(7);
 
-        Map<LocalDate, TemperatureForecastData> forecastDataMap = getTemperatureDataMap(forecastAreaCode);
-        Map<LocalDate, WeatherForecastData> weatherDataMap = getWeatherDataMap(forecastAreaCode);
+        Map<LocalDate, TemperatureForecastData> forecastDataMap = getTemperatureDataMap(forecastAreaCode.getCode());
+        Map<LocalDate, WeatherForecastData> weatherDataMap = getWeatherDataMap(forecastAreaCode.getGeneralCode());
 
         Map<LocalDate, MediumTermForecastItem> resultMap = new ConcurrentSkipListMap<>();
         weatherDataMap.forEach((dateTime, weatherData) -> {

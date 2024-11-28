@@ -4,6 +4,7 @@ import lalalabs.pharmacy_crop.business.weather.infrastructure.api.builder.Weathe
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermWeatherApiResponse;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.WeatherApiDateTime;
+import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -27,10 +28,10 @@ public class WeatherApiClient {
                 .body(ShortTermWeatherApiResponse.class);
     }
 
-    public String getGridNumber(String uri) {
+    public String getGridNumber(Coordinate coordinate) {
         return restClient
                 .get()
-                .uri(uri)
+                .uri(weatherApiUriBuilder.buildGridNumberUri(coordinate))
                 .header("Content-Type", "text/plain")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {

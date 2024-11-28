@@ -33,14 +33,13 @@ public class ShortTermForecastFetcher implements WeatherInformationFetcher {
         Map<LocalDate, AfternoonShortTermOverlandForecastItem> afternoonData = getAfternoonData(response);
 
         Map<LocalDate, ShortTermOverlandForecastItem> result = new TreeMap<>();
-        for (LocalDate dateTime : morningData.keySet()) {
+        morningData.keySet().forEach(dateTime -> {
             MorningShortTermOverlandForecastItem morning = morningData.get(dateTime);
             AfternoonShortTermOverlandForecastItem afternoon = afternoonData.get(dateTime);
 
             ShortTermOverlandForecastItem item = ShortTermOverlandForecastItem.createNew(morning, afternoon);
-
             result.put(dateTime, item);
-        }
+        });
 
         return result;
     }
