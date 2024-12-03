@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 public class WeatherFetchProperty {
+
     @Value("${forecast.uri.short-term.detail}")
     private String shortTermUri;
 

@@ -40,10 +40,10 @@ public class WeatherApiClient {
                 .body(String.class);
     }
 
-    public String getMediumTermWeatherForecast(String regionCode) {
+    public String getMediumTermWeatherForecast() {
         return restClient
                 .get()
-                .uri(weatherApiUriBuilder.buildMediumTermWeatherForecastUri(regionCode))
+                .uri(weatherApiUriBuilder.buildMediumTermWeatherForecastUri())
                 .header("Content-Type", "text/plain")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {
@@ -52,10 +52,10 @@ public class WeatherApiClient {
                 .body(String.class);
     }
 
-    public String getMediumTermTemperatureForecast(String regionCode) {
+    public String getMediumTermTemperatureForecast() {
         return restClient
                 .get()
-                .uri(weatherApiUriBuilder.buildMediumTermTemperatureForecastUri(regionCode))
+                .uri(weatherApiUriBuilder.buildMediumTermTemperatureForecastUri())
                 .header("Content-Type", "text/plain")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {
@@ -64,10 +64,10 @@ public class WeatherApiClient {
                 .body(String.class);
     }
 
-    public String getShortOverlandForecast(String regionCode) {
+    public String getShortOverlandForecast() {
         return restClient
                 .get()
-                .uri(weatherApiUriBuilder.buildShortTermOverlandForecastUri(regionCode))
+                .uri(weatherApiUriBuilder.buildShortTermOverlandForecastUri())
                 .header("Content-Type", "text/plain")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {

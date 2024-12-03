@@ -39,21 +39,18 @@ public class WeatherApiUriBuilder {
                 .toUriString();
     }
 
-    public String buildMediumTermTemperatureForecastUri(String regionCode) {
+    public String buildMediumTermTemperatureForecastUri() {
         return initializeUriBuilder(weatherFetchProperty.getMediumTermTemperatureUri())
-                .queryParam("reg", regionCode)
                 .toUriString();
     }
 
-    public String buildMediumTermWeatherForecastUri(String regionCode) {
+    public String buildMediumTermWeatherForecastUri() {
         return initializeUriBuilder(weatherFetchProperty.getMediumTermWeatherUri())
-                .queryParam("reg", regionCode)
                 .toUriString();
     }
 
-    public String buildShortTermOverlandForecastUri(String regionCode) {
+    public String buildShortTermOverlandForecastUri() {
         return initializeUriBuilder(weatherFetchProperty.getShortTermOverlandForecastUri())
-                .queryParam("reg", regionCode)
                 .toUriString();
     }
 }

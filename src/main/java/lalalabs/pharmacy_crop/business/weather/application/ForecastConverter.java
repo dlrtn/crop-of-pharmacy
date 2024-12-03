@@ -10,10 +10,14 @@ import lalalabs.pharmacy_crop.business.weather.api.dto.TodayWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.domain.type.PrecipitationType;
 import lalalabs.pharmacy_crop.business.weather.domain.type.SkyType;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.api.ForecastParser;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.MediumTermForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermForecastData.CategoryData;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermOverlandForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermWeatherApiResponse.ShortTermForecastItem;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumTemperatureForecast;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumWeatherForecast;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortTermWeatherForecast;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ForecastConverter {
     private final ForecastGrouper forecastGrouper;
+    private final ForecastParser forecastParser;
 
     private <T> T findValue(List<CategoryData> categories, String category, Function<String, T> converter,
                             T defaultValue) {
@@ -112,5 +117,26 @@ public class ForecastConverter {
                     );
                 })
                 .toList();
+    }
+
+    public List<MediumTemperatureForecast> convertMediumTemperatureForecast(String response) {
+        return forecastParser.parseTemperatureForecast(response);
+    }
+
+    public List<MediumWeatherForecast> convertMediumWeatherForecast(String response) {
+        return forecastParser.parseWeatherForecast(response);
+    }
+
+    public List<WeeklyWeatherForecastDto> convertWeeklyWeatherForecast(List<MediumWeatherForecast> weatherForecast,
+                                                                       List<MediumTemperatureForecast> temperatureForecast) {
+        // just logging
+        weatherForecast.forEach(System.out::println);
+        temperatureForecast.forEach(System.out::println);
+
+        return List.of();
+    }
+
+    public List<ShortTermWeatherForecast> convertShortTermWeatherForecast(String response) {
+        return null;
     }
 }
