@@ -1,12 +1,12 @@
 package lalalabs.pharmacy_crop.business.weather.infrastructure.repository;
 
 import java.util.List;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortTermWeatherForecast;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortForecast;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ShortTermWeatherForecastRepository extends JpaRepository<ShortTermWeatherForecast, Long> {
+public interface ShortTermWeatherForecastRepository extends JpaRepository<ShortForecast, Long> {
 
     boolean existsByRegId(String regId);
 
-    List<ShortTermWeatherForecast> findByRegId(String regId);
+    List<ShortForecast> findByRegId(String regId);
 }

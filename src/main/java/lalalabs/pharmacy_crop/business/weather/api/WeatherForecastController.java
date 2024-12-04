@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.weather.api.dto.TodayWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.application.WeatherForecastService;
@@ -15,7 +14,6 @@ import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,9 +33,9 @@ public class WeatherForecastController {
                     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = TodayWeatherForecastDto.class))),
                     @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             })
-    public ResponseEntity<Object> getTodayWeather(@AuthenticationPrincipal OauthUser oauthUser,
-                                                  @Parameter(description = "위도", required = true) @RequestParam double latitude,
-                                                  @Parameter(description = "경도", required = true) @RequestParam double longitude) {
+    public ResponseEntity<Object> getTodayWeather(
+            @Parameter(description = "위도", required = true) @RequestParam double latitude,
+            @Parameter(description = "경도", required = true) @RequestParam double longitude) {
         Coordinate coordinate = new Coordinate(latitude, longitude);
 
         TodayWeatherForecastDto todayWeatherForecast = weatherForecastService.getTodayWeatherForecast(coordinate);
@@ -52,9 +50,9 @@ public class WeatherForecastController {
                     @ApiResponse(responseCode = "400", description = "잘못된 요청")
             }
     )
-    public ResponseEntity<Object> getWeeklyWeather(@AuthenticationPrincipal OauthUser oauthUser,
-                                                   @Parameter(description = "위도", required = true) @RequestParam double latitude,
-                                                   @Parameter(description = "경도", required = true) @RequestParam double longitude) {
+    public ResponseEntity<Object> getWeeklyWeather(
+            @Parameter(description = "위도", required = true) @RequestParam double latitude,
+            @Parameter(description = "경도", required = true) @RequestParam double longitude) {
         Coordinate coordinate = new Coordinate(latitude, longitude);
 
         List<WeeklyWeatherForecastDto> weeklyWeatherForecast = weatherForecastService.getWeeklyWeatherForecast(

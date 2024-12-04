@@ -27,10 +27,6 @@ public class OauthHelperComposite {
                 ));
     }
 
-    public OauthTokenDto fetchToken(OauthServiceType serviceType, String code) {
-        return getHelper(serviceType).fetchToken(code);
-    }
-
     public OIDCDecodePayload decode(OauthServiceType serviceType, OauthTokenDto oauthTokenDto) {
         return getHelper(serviceType).decode(oauthTokenDto);
     }

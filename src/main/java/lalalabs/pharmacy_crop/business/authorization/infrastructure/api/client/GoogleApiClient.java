@@ -3,7 +3,6 @@ package lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client;
 import lalalabs.pharmacy_crop.business.authorization.domain.google.GoogleUriBuilder;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.GoogleMemberResponse;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.GoogleTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.common.ApiClient;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +16,6 @@ public class GoogleApiClient {
 
     private final ApiClient apiClient;
     private final GoogleUriBuilder googleUriBuilder;
-
-    public GoogleTokenDto fetchToken(String code) {
-        String uri = googleUriBuilder.buildGetTokenUri(code);
-
-        return apiClient.post(uri, GoogleTokenDto.class);
-    }
 
     public OauthUserInfoDto fetchUserInfo(OauthTokenDto oauthTokenDto) {
         GoogleMemberResponse googleMemberResponse = apiClient.get(googleUriBuilder.buildGetMemberUri(),

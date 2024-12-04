@@ -1,10 +1,8 @@
 package lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client;
 
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoMemberResponse;
-import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoOauthProperties;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoUriBuilder;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoMemberResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoUnlinkResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OIDCPublicKeysResponse;
 import lalalabs.pharmacy_crop.common.ApiClient;
@@ -20,13 +18,6 @@ public class KakaoApiClient {
 
     private final ApiClient apiClient;
     private final KakaoUriBuilder kakaoUriBuilder;
-    private final KakaoOauthProperties properties;
-
-    public KakaoTokenDto fetchToken(String code) {
-        String uri = kakaoUriBuilder.buildGetTokenUri(code);
-
-        return apiClient.post(uri, KakaoTokenDto.class);
-    }
 
     public OauthUserInfoDto fetchUserInfo(String accessToken) {
         KakaoMemberResponse kakaoMemberResponse = apiClient.get(kakaoUriBuilder.buildGetMemberUri(),

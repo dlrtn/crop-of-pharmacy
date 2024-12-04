@@ -5,6 +5,7 @@ import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceTy
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,23 +15,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OauthService {
 
-    private final AuthorizationCodeRequestUriProviderComposite uriProviderComposite;
     private final OauthHelperComposite oauthHelperComposite;
     private final UserRepository userRepository;
+    private final OauthTokenRepository oauthTokenRepository;
     private final TokenService tokenService;
 
-    public String getAuthorizationCodeRequestUri(OauthServiceType oauthServiceType) {
-        return uriProviderComposite.provide(oauthServiceType);
-    }
-
-    public JwtTokens login(OauthServiceType oauthServiceType, String authorizationCode) {
-        OauthTokenDto oauthToken = oauthHelperComposite.fetchToken(oauthServiceType, authorizationCode);
-
+    public JwtTokens login(OauthServiceType oauthServiceType, OauthTokenDto oauthToken) {
         OIDCDecodePayload oidcPayload = oauthHelperComposite.decode(oauthServiceType, oauthToken);
         String oauthId = oidcPayload.sub();
 
         OauthUser oauthUser = userRepository.findByOauthId(oauthId, oauthServiceType)
                 .orElseGet(() -> signUpUser(oauthServiceType, oauthToken));
+        oauthTokenRepository.save(oauthToken.toEntity(oauthUser.getId()));
 
         return tokenService.issueTokensByUserId(oauthUser.getId());
     }

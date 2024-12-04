@@ -8,7 +8,6 @@ import lalalabs.pharmacy_crop.business.weather.domain.ForecastAreaCodeResolver;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermWeatherApiResponse.ShortTermForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher.GridNumberFetcher;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher.ShortTermForecastFetcher;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher.TodayTermForecastFetcher;
 import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ public class WeatherForecastService {
     private final ForecastAreaCodeResolver forecastAreaCodeResolver;
     private final GridNumberFetcher gridNumberFetcher;
     private final TodayTermForecastFetcher todayTermForecastFetcher;
-    private final ShortTermForecastFetcher shortTermForecastFetcher;
     private final ForecastConverter forecastConverter;
     private final WeeklyForecastManager weeklyForecastManager;
 
@@ -36,13 +34,9 @@ public class WeatherForecastService {
         return forecastConverter.convert(shortTermForecastItemList);
     }
 
-    // todo : 캐시 적용
     public List<WeeklyWeatherForecastDto> getWeeklyWeatherForecast(Coordinate coordinate) {
         ForecastAreaCode forecastAreaCode = forecastAreaCodeResolver.resolve(coordinate);
 
-        List<WeeklyWeatherForecastDto> weeklyWeatherForecastDtoList = weeklyForecastManager.getWeeklyWeatherForecast(
-                forecastAreaCode.getCode());
-
-        return List.of();
+        return weeklyForecastManager.getWeeklyWeatherForecast(forecastAreaCode);
     }
 }

@@ -4,11 +4,10 @@ import java.util.Objects;
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.OauthHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.OauthOIDCHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.KakaoApiClient;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoUnlinkResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OIDCPublicKeysResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
@@ -29,16 +28,8 @@ public class KakaoOauthHelper implements OauthHelper {
         return OauthServiceType.KAKAO;
     }
 
-    public KakaoTokenDto fetchToken(String code) {
-        return kakaoOauthClient.fetchToken(code);
-    }
-
     public OauthUserInfoDto fetchUserInfo(OauthTokenDto oauthTokenDto) {
-        OauthUserInfoDto oauthUserInfoDto = kakaoOauthClient.fetchUserInfo(oauthTokenDto.getAccessToken());
-
-        oauthTokenRepository.save(oauthTokenDto.toEntity(oauthUserInfoDto.id()));
-
-        return oauthUserInfoDto;
+        return kakaoOauthClient.fetchUserInfo(oauthTokenDto.getAccessToken());
     }
 
     public void unlink(String oauthId) {

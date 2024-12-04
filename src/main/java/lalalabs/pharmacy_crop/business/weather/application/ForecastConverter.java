@@ -11,22 +11,26 @@ import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.domain.type.PrecipitationType;
 import lalalabs.pharmacy_crop.business.weather.domain.type.SkyType;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.ForecastParser;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.MediumTermForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermForecastData.CategoryData;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermOverlandForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ShortTermWeatherApiResponse.ShortTermForecastItem;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumTemperatureForecast;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumWeatherForecast;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortTermWeatherForecast;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortForecast;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ForecastConverter {
     private final ForecastGrouper forecastGrouper;
     private final ForecastParser forecastParser;
+
+    public List<ShortForecast> convertShortTermWeatherForecast(String response) {
+        return forecastParser.parseShortTermWeatherForecast(response);
+    }
 
     private <T> T findValue(List<CategoryData> categories, String category, Function<String, T> converter,
                             T defaultValue) {
@@ -72,53 +76,6 @@ public class ForecastConverter {
                 .orElse(-999.0);
     }
 
-    public List<WeeklyWeatherForecastDto> convertWeeklyForecast(
-            Map<LocalDate, ShortTermOverlandForecastItem> shortTermOverlandForecastItemMap,
-            Map<LocalDate, MediumTermForecastItem> mediumTermForecastItemMap) {
-        List<WeeklyWeatherForecastDto> weeklyWeatherForecast = new LinkedList<>();
-
-        weeklyWeatherForecast.addAll(convertShortTermOverlandToWeeklyForecast(shortTermOverlandForecastItemMap));
-        weeklyWeatherForecast.addAll(convertMediumTermToWeeklyForecast(mediumTermForecastItemMap));
-
-        return weeklyWeatherForecast;
-    }
-
-    private List<WeeklyWeatherForecastDto> convertShortTermOverlandToWeeklyForecast(
-            Map<LocalDate, ShortTermOverlandForecastItem> shortTermOverlandForecastItem) {
-        return shortTermOverlandForecastItem.keySet().stream()
-                .map(date -> {
-                    ShortTermOverlandForecastItem forecastItem = shortTermOverlandForecastItem.get(date);
-
-                    return new WeeklyWeatherForecastDto(
-                            date.getDayOfWeek().getValue(),
-                            forecastItem.maxTemperature(),
-                            forecastItem.minTemperature(),
-                            SkyType.fromShortTermOverlandForecastCode(forecastItem.sky()),
-                            forecastItem.rainProbability(),
-                            PrecipitationType.fromCode(forecastItem.precipitation())
-                    );
-                })
-                .toList();
-    }
-
-    private List<WeeklyWeatherForecastDto> convertMediumTermToWeeklyForecast(
-            Map<LocalDate, MediumTermForecastItem> mediumTermForecastItem) {
-        return mediumTermForecastItem.keySet().stream()
-                .map(date -> {
-                    MediumTermForecastItem forecastItem = mediumTermForecastItem.get(date);
-
-                    return new WeeklyWeatherForecastDto(
-                            date.getDayOfWeek().getValue(),
-                            forecastItem.maxTemperature(),
-                            forecastItem.minTemperature(),
-                            SkyType.fromMediumTermForecastCode(forecastItem.sky()),
-                            forecastItem.rainProbability(),
-                            PrecipitationType.fromMediumForecastCode(forecastItem.precipitation())
-                    );
-                })
-                .toList();
-    }
-
     public List<MediumTemperatureForecast> convertMediumTemperatureForecast(String response) {
         return forecastParser.parseTemperatureForecast(response);
     }
@@ -127,16 +84,81 @@ public class ForecastConverter {
         return forecastParser.parseWeatherForecast(response);
     }
 
-    public List<WeeklyWeatherForecastDto> convertWeeklyWeatherForecast(List<MediumWeatherForecast> weatherForecast,
-                                                                       List<MediumTemperatureForecast> temperatureForecast) {
-        // just logging
-        weatherForecast.forEach(System.out::println);
-        temperatureForecast.forEach(System.out::println);
+    public List<WeeklyWeatherForecastDto> convertWeeklyWeatherForecast(
+            List<ShortForecast> shortForecast,
+            List<MediumWeatherForecast> weatherForecast,
+            List<MediumTemperatureForecast> temperatureForecast) {
+        List<WeeklyWeatherForecastDto> weeklyWeatherForecast = convertShortForecastToWeeklyForecast(shortForecast);
 
-        return List.of();
+        List<WeeklyWeatherForecastDto> threeToSevenDaysForecast = convertMediumWeatherForecastToWeeklyForecast(
+                weatherForecast, temperatureForecast);
+
+        weeklyWeatherForecast.addAll(threeToSevenDaysForecast);
+
+        return weeklyWeatherForecast;
     }
 
-    public List<ShortTermWeatherForecast> convertShortTermWeatherForecast(String response) {
-        return null;
+    private List<WeeklyWeatherForecastDto> convertShortForecastToWeeklyForecast(List<ShortForecast> shortForecast) {
+        List<ShortForecast> midnights = shortForecast.stream()
+                .filter(forecast -> forecast.getTmEf().getHour() == 0)
+                .filter(forecast -> forecast.getTmEf().isAfter(LocalDate.now().atStartOfDay()))
+                .toList();
+
+        List<ShortForecast> noons = shortForecast.stream()
+                .filter(forecast -> forecast.getTmEf().getHour() == 12)
+                .filter(forecast -> forecast.getTmEf().isAfter(LocalDate.now().atStartOfDay()))
+                .toList();
+
+        List<WeeklyWeatherForecastDto> weeklyWeatherForecast = new LinkedList<>();
+
+        for (int i = 0; i < midnights.size(); i++) {
+            ShortForecast midnight = midnights.get(i);
+            ShortForecast noon = noons.get(i);
+
+            WeeklyWeatherForecastDto weeklyForecast = new WeeklyWeatherForecastDto(
+                    midnight.getTmEf().getDayOfMonth(),
+                    noon.getTemperature(),
+                    midnight.getTemperature(),
+                    SkyType.fromShortTermOverlandForecastCode(noon.getSky()),
+                    noon.getRnSt(),
+                    PrecipitationType.fromCode(noon.getPre())
+            );
+
+            weeklyWeatherForecast.add(weeklyForecast);
+
+        }
+
+        return weeklyWeatherForecast;
+    }
+
+    private List<WeeklyWeatherForecastDto> convertMediumWeatherForecastToWeeklyForecast(
+            List<MediumWeatherForecast> weatherForecast, List<MediumTemperatureForecast> temperatureForecast) {
+        List<MediumWeatherForecast> midnightWeatherForecast = weatherForecast.stream()
+                .filter(forecast -> forecast.getTmEf().getHour() == 0)
+                .filter(forecast -> forecast.getTmEf().isBefore(LocalDate.now().plusDays(8).atStartOfDay()))
+                .toList();
+
+        List<MediumTemperatureForecast> midnightTemperatureForecast = temperatureForecast.stream()
+                .filter(forecast -> forecast.getTmEf().isBefore(LocalDate.now().plusDays(8).atStartOfDay()))
+                .toList();
+
+        List<WeeklyWeatherForecastDto> weeklyWeatherForecast = new LinkedList<>();
+        for (int i = 0; i < midnightWeatherForecast.size(); i++) {
+            MediumWeatherForecast midnight = midnightWeatherForecast.get(i);
+            MediumTemperatureForecast temperature = midnightTemperatureForecast.get(i);
+
+            WeeklyWeatherForecastDto weeklyForecast = new WeeklyWeatherForecastDto(
+                    midnight.getTmEf().getDayOfMonth(),
+                    temperature.getMax(),
+                    temperature.getMin(),
+                    SkyType.fromMediumTermForecastCode(midnight.getSky()),
+                    midnight.getRnSt(),
+                    PrecipitationType.fromMediumForecastCode(midnight.getPre())
+            );
+
+            weeklyWeatherForecast.add(weeklyForecast);
+        }
+
+        return weeklyWeatherForecast;
     }
 }

@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumTemperatureForecast;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumWeatherForecast;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortTermWeatherForecast;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortForecast;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +16,7 @@ public class ForecastParser {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 
-    public List<ShortTermWeatherForecast> parseShortTermWeatherForecast(String response) {
+    public List<ShortForecast> parseShortTermWeatherForecast(String response) {
         return parseWeatherForecast(response, this::getShortTermWeatherForecastData);
     }
 
@@ -81,8 +81,8 @@ public class ForecastParser {
         );
     }
 
-    private ShortTermWeatherForecast getShortTermWeatherForecastData(List<String> fields) {
-        return new ShortTermWeatherForecast(
+    private ShortForecast getShortTermWeatherForecastData(List<String> fields) {
+        return new ShortForecast(
                 null,
                 fields.get(0),
                 LocalDateTime.parse(fields.get(1), FORMATTER),

@@ -13,13 +13,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "short_term_weather_forecast", indexes = {
-        @Index(name = "medium_weather_forecast_idx_reg_id", columnList = "reg_id"),
+@Table(name = "short_forecast", indexes = {
+        @Index(name = "short_forecast_idx_reg_id", columnList = "reg_id"),
 })
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShortTermWeatherForecast {
+public class ShortForecast {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

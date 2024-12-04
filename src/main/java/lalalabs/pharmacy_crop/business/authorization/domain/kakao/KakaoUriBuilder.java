@@ -10,24 +10,6 @@ public class KakaoUriBuilder {
 
     private final KakaoOauthProperties properties;
 
-    public String buildAuthorizeUri() {
-        return UriComponentsBuilder.fromUriString(properties.getAuthorizeCodeUri())
-                .queryParam("response_type", "code")
-                .queryParam("client_id", properties.getClientId())
-                .queryParam("redirect_uri", properties.getRedirectUri())
-                .toUriString();
-    }
-
-    public String buildGetTokenUri(String code) {
-        return UriComponentsBuilder.fromUriString(properties.getKakaoOauthTokenUri())
-                .queryParam("grant_type", "authorization_code")
-                .queryParam("client_id", properties.getClientId())
-                .queryParam("redirect_uri", properties.getRedirectUri())
-                .queryParam("code", code)
-                .queryParam("client_secret", properties.getClientSecret())
-                .toUriString();
-    }
-
     public String buildGetOIDCPublicKeyUri() {
         return UriComponentsBuilder.fromUriString(properties.getOidcPublicKeyUri())
                 .toUriString();

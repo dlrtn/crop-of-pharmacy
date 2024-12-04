@@ -9,8 +9,6 @@ public interface OauthHelper {
 
     OauthServiceType supportServer();
 
-    OauthTokenDto fetchToken(String code);
-
     OIDCDecodePayload decode(OauthTokenDto oauthTokenDto);
 
     OauthUserInfoDto fetchUserInfo(OauthTokenDto accessToken);

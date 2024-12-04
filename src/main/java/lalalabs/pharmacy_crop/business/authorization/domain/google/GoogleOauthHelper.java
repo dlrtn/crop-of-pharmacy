@@ -12,7 +12,6 @@ import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecode
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.GoogleApiClient;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.GoogleTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +29,8 @@ public class GoogleOauthHelper implements OauthHelper {
         return OauthServiceType.GOOGLE;
     }
 
-    public GoogleTokenDto fetchToken(String code) {
-        return googleApiClient.fetchToken(code);
-    }
-
     public OauthUserInfoDto fetchUserInfo(OauthTokenDto oauthTokenDto) {
-        OauthUserInfoDto oauthUserInfoDto = googleApiClient.fetchUserInfo(oauthTokenDto);
-
-        oauthTokenRepository.save(oauthTokenDto.toEntity(oauthUserInfoDto.id()));
-
-        return oauthUserInfoDto;
+        return googleApiClient.fetchUserInfo(oauthTokenDto);
     }
 
     public void unlink(String oauthId) {
