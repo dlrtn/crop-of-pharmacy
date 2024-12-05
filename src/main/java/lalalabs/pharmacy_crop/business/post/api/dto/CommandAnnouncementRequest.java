@@ -1,10 +1,9 @@
 package lalalabs.pharmacy_crop.business.post.api.dto;
 
-import lombok.Builder;
+import lombok.Getter;
 
-@Builder
-public record CommandAnnouncementRequest(
-        String title,
-        String content
-) {
+@Getter
+public class CommandAnnouncementRequest {
+    String title;
+    String content;
 }

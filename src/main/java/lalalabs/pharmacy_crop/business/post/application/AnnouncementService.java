@@ -27,8 +27,8 @@ public class AnnouncementService {
     public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
         Announcement announcement = Announcement.builder()
                 .userId(userId.getId())
-                .title(request.title())
-                .content(request.content())
+                .title(request.getTitle())
+                .content(request.getContent())
                 .picturePath(localFileUploader.upload(file, DirectoryType.Announcement))
                 .build();
 
@@ -40,7 +40,7 @@ public class AnnouncementService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
 
         if (request != null) {
-            announcement.update(request.title(), request.content());
+            announcement.update(request.getTitle(), request.getContent());
         }
 
         if (file != null) {
