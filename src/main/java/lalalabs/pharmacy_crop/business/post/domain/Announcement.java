@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// 공지사항 도메인
 @Getter
 @Entity
 @Builder
@@ -20,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class Announcement extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
