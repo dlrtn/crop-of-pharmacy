@@ -39,7 +39,7 @@ public class SecurityConfig {
                                 .requestMatchers("/oauth/**", "/oauth/login/**", "/error").anonymous()
                                 .requestMatchers("/", "/api*", "/api-docs/**", "/swagger-ui/**",
                                         "/swagger-ui.html", "/v3/api-docs/**", "/demo-ui.html").permitAll()
-                                .requestMatchers("/weather/**").permitAll()
+                                .requestMatchers("/static/**", "/resources/**", "/public/**", "/webjars/**").permitAll()
                                 .anyRequest().permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(entryPoint))
