@@ -4,7 +4,9 @@ import java.util.List;
 import lalalabs.pharmacy_crop.common.JwtAuthenticationFilter;
 import lalalabs.pharmacy_crop.common.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+@ComponentScan
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -36,11 +39,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests ->
                         requests
-                                .requestMatchers("/oauth/**", "/oauth/login/**", "/error").anonymous()
+                                .requestMatchers("/oauth/**", "/oauth/login/**", "/error").permitAll()
                                 .requestMatchers("/", "/api*", "/api-docs/**", "/swagger-ui/**",
                                         "/swagger-ui.html", "/v3/api-docs/**", "/demo-ui.html").permitAll()
-                                .requestMatchers("/static/**", "/resources/**", "/public/**", "/webjars/**").permitAll()
-                                .anyRequest().permitAll())
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                                .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(entryPoint))
                 .build();

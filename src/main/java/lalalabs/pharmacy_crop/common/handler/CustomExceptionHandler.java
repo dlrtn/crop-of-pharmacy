@@ -13,8 +13,6 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleUnexpectedException(Exception e) {
-        log.error("Unexpected exception occurred", e);
-
         return ResponseEntity.status(500).body(ClientErrorResponse.of(e));
     }
 }
