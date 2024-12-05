@@ -10,12 +10,14 @@ import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploa
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.common.file.DirectoryType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AnnouncementService {
@@ -25,6 +27,7 @@ public class AnnouncementService {
 
     @Transactional
     public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
+        log.info("create announcement");
         Announcement announcement = Announcement.builder()
                 .userId(userId.getId())
                 .title(request.getTitle())
@@ -32,6 +35,7 @@ public class AnnouncementService {
                 .picturePath(localFileUploader.upload(file, DirectoryType.Announcement))
                 .build();
 
+        log.info("save announcement");
         announcementRepository.save(announcement);
     }
 

@@ -6,11 +6,12 @@ import java.util.List;
 import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.application.AnnouncementService;
 import lalalabs.pharmacy_crop.business.post.application.dto.AnnouncementDto;
-import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
+import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
 import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Tag(name = "공지사항", description = "공지사항을 생성, 조회, 수정, 삭제합니다.")
 @RequiredArgsConstructor
 @RestController
@@ -51,10 +53,17 @@ public class AnnouncementController {
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
     @PostMapping(value = "/announcements", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createAnnouncement(
-            @AuthenticationPrincipal OauthUser user,
+            @AuthenticationPrincipal OauthUserDetails user,
             @RequestPart("file") MultipartFile file,
-            @RequestPart CommandAnnouncementRequest request) {
-        service.create(user, request, file);
+            @RequestPart("title") String title,
+            @RequestPart("content") String content
+    ) {
+        CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
+                .title(title)
+                .content(content)
+                .build();
+
+        service.create(user.getUser(), request, file);
 
         return ResponseEntity.ok(SuccessResponse.of());
     }
@@ -64,8 +73,14 @@ public class AnnouncementController {
     public ResponseEntity<ApiResponse> updateAnnouncement(
             @PathVariable("id") Long id,
             @RequestPart(value = "file", required = false) MultipartFile file,
-            @RequestPart(value = "request", required = false) CommandAnnouncementRequest request
+            @RequestPart("title") String title,
+            @RequestPart("content") String content
     ) {
+        CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
+                .title(title)
+                .content(content)
+                .build();
+
         service.update(id, request, file);
 
         return ResponseEntity.ok(SuccessResponse.of());

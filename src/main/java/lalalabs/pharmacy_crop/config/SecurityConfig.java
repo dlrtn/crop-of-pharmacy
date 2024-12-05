@@ -43,7 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers("/", "/api*", "/api-docs/**", "/swagger-ui/**",
                                         "/swagger-ui.html", "/v3/api-docs/**", "/demo-ui.html").permitAll()
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtils), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(entryPoint))
                 .build();
