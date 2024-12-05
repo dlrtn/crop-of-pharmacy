@@ -4,13 +4,24 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lalalabs.pharmacy_crop.common.time.BaseTimeEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 // 공지사항 도메인
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Announcement extends BaseTimeEntity {
 
     @Id
     private Long id;
+
+    @Column
+    private String userId;
 
     @Column
     private String title;
@@ -19,12 +30,14 @@ public class Announcement extends BaseTimeEntity {
     private String content;
 
     @Column
-    private String writer;
+    private String picturePath;
 
-    @Column
-    private String picture;
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
-    @Column
-    private String link;
-
+    public void updatePicturePath(String picturePath) {
+        this.picturePath = picturePath;
+    }
 }
