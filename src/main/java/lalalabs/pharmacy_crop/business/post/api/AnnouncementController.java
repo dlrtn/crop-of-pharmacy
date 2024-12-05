@@ -1,6 +1,7 @@
 package lalalabs.pharmacy_crop.business.post.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.application.AnnouncementService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+@Tag(name = "공지사항", description = "공지사항을 생성, 조회, 수정, 삭제합니다.")
 @RequiredArgsConstructor
 @RestController
 public class AnnouncementController {
