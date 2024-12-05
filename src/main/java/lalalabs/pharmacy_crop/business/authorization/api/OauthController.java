@@ -10,6 +10,7 @@ import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.Oaut
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
+import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,10 @@ public class OauthController {
 
     private final OauthService oauthService;
 
-    @Operation(summary = ApiDescriptions.SOCIAL_LOGIN_SUMMARY, description = ApiDescriptions.SOCIAL_LOGIN_DESCRIPTION)
+    @Operation(
+            summary = ApiDescriptions.SOCIAL_LOGIN_SUMMARY,
+            description = ApiDescriptions.SOCIAL_LOGIN_DESCRIPTION
+    )
     @PostMapping("/login/{oauthServiceType}")
     public ResponseEntity<ApiResponse> login(@PathVariable OauthServiceType oauthServiceType,
                                              @RequestBody() OauthTokenDto oauthTokenDto) {
@@ -39,7 +43,11 @@ public class OauthController {
         return ResponseEntity.ok().body(SuccessResponse.of(jwtTokens));
     }
 
-    @Operation(summary = ApiDescriptions.WITHDRAW_SOCIAL_USER_SUMMARY, description = ApiDescriptions.WITHDRAW_SOCIAL_USER_DESCRIPTION)
+    @ApiHeader
+    @Operation(
+            summary = ApiDescriptions.WITHDRAW_SOCIAL_USER_SUMMARY,
+            description = ApiDescriptions.WITHDRAW_SOCIAL_USER_DESCRIPTION
+    )
     @DeleteMapping("/withdraw")
     public ResponseEntity<ApiResponse> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser) {
         oauthService.withdrawUser(oauthUser.getUser());

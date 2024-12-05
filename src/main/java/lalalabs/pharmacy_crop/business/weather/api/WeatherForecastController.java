@@ -12,6 +12,7 @@ import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.application.WeatherForecastService;
 import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
+import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class WeatherForecastController {
 
     private final WeatherForecastService weatherForecastService;
 
+    @ApiHeader
     @GetMapping("/today")
     @ApiResponses(
             value = {
@@ -43,6 +45,7 @@ public class WeatherForecastController {
         return ResponseEntity.ok(SuccessResponse.of(todayWeatherForecast));
     }
 
+    @ApiHeader
     @GetMapping("/weekly")
     @ApiResponses(
             value = {
