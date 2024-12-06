@@ -1,5 +1,8 @@
 package lalalabs.pharmacy_crop.common.file;
 
+import lombok.Getter;
+
+@Getter
 public enum DirectoryType {
     Announcement("announcement");
 

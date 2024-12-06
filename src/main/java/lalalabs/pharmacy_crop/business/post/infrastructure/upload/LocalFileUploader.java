@@ -23,7 +23,7 @@ public class LocalFileUploader {
 
         file.transferTo(filePath.toFile());
 
-        return filePath.toString();
+        return filePath.toString().substring(4);
     }
 
     private void validateFile(MultipartFile file) {
@@ -50,7 +50,7 @@ public class LocalFileUploader {
     }
 
     private Path getDirectoryPath(DirectoryType type) throws IOException {
-        Path directoryPath = Paths.get(BASE_DIRECTORY, type.name());
+        Path directoryPath = Paths.get(BASE_DIRECTORY, type.getDirectoryName());
         if (!Files.exists(directoryPath)) {
             Files.createDirectories(directoryPath); // 디렉토리 없으면 생성
         }
