@@ -1,6 +1,7 @@
 package lalalabs.pharmacy_crop.business.authorization.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.authorization.api.docs.ApiDescriptions;
 import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
@@ -35,6 +36,7 @@ public class OauthController {
             summary = ApiDescriptions.SOCIAL_LOGIN_SUMMARY,
             description = ApiDescriptions.SOCIAL_LOGIN_DESCRIPTION
     )
+    @Parameter(name = "oauthServiceType", description = "소셜 로그인 서비스 타입", required = true)
     @PostMapping("/login/{oauthServiceType}")
     public ResponseEntity<ApiResponse> login(@PathVariable OauthServiceType oauthServiceType,
                                              @RequestBody() OauthTokenDto oauthTokenDto) {
@@ -48,6 +50,7 @@ public class OauthController {
             summary = ApiDescriptions.WITHDRAW_SOCIAL_USER_SUMMARY,
             description = ApiDescriptions.WITHDRAW_SOCIAL_USER_DESCRIPTION
     )
+    @Parameter(name = "Authorization", description = "액세스 토큰", required = true)
     @DeleteMapping("/withdraw")
     public ResponseEntity<ApiResponse> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser) {
         oauthService.withdrawUser(oauthUser.getUser());

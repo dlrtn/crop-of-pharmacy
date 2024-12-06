@@ -1,5 +1,6 @@
 package lalalabs.pharmacy_crop.business.weather.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,6 +31,7 @@ public class WeatherForecastController {
 
     @ApiHeader
     @GetMapping("/today")
+    @Operation(summary = "오늘의 날씨 조회", description = "현재 위치의 오늘 날씨 정보를 조회합니다")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = TodayWeatherForecastDto.class))),
@@ -47,6 +49,7 @@ public class WeatherForecastController {
 
     @ApiHeader
     @GetMapping("/weekly")
+    @Operation(summary = "주간 날씨 조회", description = "현재 위치의 주간 날씨 정보를 조회합니다")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = WeeklyWeatherForecastDto.class))),

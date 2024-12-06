@@ -1,6 +1,7 @@
 package lalalabs.pharmacy_crop.business.post.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
@@ -34,16 +35,23 @@ public class AnnouncementController {
     private final AnnouncementService service;
 
     @ApiHeader
+    @Operation(summary = "공지사항 목록 조회", description = "공지사항 목록을 조회합니다.")
     @GetMapping("/announcements")
-    public ResponseEntity<ApiResponse> readAnnouncements(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<ApiResponse> read(
+            @Parameter(name = "page", description = "페이지 번호", required = true) @RequestParam int page,
+            @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size
+    ) {
         List<AnnouncementDto> announcementDtoList = service.read(page, size);
 
         return ResponseEntity.ok(SuccessResponse.of(announcementDtoList));
     }
 
     @ApiHeader
+    @Operation(summary = "공지사항 상세 조회", description = "공지사항 상세를 조회합니다.")
     @GetMapping("/announcements/{id}")
-    public ResponseEntity<ApiResponse> readAnnouncementById(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> readById(
+            @Parameter(name = "id", description = "공지사항 ID", required = true) @PathVariable("id") Long id
+    ) {
         AnnouncementDto announcementDto = service.readById(id);
 
         return ResponseEntity.ok(SuccessResponse.of(announcementDto));
@@ -52,11 +60,11 @@ public class AnnouncementController {
     @ApiHeader
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
     @PostMapping(value = "/announcements", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse> createAnnouncement(
+    public ResponseEntity<ApiResponse> create(
             @AuthenticationPrincipal OauthUserDetails user,
-            @RequestPart("file") MultipartFile file,
-            @RequestPart("title") String title,
-            @RequestPart("content") String content
+            @Parameter(name = "file", description = "파일", required = true) @RequestPart("file") MultipartFile file,
+            @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
+            @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)
@@ -69,12 +77,13 @@ public class AnnouncementController {
     }
 
     @ApiHeader
+    @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/announcements/{id}")
-    public ResponseEntity<ApiResponse> updateAnnouncement(
-            @PathVariable("id") Long id,
-            @RequestPart(value = "file", required = false) MultipartFile file,
-            @RequestPart("title") String title,
-            @RequestPart("content") String content
+    public ResponseEntity<ApiResponse> update(
+            @Parameter(name = "id", description = "공지사항 ID", required = true) @PathVariable("id") Long id,
+            @Parameter(name = "file", description = "파일", required = false) @RequestPart(value = "file", required = false) MultipartFile file,
+            @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
+            @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)
@@ -87,8 +96,10 @@ public class AnnouncementController {
     }
 
     @ApiHeader
+    @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제합니다.")
     @DeleteMapping("/announcements/{id}")
-    public ResponseEntity<ApiResponse> deleteAnnouncement(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> delete(
+            @Parameter(name = "id", description = "공지사항 ID", required = true) @PathVariable("id") Long id) {
         service.delete(id);
 
         return ResponseEntity.ok(SuccessResponse.of());
