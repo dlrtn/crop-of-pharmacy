@@ -50,7 +50,6 @@ public class OauthController {
             summary = ApiDescriptions.WITHDRAW_SOCIAL_USER_SUMMARY,
             description = ApiDescriptions.WITHDRAW_SOCIAL_USER_DESCRIPTION
     )
-    @Parameter(name = "Authorization", description = "액세스 토큰", required = true)
     @DeleteMapping("/withdraw")
     public ResponseEntity<ApiResponse> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser) {
         oauthService.withdrawUser(oauthUser.getUser());
