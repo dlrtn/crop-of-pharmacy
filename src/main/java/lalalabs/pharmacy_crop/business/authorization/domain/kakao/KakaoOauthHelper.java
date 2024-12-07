@@ -32,12 +32,12 @@ public class KakaoOauthHelper implements OauthHelper {
         return kakaoOauthClient.fetchUserInfo(oauthTokenDto.getAccessToken());
     }
 
-    public void unlink(String oauthId) {
-        OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(oauthId)
-                .orElseThrow(() -> new RuntimeException("Failed to find oauth token by oauthId: " + oauthId));
+    public void unlink(String userId) {
+        OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Failed to find oauth token by oauthId: " + userId));
 
         KakaoUnlinkResponse response = kakaoOauthClient.unlink(oauthTokenEntity.getAccessToken());
-        if (!Objects.equals(response.id(), oauthId)) {
+        if (!Objects.equals(response.id(), userId)) {
             throw new RuntimeException("Failed to unlink user from oauth server");
         }
 

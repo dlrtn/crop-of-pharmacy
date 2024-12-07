@@ -2,8 +2,6 @@ package lalalabs.pharmacy_crop.business.authorization.domain.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lalalabs.pharmacy_crop.common.time.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -17,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class OauthTokenEntity extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column

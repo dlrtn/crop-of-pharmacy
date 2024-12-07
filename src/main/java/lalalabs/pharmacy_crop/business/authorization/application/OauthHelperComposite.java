@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.OauthHelper;
-import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthId;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -40,7 +40,7 @@ public class OauthHelperComposite {
         return getHelper(serviceType).fetchUserInfo(accessToken);
     }
 
-    public void unlink(OauthId oauthServerId) {
-        getHelper(oauthServerId.getOauthServiceType()).unlink(oauthServerId.getOauthServerId());
+    public void unlink(OauthUser user) {
+        getHelper(user.getOauthId().getOauthServiceType()).unlink(user.getId());
     }
 }

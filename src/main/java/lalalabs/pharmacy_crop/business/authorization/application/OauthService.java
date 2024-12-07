@@ -40,7 +40,7 @@ public class OauthService {
     }
 
     public void withdrawUser(OauthUser user) {
-        oauthHelperComposite.unlink(user.getOauthId());
+        oauthHelperComposite.unlink(user);
         userRepository.deleteById(user.getId());
     }
 }
