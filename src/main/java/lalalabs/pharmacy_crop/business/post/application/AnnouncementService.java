@@ -2,8 +2,8 @@ package lalalabs.pharmacy_crop.business.post.application;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
-import lalalabs.pharmacy_crop.business.post.application.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.post.domain.Announcement;
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.AnnouncementRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
@@ -28,11 +28,8 @@ public class AnnouncementService {
     @Transactional
     public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
         log.info("create announcement");
-        Announcement announcement = Announcement.builder()
-                .userId(userId.getId())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .picturePath(localFileUploader.upload(file, DirectoryType.Announcement))
+        Announcement announcement = Announcement.builder().userId(userId.getId()).title(request.getTitle())
+                .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.Announcement))
                 .build();
 
         log.info("save announcement");
@@ -62,15 +59,11 @@ public class AnnouncementService {
     public List<AnnouncementDto> read(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        return announcementRepository.findAll(pageable)
-                .stream()
-                .map(AnnouncementDto::fromDomain)
-                .toList();
+        return announcementRepository.findAll(pageable).getContent().stream().map(AnnouncementDto::fromDomain).toList();
     }
 
     public AnnouncementDto readById(Long announcementId) {
-        return announcementRepository.findById(announcementId)
-                .map(AnnouncementDto::fromDomain)
+        return announcementRepository.findById(announcementId).map(AnnouncementDto::fromDomain)
                 .orElseThrow(() -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
     }
 }

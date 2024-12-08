@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.application.AnnouncementService;
-import lalalabs.pharmacy_crop.business.post.application.dto.AnnouncementDto;
+import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
@@ -38,7 +38,7 @@ public class AnnouncementController {
     @Operation(summary = "공지사항 목록 조회", description = "공지사항 목록을 조회합니다.")
     @GetMapping("/announcements")
     public ResponseEntity<ApiResponse> read(
-            @Parameter(name = "page", description = "페이지 번호", required = true) @RequestParam int page,
+            @Parameter(name = "page", description = "페이지 번호(0 ~ )", required = true) @RequestParam int page,
             @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size
     ) {
         List<AnnouncementDto> announcementDtoList = service.read(page, size);
@@ -81,7 +81,7 @@ public class AnnouncementController {
     @PutMapping("/announcements/{id}")
     public ResponseEntity<ApiResponse> update(
             @Parameter(name = "id", description = "공지사항 ID", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "file", description = "파일", required = false) @RequestPart(value = "file", required = false) MultipartFile file,
+            @Parameter(name = "file", description = "파일") @RequestPart(value = "file", required = false) MultipartFile file,
             @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
             @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content
     ) {
