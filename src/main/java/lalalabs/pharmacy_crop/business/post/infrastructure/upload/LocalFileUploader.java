@@ -23,7 +23,7 @@ public class LocalFileUploader {
 
         file.transferTo(filePath.toFile());
 
-        return filePath.toString().substring(4);
+        return filePath.toString();
     }
 
     private void validateFile(MultipartFile file) {

@@ -19,10 +19,4 @@ public class OauthTokenEntity extends BaseTimeEntity {
 
     @Column
     private String accessToken;
-
-    @Column
-    private String refreshToken;
-
-    @Column
-    private String expriesIn;
 }

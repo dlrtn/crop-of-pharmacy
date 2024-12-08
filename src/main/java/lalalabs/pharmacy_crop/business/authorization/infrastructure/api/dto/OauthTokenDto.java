@@ -11,10 +11,8 @@ public class OauthTokenDto {
     private String tokenType;
     private String accessToken;
     private String idToken;
-    private String expriesIn;
-    private String refreshToken;
 
     public OauthTokenEntity toEntity(String id) {
-        return new OauthTokenEntity(id, accessToken, refreshToken, expriesIn);
+        return new OauthTokenEntity(id, accessToken);
     }
 }
