@@ -12,11 +12,13 @@ import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecode
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.GoogleApiClient;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class GoogleOauthHelper implements OauthHelper {
@@ -44,6 +46,8 @@ public class GoogleOauthHelper implements OauthHelper {
     public OIDCDecodePayload decode(OauthTokenDto googleToken) {
         try {
             GoogleIdToken googleIdToken = googleIdTokenVerifier.verify(googleToken.getIdToken());
+
+            log.info("googleIdToken: {}", googleIdToken);
 
             if (isNull(googleIdToken)) {
                 throw new RuntimeException("Invalid id token");

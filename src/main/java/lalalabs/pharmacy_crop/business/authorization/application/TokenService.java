@@ -1,6 +1,6 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
-import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
 import lalalabs.pharmacy_crop.common.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ public class TokenService {
 
     private final JwtUtils jwtUtils;
 
-    public JwtTokens issueTokensByUserId(String userId) {
+    public JwtTokensDto issueTokensByUserId(String userId) {
         return jwtUtils.issueTokens(userId);
     }
 }

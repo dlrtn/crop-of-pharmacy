@@ -1,10 +1,10 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
-import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
@@ -20,7 +20,7 @@ public class OauthService {
     private final OauthTokenRepository oauthTokenRepository;
     private final TokenService tokenService;
 
-    public JwtTokens login(OauthServiceType oauthServiceType, OauthTokenDto oauthToken) {
+    public JwtTokensDto login(OauthServiceType oauthServiceType, OauthTokenDto oauthToken) {
         OIDCDecodePayload oidcPayload = oauthHelperComposite.decode(oauthServiceType, oauthToken);
         String oauthId = oidcPayload.sub();
 

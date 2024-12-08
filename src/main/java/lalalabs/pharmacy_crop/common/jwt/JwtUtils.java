@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
-import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
 import lalalabs.pharmacy_crop.common.time.TimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,8 +40,8 @@ public class JwtUtils {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public JwtTokens issueTokens(String payload) {
-        return JwtTokens.builder()
+    public JwtTokensDto issueTokens(String payload) {
+        return JwtTokensDto.builder()
                 .accessToken(generateAccessToken(payload))
                 .refreshToken(generateRefreshToken(payload))
                 .build();

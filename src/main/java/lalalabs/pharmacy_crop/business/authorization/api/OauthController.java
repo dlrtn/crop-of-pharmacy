@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.authorization.api.docs.ApiDescriptions;
-import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokens;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
 import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
@@ -39,8 +39,8 @@ public class OauthController {
     @Parameter(name = "oauthServiceType", description = "소셜 로그인 서비스 타입", required = true)
     @PostMapping("/login/{oauthServiceType}")
     public ResponseEntity<ApiResponse> login(@PathVariable OauthServiceType oauthServiceType,
-                                             @RequestBody() OauthTokenDto oauthTokenDto) {
-        JwtTokens jwtTokens = oauthService.login(oauthServiceType, oauthTokenDto);
+                                             @RequestBody OauthTokenDto oauthTokenDto) {
+        JwtTokensDto jwtTokens = oauthService.login(oauthServiceType, oauthTokenDto);
 
         return ResponseEntity.ok().body(SuccessResponse.of(jwtTokens));
     }

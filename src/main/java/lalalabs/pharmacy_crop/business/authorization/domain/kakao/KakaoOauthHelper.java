@@ -10,7 +10,7 @@ import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTo
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.KakaoApiClient;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoUnlinkResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OIDCPublicKeysResponse;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OauthTokenDto;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
