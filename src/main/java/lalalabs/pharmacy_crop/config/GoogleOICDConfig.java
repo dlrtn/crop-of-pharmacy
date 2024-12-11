@@ -18,7 +18,7 @@ public class GoogleOICDConfig {
     @Bean
     public GoogleIdTokenVerifier googleIdTokenVerifier() {
         List<String> audience = List.of(googleOauthProperties.getClientId(), googleOauthProperties.getAndroidClientId(),
-                googleOauthProperties.getIosClientId());
+                googleOauthProperties.getIosClientId(), googleOauthProperties.getAnyClientId());
 
         return new GoogleIdTokenVerifier
                 .Builder(new NetHttpTransport(), new GsonFactory())
