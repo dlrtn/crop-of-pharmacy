@@ -4,19 +4,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.authorization.api.docs.ApiDescriptions;
-import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
-import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
-import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,15 +41,10 @@ public class OauthController {
         return ResponseEntity.ok().body(SuccessResponse.of(jwtTokens));
     }
 
-    @ApiHeader
-    @Operation(
-            summary = ApiDescriptions.WITHDRAW_SOCIAL_USER_SUMMARY,
-            description = ApiDescriptions.WITHDRAW_SOCIAL_USER_DESCRIPTION
-    )
-    @DeleteMapping("/withdraw")
-    public ResponseEntity<ApiResponse> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser) {
-        oauthService.withdrawUser(oauthUser.getUser());
+    @PostMapping("/token/refresh")
+    public ResponseEntity<ApiResponse> refreshToken(@RequestBody JwtTokensDto jwtTokensDto) {
+        JwtTokensDto jwtTokens = oauthService.refreshToken(jwtTokensDto);
 
-        return ResponseEntity.ok().body(SuccessResponse.of());
+        return ResponseEntity.ok().body(SuccessResponse.of(jwtTokens));
     }
 }

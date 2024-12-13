@@ -20,5 +20,4 @@ public class OauthId {
     @Column(name = "oauth_service_type")
     @Enumerated(EnumType.STRING)
     private OauthServiceType oauthServiceType;
-
 }

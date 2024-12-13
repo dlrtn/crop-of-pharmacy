@@ -1,10 +1,10 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
 import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
-import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
@@ -39,8 +39,15 @@ public class OauthService {
         return userRepository.save(newUser);
     }
 
-    public void withdrawUser(OauthUser user) {
+    public void unlink(OauthUser user) {
         oauthHelperComposite.unlink(user);
-        userRepository.deleteById(user.getId());
+    }
+
+    public JwtTokensDto refreshToken(JwtTokensDto jwtTokensDto) {
+        tokenService.verifyToken(jwtTokensDto.refreshToken());
+
+        String payload = tokenService.getPayloadFromToken(jwtTokensDto.refreshToken());
+
+        return tokenService.reissueTokens(payload);
     }
 }

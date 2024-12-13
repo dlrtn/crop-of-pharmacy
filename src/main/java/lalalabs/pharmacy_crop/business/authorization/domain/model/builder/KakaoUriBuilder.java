@@ -1,5 +1,6 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.kakao;
+package lalalabs.pharmacy_crop.business.authorization.domain.model.builder;
 
+import lalalabs.pharmacy_crop.business.authorization.domain.model.KakaoOauthProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;

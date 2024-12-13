@@ -40,6 +40,4 @@ public record KakaoMemberResponse(
             boolean isDefaultImage
     ) {
     }
-
-
 }

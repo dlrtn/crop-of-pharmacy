@@ -1,5 +1,6 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.google;
+package lalalabs.pharmacy_crop.business.authorization.domain.model.builder;
 
+import lalalabs.pharmacy_crop.business.authorization.domain.model.GoogleOauthProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;

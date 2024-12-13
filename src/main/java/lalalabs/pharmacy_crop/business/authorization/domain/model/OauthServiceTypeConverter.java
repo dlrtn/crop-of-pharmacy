@@ -8,5 +8,4 @@ public class OauthServiceTypeConverter implements Converter<String, OauthService
     public OauthServiceType convert(String serviceName) {
         return OauthServiceType.fromName(serviceName);
     }
-
 }

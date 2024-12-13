@@ -99,9 +99,19 @@ public class JwtUtils {
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
+
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public String extractSubject(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }

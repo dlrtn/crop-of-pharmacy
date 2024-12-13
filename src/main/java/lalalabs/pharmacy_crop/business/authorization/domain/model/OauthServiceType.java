@@ -13,4 +13,3 @@ public enum OauthServiceType {
         return OauthServiceType.valueOf(type.toUpperCase(ENGLISH));
     }
 }
-

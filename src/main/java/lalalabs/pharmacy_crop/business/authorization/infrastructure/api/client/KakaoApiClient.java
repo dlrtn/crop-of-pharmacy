@@ -1,6 +1,6 @@
 package lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client;
 
-import lalalabs.pharmacy_crop.business.authorization.domain.kakao.KakaoUriBuilder;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.builder.KakaoUriBuilder;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoMemberResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoUnlinkResponse;

@@ -1,12 +1,15 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.kakao;
+package lalalabs.pharmacy_crop.business.authorization.domain.helper;
 
 import java.util.Objects;
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.OauthHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.OauthOIDCHelper;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.KakaoOauthProperties;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.exception.InvalidOauthTokenException;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.exception.KakaoUnlinkFailedException;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.KakaoApiClient;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.KakaoUnlinkResponse;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.dto.OIDCPublicKeysResponse;
@@ -34,11 +37,11 @@ public class KakaoOauthHelper implements OauthHelper {
 
     public void unlink(String userId) {
         OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Failed to find oauth token by oauthId: " + userId));
+                .orElseThrow(() -> new InvalidOauthTokenException(userId));
 
         KakaoUnlinkResponse response = kakaoOauthClient.unlink(oauthTokenEntity.getAccessToken());
         if (!Objects.equals(response.id(), userId)) {
-            throw new RuntimeException("Failed to unlink user from oauth server");
+            throw new KakaoUnlinkFailedException(userId);
         }
 
         oauthTokenRepository.delete(oauthTokenEntity);

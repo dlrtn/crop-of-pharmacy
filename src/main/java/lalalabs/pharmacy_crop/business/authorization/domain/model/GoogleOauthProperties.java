@@ -1,4 +1,4 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.google;
+package lalalabs.pharmacy_crop.business.authorization.domain.model;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

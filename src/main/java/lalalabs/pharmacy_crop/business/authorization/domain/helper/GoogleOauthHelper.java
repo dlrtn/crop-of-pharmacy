@@ -1,20 +1,21 @@
-package lalalabs.pharmacy_crop.business.authorization.domain.google;
+package lalalabs.pharmacy_crop.business.authorization.domain.helper;
 
 import static com.google.api.client.util.Data.isNull;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.application.usecase.OauthHelper;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.entity.OauthTokenEntity;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.exception.InvalidGoogleIdTokenException;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.exception.InvalidOauthTokenException;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.GoogleApiClient;
-import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -37,26 +38,20 @@ public class GoogleOauthHelper implements OauthHelper {
 
     public void unlink(String oauthId) {
         OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(oauthId)
-                .orElseThrow(() -> new RuntimeException("Failed to find oauth token by oauthId: " + oauthId));
+                .orElseThrow(() -> new InvalidOauthTokenException(oauthId));
 
         googleApiClient.unlink(oauthTokenEntity.getAccessToken());
         oauthTokenRepository.delete(oauthTokenEntity);
     }
 
+    @SneakyThrows
     public OIDCDecodePayload decode(OauthTokenDto googleToken) {
-        try {
-            GoogleIdToken googleIdToken = googleIdTokenVerifier.verify(googleToken.getIdToken());
+        GoogleIdToken googleIdToken = googleIdTokenVerifier.verify(googleToken.getIdToken());
 
-            log.info("googleIdToken: {}", googleIdToken);
-
-            if (isNull(googleIdToken)) {
-                throw new RuntimeException("Invalid id token");
-            }
-
-            return new OIDCDecodePayload(googleIdToken.getPayload().getSubject(),
-                    googleIdToken.getPayload().getIssuer(), googleIdToken.getHeader().getKeyId());
-        } catch (GeneralSecurityException | IOException e) {
-            throw new RuntimeException("Failed to verify id token", e);
+        if (isNull(googleIdToken)) {
+            throw new InvalidGoogleIdTokenException();
         }
+
+        return OIDCDecodePayload.fromGoogleIdToken(googleIdToken);
     }
 }
