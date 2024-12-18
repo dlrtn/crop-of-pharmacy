@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum DirectoryType {
-    Announcement("announcement");
+    ANNOUNCEMENT("announcement");
 
     private final String directoryName;
 

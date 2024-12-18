@@ -29,7 +29,7 @@ public class AnnouncementService {
     public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
         log.info("create announcement");
         Announcement announcement = Announcement.builder().userId(userId.getId()).title(request.getTitle())
-                .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.Announcement))
+                .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
                 .build();
 
         log.info("save announcement");
@@ -45,7 +45,7 @@ public class AnnouncementService {
         }
 
         if (file != null) {
-            announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.Announcement));
+            announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT));
         }
 
         announcementRepository.save(announcement);
