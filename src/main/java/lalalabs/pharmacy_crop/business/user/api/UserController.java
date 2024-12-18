@@ -6,6 +6,7 @@ import lalalabs.pharmacy_crop.business.authorization.api.docs.ApiDescriptions;
 import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
 import lalalabs.pharmacy_crop.business.user.api.dto.UpdateUserRequest;
 import lalalabs.pharmacy_crop.business.user.application.UserCommandService;
+import lalalabs.pharmacy_crop.business.user.application.UserQueryService;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserCommandService userCommandService;
+    private final UserQueryService userQueryService;
     private final OauthService oauthService;
 
     @ApiHeader
@@ -49,5 +52,17 @@ public class UserController {
         oauthService.unlink(oauthUser.getUser());
 
         return ResponseEntity.ok().body(SuccessResponse.of());
+    }
+
+    @ApiHeader
+    @GetMapping("/nickname")
+    public ResponseEntity<ApiResponse> getUserNickname(@AuthenticationPrincipal OauthUserDetails oauthUser) {
+        return ResponseEntity.ok(SuccessResponse.of(oauthUser.getUser().getNickname()));
+    }
+
+    @ApiHeader
+    @GetMapping()
+    public ResponseEntity<ApiResponse> getUserInfo(@AuthenticationPrincipal OauthUserDetails oauthUser) {
+        return ResponseEntity.ok(SuccessResponse.of(oauthUser.getUser()));
     }
 }
