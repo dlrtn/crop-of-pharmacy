@@ -3,7 +3,7 @@ package lalalabs.pharmacy_crop.business.post.application;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
-import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
+import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.domain.Announcement;
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.AnnouncementRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;

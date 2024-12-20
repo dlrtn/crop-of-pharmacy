@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import lalalabs.pharmacy_crop.business.post.api.dto.CommandAnnouncementRequest;
+import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.application.AnnouncementService;
 import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
