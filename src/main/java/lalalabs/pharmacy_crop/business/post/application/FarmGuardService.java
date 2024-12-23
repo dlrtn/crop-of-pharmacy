@@ -2,6 +2,7 @@ package lalalabs.pharmacy_crop.business.post.application;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
+import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDetailDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardReportHistoryRequest;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardRequest;
@@ -43,15 +44,19 @@ public class FarmGuardService {
     }
 
     @Transactional
-    public void delete(String userId, Long announcementId) {
-        FarmGuard farmGuard = guardRepository.findById(announcementId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
+    public void delete(String userId, Long farmGuardId) {
+        FarmGuard farmGuard = getOrElseThrow(farmGuardId);
 
         if (!farmGuard.isOwner(userId)) {
             throw new IllegalArgumentException("해당 병충해 찾기 게시글을 삭제할 권한이 없습니다.");
         }
 
-        guardRepository.deleteById(announcementId);
+        guardRepository.deleteById(farmGuardId);
+    }
+
+    private FarmGuard getOrElseThrow(Long farmGuardId) {
+        return guardRepository.findById(farmGuardId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
     }
 
     public List<FarmGuardDto> read(int page, int size) {
@@ -59,22 +64,31 @@ public class FarmGuardService {
 
         List<FarmGuard> farmGuards = guardRepository.findAll(pageable).getContent().stream().toList();
 
-        return farmGuards.stream().map(farmGuard -> {
-            boolean isReported = reportRepository.existsById(farmGuard.getId());
-            return FarmGuardDto.fromDomain(farmGuard, isReported);
-        }).toList();
+        return farmGuards.stream().map(this::getFarmGuardDto).toList();
     }
 
-    public FarmGuardDto readById(Long announcementId) {
-        return guardRepository.findById(announcementId).map(farmGuard -> {
-            boolean isReported = reportRepository.existsById(farmGuard.getId());
-            return FarmGuardDto.fromDomain(farmGuard, isReported);
-        }).orElseThrow(() -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
+    public FarmGuardDetailDto readById(Long farmGuardId) {
+        return guardRepository.findById(farmGuardId).map(this::getFarmGuardDetailDto)
+                .orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
+    }
+
+    private FarmGuardDto getFarmGuardDto(FarmGuard farmGuard) {
+        boolean isReported = reportRepository.existsById(farmGuard.getId());
+        boolean isAnswered = farmGuardAnswerRepository.existsFarmGuardAnswerByFarmGuardId(farmGuard.getId());
+
+        return FarmGuardDto.fromDomain(farmGuard, isReported, isAnswered);
+    }
+
+    private FarmGuardDetailDto getFarmGuardDetailDto(FarmGuard farmGuard) {
+        if (farmGuardAnswerRepository.existsFarmGuardAnswerByFarmGuardId(farmGuard.getId())) {
+            FarmGuardAnswer answer = farmGuardAnswerRepository.findFarmGuardAnswerByFarmGuardId(farmGuard.getId());
+            return FarmGuardDetailDto.fromDomain(farmGuard, answer);
+        }
+        return FarmGuardDetailDto.fromDomain(farmGuard);
     }
 
     public void report(CommandFarmGuardReportHistoryRequest reportHistoryDto) {
-        FarmGuard farmGuard = guardRepository.findById(reportHistoryDto.getFarmGuardId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
+        FarmGuard farmGuard = getOrElseThrow(reportHistoryDto.getFarmGuardId());
 
         if (farmGuard.isOwner(reportHistoryDto.getUserId())) {
             throw new IllegalArgumentException("자신의 병충해 찾기 게시글은 신고할 수 없습니다.");
@@ -85,16 +99,31 @@ public class FarmGuardService {
         reportRepository.save(history);
     }
 
-    public void answer(Long id, RegisterAnswerRequest content) {
-        FarmGuard farmGuard = guardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
+    public void answer(Long farmGuardId, RegisterAnswerRequest content) {
+        FarmGuard farmGuard = getOrElseThrow(farmGuardId);
 
         FarmGuardAnswer answer = FarmGuardAnswer.builder()
-                .farmGuardId(id)
+                .farmGuardId(farmGuardId)
                 .userId(farmGuard.getUserId())
                 .content(content.getContent())
                 .build();
 
         farmGuardAnswerRepository.save(answer);
     }
+
+    public List<FarmGuardDto> readFrequently(int size) {
+        Pageable pageable = PageRequest.of(0, size, Sort.by("id").descending());
+
+        List<FarmGuard> farmGuards = guardRepository.findAllByOftenViewed(true, pageable);
+
+        return farmGuards.stream().map(this::getFarmGuardDto).toList();
+    }
+
+    public void updateFarmGuardViewedStatus(Long farmGuardId) {
+        FarmGuard farmGuard = getOrElseThrow(farmGuardId);
+
+        farmGuard.updateOftenViewedStatus();
+    }
+
+
 }

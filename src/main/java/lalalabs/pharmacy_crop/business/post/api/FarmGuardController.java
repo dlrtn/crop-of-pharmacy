@@ -3,6 +3,7 @@ package lalalabs.pharmacy_crop.business.post.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
+import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDetailDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardReportHistoryRequest;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardRequest;
@@ -36,9 +37,15 @@ public class FarmGuardController {
     private final FarmGuardService service;
     private final FarmGuardService farmGuardService;
 
-    // todo: 자주 찾는 병충해 조회 기능
-    public ResponseEntity<?> getFrequentlyFarmGuards() {
-        return null;
+    @ApiHeader
+    @Operation(summary = "자주 찾는 병충해 목록 조회", description = "자주 찾는 병충해 목록을 조회합니다.")
+    @GetMapping("/frequently")
+    public ResponseEntity<ApiResponse> getFrequentlyFarmGuards(
+            @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size
+    ) {
+        List<FarmGuardDto> farmGuardDtoList = farmGuardService.readFrequently(size);
+
+        return ResponseEntity.ok(SuccessResponse.of(farmGuardDtoList));
     }
 
     @ApiHeader
@@ -59,7 +66,7 @@ public class FarmGuardController {
     public ResponseEntity<ApiResponse> getFarmGuard(
             @Parameter(name = "id", description = "병충해 ID", required = true) @PathVariable("id") Long id
     ) {
-        FarmGuardDto farmGuardDto = farmGuardService.readById(id);
+        FarmGuardDetailDto farmGuardDto = farmGuardService.readById(id);
 
         return ResponseEntity.ok(SuccessResponse.of(farmGuardDto));
     }
@@ -101,12 +108,12 @@ public class FarmGuardController {
     public ResponseEntity<ApiResponse> reportFarmGuard(
             @AuthenticationPrincipal OauthUserDetails userDetails,
             @Parameter(name = "id", description = "병충해 ID", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "content", description = "신고 내용", required = true) @RequestParam ReportReason content
+            @Parameter(name = "reportReason", description = "신고 내용", required = true) @RequestParam int reportReason
     ) {
         CommandFarmGuardReportHistoryRequest reportHistoryDto = CommandFarmGuardReportHistoryRequest.builder()
                 .farmGuardId(id)
                 .userId(userDetails.getUser().getId())
-                .content(content)
+                .content(ReportReason.from(reportReason))
                 .build();
 
         service.report(reportHistoryDto);
@@ -114,14 +121,27 @@ public class FarmGuardController {
         return ResponseEntity.ok(SuccessResponse.of());
     }
 
+    // todo: 관리자 전용 기능
     @ApiHeader
     @Operation(summary = "병충해 답변", description = "병충해에 답변합니다.")
     @PostMapping("/{id}/answers")
     public ResponseEntity<ApiResponse> answerFarmGuard(
             @Parameter(name = "id", description = "병충해 ID", required = true) @PathVariable("id") Long id,
             @Parameter(name = "content", description = "답변 내용", required = true) @RequestBody RegisterAnswerRequest content
-            ) {
+    ) {
         farmGuardService.answer(id, content);
+
+        return ResponseEntity.ok(SuccessResponse.of());
+    }
+
+    // todo: 관리자 전용 기능
+    @ApiHeader
+    @Operation(summary = "자주 찾는 병충해 등록 또는 삭제", description = "자주 찾는 병충해를 등록 또는 삭제합니다.")
+    @PostMapping("/frequently")
+    public ResponseEntity<ApiResponse> createFrequentlyFarmGuard(
+            @Parameter(name = "farmGuardId", description = "병충해 ID", required = true) @RequestParam Long farmGuardId
+    ) {
+        farmGuardService.updateFarmGuardViewedStatus(farmGuardId);
 
         return ResponseEntity.ok(SuccessResponse.of());
     }

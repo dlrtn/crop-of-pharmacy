@@ -36,16 +36,24 @@ public class FarmGuard extends BaseTimeEntity {
     @Column
     private String picturePath;
 
+    @Column
+    private boolean oftenViewed;
+
     public static FarmGuard create(CommandFarmGuardRequest request, OauthUser user, String picturePath) {
         return FarmGuard.builder()
                 .userId(user.getId())
                 .title(user.getNickname() + "님의 병해충 잡초 찾기")
                 .content(request.getContent())
                 .picturePath(picturePath)
+                .oftenViewed(false)
                 .build();
     }
 
     public boolean isOwner(String userId) {
         return this.userId.equals(userId);
+    }
+
+    public void updateOftenViewedStatus() {
+        this.oftenViewed = !this.oftenViewed;
     }
 }

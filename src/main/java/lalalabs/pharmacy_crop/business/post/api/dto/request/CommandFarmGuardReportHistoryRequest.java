@@ -7,8 +7,12 @@ import lombok.Getter;
 @Builder
 @Getter
 public class CommandFarmGuardReportHistoryRequest {
+
     private Long id;
+
     private Long farmGuardId;
+
     private String userId;
+    
     private ReportReason content;
 }
