@@ -3,6 +3,8 @@ package lalalabs.pharmacy_crop.business.post.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDetailDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardReportHistoryRequest;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@Tag(name = "병충해 잡초 찾기", description = "병충해 잡초 찾기 도메인 관련 기능들을 지원합니다.")
 @RequestMapping("/farm-guards")
 @RequiredArgsConstructor
 public class FarmGuardController {

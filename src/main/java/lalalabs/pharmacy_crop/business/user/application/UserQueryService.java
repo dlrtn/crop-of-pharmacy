@@ -14,4 +14,10 @@ public class UserQueryService {
     public OauthUser findByUserId(String userId) {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
+
+    public String getUserNickname(OauthUser user) {
+        OauthUser oauthUser = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return oauthUser.getNickname();
+    }
 }

@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Weather", description = "일기예보 정보를 조회합니다")
 @RestController
+@Tag(name = "일기예보", description = "일기예보 도메인과 관련한 기능들을 지원합니다.")
 @RequiredArgsConstructor
 @RequestMapping("/weather")
 public class WeatherForecastController {

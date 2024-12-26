@@ -7,6 +7,7 @@ import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
 import lalalabs.pharmacy_crop.business.user.api.dto.UpdateUserRequest;
 import lalalabs.pharmacy_crop.business.user.application.UserCommandService;
 import lalalabs.pharmacy_crop.business.user.application.UserQueryService;
+import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
@@ -21,21 +22,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "User", description = "사용자의 정보 변경, 관리를 수행합니다.")
 @RestController
+@Tag(name = "사용자", description = "사용자의 정보 변경, 관리를 수행합니다.")
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
 
     private final UserCommandService userCommandService;
-    private final UserQueryService userQueryService;
     private final OauthService oauthService;
+    private final UserQueryService userQueryService;
 
     @ApiHeader
     @Operation(summary = "닉네임 변경", description = "사용자의 닉네임을 변경합니다.")
     @PatchMapping("/nickname")
-    public ResponseEntity<ApiResponse> changeNickname(@AuthenticationPrincipal OauthUserDetails oauthUser,
-                                                      @RequestBody UpdateUserRequest nickname) {
+    public ResponseEntity<ApiResponse> changeNickname(
+            @AuthenticationPrincipal OauthUserDetails oauthUser,
+            @RequestBody UpdateUserRequest nickname
+    ) {
         userCommandService.updateUserNickname(oauthUser.getUser(), nickname);
 
         return ResponseEntity.ok().build();
@@ -55,14 +58,26 @@ public class UserController {
     }
 
     @ApiHeader
+    @Operation(
+            summary = ApiDescriptions.GET_USER_NICKNAME_SUMMARY,
+            description = ApiDescriptions.GET_USER_NICKNAME_DESCRIPTION
+    )
     @GetMapping("/nickname")
     public ResponseEntity<ApiResponse> getUserNickname(@AuthenticationPrincipal OauthUserDetails oauthUser) {
-        return ResponseEntity.ok(SuccessResponse.of(oauthUser.getUser().getNickname()));
+        String nickname = userQueryService.getUserNickname(oauthUser.getUser());
+
+        return ResponseEntity.ok(SuccessResponse.of(nickname));
     }
 
     @ApiHeader
+    @Operation(
+            summary = ApiDescriptions.GET_USER_SUMMARY,
+            description = ApiDescriptions.GET_USER_DESCRIPTION
+    )
     @GetMapping()
     public ResponseEntity<ApiResponse> getUserInfo(@AuthenticationPrincipal OauthUserDetails oauthUser) {
-        return ResponseEntity.ok(SuccessResponse.of(oauthUser.getUser()));
+        OauthUser user = userQueryService.findByUserId(oauthUser.getUser().getId());
+
+        return ResponseEntity.ok(SuccessResponse.of(user));
     }
 }

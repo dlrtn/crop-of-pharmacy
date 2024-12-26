@@ -16,10 +16,11 @@ public class UserCommandService {
     @Transactional
     public void updateUserNickname(OauthUser user, UpdateUserRequest updateUserRequest) {
         user.updateNickname(updateUserRequest.nickname());
+
+        userRepository.save(user);
     }
 
     public void withdrawUser(OauthUser user) {
         userRepository.delete(user);
-
     }
 }

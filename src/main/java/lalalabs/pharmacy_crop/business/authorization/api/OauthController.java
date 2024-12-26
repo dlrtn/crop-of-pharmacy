@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Oauth", description = "소셜 사용자의 인증, 탈퇴 등을 처리합니다.")
+@Tag(name = "소셜 인증", description = "소셜 사용자의 인증, 탈퇴 등을 처리합니다.")
 @RequestMapping("/oauth")
 public class OauthController {
 
@@ -41,6 +41,11 @@ public class OauthController {
         return ResponseEntity.ok().body(SuccessResponse.of(jwtTokens));
     }
 
+
+    @Operation(
+            summary = ApiDescriptions.REFRESH_TOKEN_SUMMARY,
+            description = ApiDescriptions.REFRESH_TOKEN_DESCRIPTION
+    )
     @PostMapping("/token/refresh")
     public ResponseEntity<ApiResponse> refreshToken(@RequestBody JwtTokensDto jwtTokensDto) {
         JwtTokensDto jwtTokens = oauthService.refreshToken(jwtTokensDto);
