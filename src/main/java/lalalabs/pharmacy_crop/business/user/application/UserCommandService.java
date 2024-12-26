@@ -22,5 +22,6 @@ public class UserCommandService {
 
     public void withdrawUser(OauthUser user) {
         userRepository.delete(user);
+        // Todo: delete user's related data
     }
 }
