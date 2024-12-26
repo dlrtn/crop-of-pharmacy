@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,7 +24,7 @@ public class FarmGuardDetailDto {
 
     private String date;
 
-    private String answer;
+    private FarmGuardAnswerDto answer;
 
     public static FarmGuardDetailDto fromDomain(FarmGuard farmGuard, FarmGuardAnswer answer) {
         return FarmGuardDetailDto.builder()
@@ -35,7 +33,7 @@ public class FarmGuardDetailDto {
                 .content(farmGuard.getContent())
                 .imagePath("http://1.234.83.196:8080" + farmGuard.getPicturePath().substring(4))
                 .date(TimeUtils.convertToDateFormat(farmGuard.getCreatedDate()))
-                .answer(answer.getContent())
+                .answer(FarmGuardAnswerDto.fromDomain(answer))
                 .build();
     }
 

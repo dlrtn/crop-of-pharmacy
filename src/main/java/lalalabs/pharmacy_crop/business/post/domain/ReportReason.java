@@ -1,5 +1,8 @@
 package lalalabs.pharmacy_crop.business.post.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum ReportReason {
     OTHER(0),
     ADVERTISEMENT_OR_PORNOGRAPHY(1),
@@ -22,7 +25,4 @@ public enum ReportReason {
         };
     }
 
-    public int getValue() {
-        return value;
-    }
 }

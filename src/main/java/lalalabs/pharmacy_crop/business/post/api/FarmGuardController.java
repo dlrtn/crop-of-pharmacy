@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RequestMapping("/farm-guards")
 @RestController
+@RequestMapping("/farm-guards")
 @RequiredArgsConstructor
 public class FarmGuardController {
 
@@ -108,7 +108,7 @@ public class FarmGuardController {
     public ResponseEntity<ApiResponse> reportFarmGuard(
             @AuthenticationPrincipal OauthUserDetails userDetails,
             @Parameter(name = "id", description = "병충해 ID", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "reportReason", description = "신고 내용", required = true) @RequestParam int reportReason
+            @Parameter(name = "reportReason", description = "신고 내용, 0: 기타, 1: 광고 및 음란물, 2: 불쾌한 내용, 3: 스팸", required = true) @RequestParam int reportReason
     ) {
         CommandFarmGuardReportHistoryRequest reportHistoryDto = CommandFarmGuardReportHistoryRequest.builder()
                 .farmGuardId(id)
@@ -141,8 +141,10 @@ public class FarmGuardController {
     public ResponseEntity<ApiResponse> createFrequentlyFarmGuard(
             @Parameter(name = "farmGuardId", description = "병충해 ID", required = true) @RequestParam Long farmGuardId
     ) {
-        farmGuardService.updateFarmGuardViewedStatus(farmGuardId);
+        farmGuardService.updateFarmGuardOftenViewedStatus(farmGuardId);
 
         return ResponseEntity.ok(SuccessResponse.of());
     }
 }
+
+

@@ -23,9 +23,9 @@ public class FarmGuardDto {
 
     private String date;
 
-    private boolean isComplained;
+    private Boolean isComplained;
 
-    private boolean isAnswered;
+    private Boolean isAnswered;
 
     public static FarmGuardDto fromDomain(FarmGuard farmGuard, boolean isReported, boolean isAnswered) {
         return FarmGuardDto.builder()

@@ -29,4 +29,7 @@ public class FarmGuardAnswer {
 
     @Column
     private String content;
+
+    @Column
+    private int productId;
 }

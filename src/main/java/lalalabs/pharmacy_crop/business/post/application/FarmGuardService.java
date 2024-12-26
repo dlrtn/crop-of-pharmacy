@@ -106,6 +106,7 @@ public class FarmGuardService {
                 .farmGuardId(farmGuardId)
                 .userId(farmGuard.getUserId())
                 .content(content.getContent())
+                .productId(content.getProductId())
                 .build();
 
         farmGuardAnswerRepository.save(answer);
@@ -119,7 +120,7 @@ public class FarmGuardService {
         return farmGuards.stream().map(this::getFarmGuardDto).toList();
     }
 
-    public void updateFarmGuardViewedStatus(Long farmGuardId) {
+    public void updateFarmGuardOftenViewedStatus(Long farmGuardId) {
         FarmGuard farmGuard = getOrElseThrow(farmGuardId);
 
         farmGuard.updateOftenViewedStatus();
