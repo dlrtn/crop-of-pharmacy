@@ -40,7 +40,7 @@ public class PushNotificationController {
     }
 
     @ApiHeader
-    @Operation(summary = "푸시 알림 발송", description = "푸시 알림을 발송합니다.")
+    @Operation(summary = "푸시 알림 발송(미구현)", description = "푸시 알림을 발송합니다.")
     @PostMapping("/send")
     public ResponseEntity<ApiResponse> sendPushNotification(
             @AuthenticationPrincipal OauthUserDetails user,
