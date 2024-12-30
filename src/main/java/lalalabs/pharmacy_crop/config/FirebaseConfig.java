@@ -20,13 +20,11 @@ public class FirebaseConfig {
     @javax.annotation.PostConstruct
     public void initializeFirebaseApp() {
         try {
-            // 환경 변수 또는 구성 파일로부터 JSON 문자열 가져오기
             String firebaseConfigJson = firebaseProperties.getJsonConfig();
             if (firebaseConfigJson == null || firebaseConfigJson.isEmpty()) {
                 throw new IllegalStateException("Firebase configuration JSON is missing or empty");
             }
 
-            // Firebase 초기화
             ByteArrayInputStream serviceAccount = new ByteArrayInputStream(firebaseConfigJson.getBytes());
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
