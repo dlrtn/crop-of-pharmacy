@@ -6,4 +6,6 @@ import lombok.Getter;
 public class PushNotificationToken {
 
     private String token;
+
+    private Boolean isAgreePushNotification;
 }

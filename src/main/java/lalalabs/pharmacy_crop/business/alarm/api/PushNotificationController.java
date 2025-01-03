@@ -51,4 +51,3 @@ public class PushNotificationController {
         return ResponseEntity.ok(SuccessResponse.of());
     }
 }
-
