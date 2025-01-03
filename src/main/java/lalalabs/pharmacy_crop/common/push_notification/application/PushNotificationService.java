@@ -61,17 +61,14 @@ public class PushNotificationService {
         return userFcmToken != null;
     }
 
-    public void updateAgreePushNotification(String userId, boolean isAgreePushNotification) {
+    public void updateAgreePushNotification(String userId, PushNotificationToken token) {
         UserFcmToken userFcmToken = userFcmTokenRepository.findByUserId(userId);
 
         if (userFcmToken == null) {
-            userFcmToken = UserFcmToken.builder()
-                    .userId(userId)
-                    .isAgreePushNotification(isAgreePushNotification)
-                    .build();
+            userFcmToken = UserFcmToken.fromDto(userId, token);
         }
 
-        userFcmToken.updateAgreePushNotification();
+        userFcmToken.updateAgreePushNotification(token);
         userFcmTokenRepository.save(userFcmToken);
     }
 }

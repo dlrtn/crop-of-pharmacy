@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Tag(name = "푸시 알림", description = "푸시 알림 관련 기능들을 제공합니다.")
@@ -47,6 +44,18 @@ public class PushNotificationController {
             @RequestBody PushNotificationBody body
     ) {
         pushNotificationService.send(user.getUser().getId(), body);
+
+        return ResponseEntity.ok(SuccessResponse.of());
+    }
+
+    @ApiHeader
+    @Operation(summary = "푸시 알림 수신 여부 수정", description = "푸시 알림 수신 여부를 수정합니다.")
+    @PatchMapping("/tokens")
+    public ResponseEntity<ApiResponse> updatePushNotificationAgree(
+            @AuthenticationPrincipal OauthUserDetails user,
+            @RequestBody PushNotificationToken token
+    ) {
+        pushNotificationService.updateAgreePushNotification(user.getUser().getId(), token);
 
         return ResponseEntity.ok(SuccessResponse.of());
     }

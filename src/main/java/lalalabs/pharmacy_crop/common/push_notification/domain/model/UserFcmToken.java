@@ -40,7 +40,8 @@ public class UserFcmToken {
         this.token = token;
     }
 
-    public void updateAgreePushNotification() {
-        this.isAgreePushNotification = !isAgreePushNotification;
+    public void updateAgreePushNotification(PushNotificationToken token) {
+        this.token = token.getToken();
+        this.isAgreePushNotification = token.getIsAgreePushNotification();
     }
 }

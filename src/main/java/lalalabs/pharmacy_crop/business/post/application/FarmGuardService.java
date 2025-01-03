@@ -77,7 +77,7 @@ public class FarmGuardService {
     }
 
     private FarmGuardDto getFarmGuardDto(FarmGuard farmGuard) {
-        boolean isReported = reportRepository.existsById(farmGuard.getId());
+        boolean isReported = reportRepository.existsByFarmGuardId(farmGuard.getId());
         boolean isAnswered = farmGuardAnswerRepository.existsFarmGuardAnswerByFarmGuardId(farmGuard.getId());
         OauthUser user = userQueryService.findByUserId(farmGuard.getUserId());
 
