@@ -8,21 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class GoogleOauthProperties {
 
-    @Value("${authorization.oauth.google.key.client-id}")
-    private String clientId;
-
-    @Value("${authorization.oauth.google.key.android-client-id}")
-    private String androidClientId;
-
-    @Value("${authorization.oauth.google.key.ios-client-id}")
-    private String iosClientId;
-
-    @Value("${authorization.oauth.google.key.any-client-id}")
-    private String anyClientId;
-
-    @Value("${authorization.oauth.google.key.client-secret}")
-    private String clientSecret;
-
     @Value("${authorization.oauth.google.uri.authorize-code}")
     private String authorizeCodeUri;
 
