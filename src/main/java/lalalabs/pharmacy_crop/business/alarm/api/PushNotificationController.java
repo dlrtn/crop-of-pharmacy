@@ -27,10 +27,7 @@ public class PushNotificationController {
     @ApiHeader
     @Operation(summary = "푸시 알림 토큰 등록", description = "존재하지 않는 경우, 신규 등록하며 이미 존재하는 경우, 업데이트합니다.")
     @PostMapping("/tokens")
-    public ResponseEntity<ApiResponse> registerPushNotificationToken(
-            @AuthenticationPrincipal OauthUserDetails user,
-            @RequestBody PushNotificationToken token
-    ) {
+    public ResponseEntity<ApiResponse> registerPushNotificationToken(@AuthenticationPrincipal OauthUserDetails user, @RequestBody PushNotificationToken token) {
         pushNotificationService.registerToken(user.getUser().getId(), token);
 
         return ResponseEntity.ok(SuccessResponse.of());
@@ -39,10 +36,7 @@ public class PushNotificationController {
     @ApiHeader
     @Operation(summary = "푸시 알림 발송", description = "푸시 알림을 발송합니다.")
     @PostMapping("/send")
-    public ResponseEntity<ApiResponse> sendPushNotification(
-            @AuthenticationPrincipal OauthUserDetails user,
-            @RequestBody PushNotificationBody body
-    ) {
+    public ResponseEntity<ApiResponse> sendPushNotification(@AuthenticationPrincipal OauthUserDetails user, @RequestBody PushNotificationBody body) {
         pushNotificationService.send(user.getUser().getId(), body);
 
         return ResponseEntity.ok(SuccessResponse.of());
