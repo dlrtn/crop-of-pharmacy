@@ -9,8 +9,10 @@ import java.util.regex.Pattern;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumTemperatureForecast;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.MediumWeatherForecast;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.ShortForecast;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ForecastParser {
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class BaseDateTimeUtils {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
     private static final int[] BASE_HOURS = {2, 5, 8, 11, 14, 17, 20, 23};
 
     public String calculateNowTime(LocalDateTime now) {
@@ -41,5 +42,11 @@ public class BaseDateTimeUtils {
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
 
         return yesterday.format(DATE_FORMATTER);
+    }
+
+    public static String getToday() {
+        LocalDateTime today = LocalDateTime.now();
+
+        return today.format(DATE_TIME_FORMATTER);
     }
 }

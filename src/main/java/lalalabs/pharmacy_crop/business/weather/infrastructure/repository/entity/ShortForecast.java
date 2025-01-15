@@ -46,4 +46,8 @@ public class ShortForecast {
 
     @Column(name = "st")
     private Integer rnSt;
+
+    public String toString() {
+        return "ShortForecast(id=" + this.getId() + ", regId=" + this.getRegId() + ", tmFc=" + this.getTmFc() + ", tmEf=" + this.getTmEf() + ", temperature=" + this.getTemperature() + ", sky=" + this.getSky() + ", pre=" + this.getPre() + ", rnSt=" + this.getRnSt() + ")";
+    }
 }

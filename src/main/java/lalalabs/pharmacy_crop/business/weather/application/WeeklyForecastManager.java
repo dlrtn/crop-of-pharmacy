@@ -1,5 +1,6 @@
 package lalalabs.pharmacy_crop.business.weather.application;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.domain.ForecastAreaCode;
@@ -29,6 +30,8 @@ public class WeeklyForecastManager {
 
     public List<WeeklyWeatherForecastDto> getWeeklyWeatherForecast(ForecastAreaCode forecastAreaCode) {
         List<ShortForecast> shortForecasts = getShortTermForecast(forecastAreaCode.getCode());
+
+
         List<MediumWeatherForecast> mediumWeatherForecasts = getMediumTermWeatherForecast(
                 forecastAreaCode.getGeneralCode());
         List<MediumTemperatureForecast> mediumTemperatureForecasts = getMediumTermTemperatureForecast(
@@ -47,9 +50,16 @@ public class WeeklyForecastManager {
 
         List<ShortForecast> shortForecasts = converter.convertShortTermWeatherForecast(response);
 
+        LocalDateTime now = LocalDateTime.now();
+
+        List<ShortForecast> filteredShortForecasts = shortForecasts.stream()
+                .filter(weatherForecast -> weatherForecast.getTmEf().isAfter(now)).toList();
+
+        filteredShortForecasts.forEach(filteredShortForecast -> log.info(filteredShortForecast.toString()));
+
         shortTermWeatherForecastRepository.saveAll(shortForecasts);
 
-        return shortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode))
+        return filteredShortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode))
                 .toList();
     }
 
