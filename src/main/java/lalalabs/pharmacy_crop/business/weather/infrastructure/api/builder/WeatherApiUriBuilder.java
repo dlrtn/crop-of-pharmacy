@@ -3,7 +3,6 @@ package lalalabs.pharmacy_crop.business.weather.infrastructure.api.builder;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.BaseDateTimeUtils;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.WeatherFetchProperty;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.WeatherApiDateTime;
 import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +30,7 @@ public class WeatherApiUriBuilder {
     }
 
     public String buildShortTermForecastUri(ForecastPoint forecastPoint) {
-        log.info("{}", BaseDateTimeUtils.getYesterday());
-
-        String url = initializeUriBuilder(weatherFetchProperty.getShortTermUri())
+        return initializeUriBuilder(weatherFetchProperty.getShortTermUri())
                 .queryParam("pageNo", 1)
                 .queryParam("numOfRows", 1000)
                 .queryParam("dataType", "JSON")
@@ -42,10 +39,6 @@ public class WeatherApiUriBuilder {
                 .queryParam("nx", forecastPoint.nx())
                 .queryParam("ny", forecastPoint.ny())
                 .toUriString();
-
-        log.info("{}", url);
-
-        return url;
     }
 
     public String buildMediumTermTemperatureForecastUri() {

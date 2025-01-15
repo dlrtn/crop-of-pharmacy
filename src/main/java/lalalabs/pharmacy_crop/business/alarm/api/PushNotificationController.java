@@ -16,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TimeZone;
 
 @Slf4j
 @Tag(name = "알림", description = "알림 관련 기능들을 제공합니다.")
@@ -75,15 +73,5 @@ public class PushNotificationController {
         pushNotificationService.readNotification(user.getUserId(), notificationId);
 
         return ResponseEntity.ok(SuccessResponse.of());
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return LocalDateTime.now().toString();
-    }
-
-    @GetMapping("/test2")
-    public String test2() {
-        return LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).toString();
     }
 }

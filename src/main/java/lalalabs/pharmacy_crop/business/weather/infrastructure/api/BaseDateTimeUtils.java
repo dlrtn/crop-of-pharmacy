@@ -45,10 +45,4 @@ public class BaseDateTimeUtils {
 
         return yesterday.format(DATE_FORMATTER);
     }
-
-    public static String getToday() {
-        LocalDateTime today = LocalDateTime.now();
-
-        return today.format(DATE_TIME_FORMATTER);
-    }
 }
