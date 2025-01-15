@@ -20,8 +20,8 @@ public class BaseDateTimeUtils {
     }
 
     public WeatherApiDateTime calculateBaseDateTime() {
-        LocalDateTime now = LocalDateTime.now();
-
+        LocalDateTime now = getNow();
+        
         return new WeatherApiDateTime(calculateBaseDate(now), calculateBaseTime(now), calculateNowTime(now));
     }
 
@@ -44,5 +44,9 @@ public class BaseDateTimeUtils {
         LocalDateTime yesterday = LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusDays(1);
 
         return yesterday.format(DATE_FORMATTER);
+    }
+    
+    public static LocalDateTime getNow() {
+        return LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId());
     }
 }
