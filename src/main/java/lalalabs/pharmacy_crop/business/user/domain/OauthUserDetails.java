@@ -31,6 +31,10 @@ public class OauthUserDetails implements UserDetails {
         return user.getId();
     }
 
+    public String getUserId() {
+        return user.getId();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
