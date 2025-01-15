@@ -33,7 +33,7 @@ public class WeatherApiUriBuilder {
     public String buildShortTermForecastUri(ForecastPoint forecastPoint) {
         log.info("{}", BaseDateTimeUtils.getYesterday());
 
-        return initializeUriBuilder(weatherFetchProperty.getShortTermUri())
+        String url = initializeUriBuilder(weatherFetchProperty.getShortTermUri())
                 .queryParam("pageNo", 1)
                 .queryParam("numOfRows", 1000)
                 .queryParam("dataType", "JSON")
@@ -42,6 +42,10 @@ public class WeatherApiUriBuilder {
                 .queryParam("nx", forecastPoint.nx())
                 .queryParam("ny", forecastPoint.ny())
                 .toUriString();
+
+        log.info("{}", url);
+
+        return url;
     }
 
     public String buildMediumTermTemperatureForecastUri() {
