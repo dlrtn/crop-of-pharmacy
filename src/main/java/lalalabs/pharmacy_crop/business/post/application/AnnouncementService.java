@@ -27,12 +27,10 @@ public class AnnouncementService {
 
     @Transactional
     public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
-        log.info("create announcement");
         Announcement announcement = Announcement.builder().userId(userId.getId()).title(request.getTitle())
                 .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
                 .build();
 
-        log.info("save announcement");
         announcementRepository.save(announcement);
     }
 
