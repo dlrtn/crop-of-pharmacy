@@ -3,6 +3,8 @@ package lalalabs.pharmacy_crop.business.weather.infrastructure.api;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.TimeZone;
+
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.WeatherApiDateTime;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +41,7 @@ public class BaseDateTimeUtils {
     }
 
     public static String getYesterday() {
-        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        LocalDateTime yesterday = LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId()).minusDays(1);
 
         return yesterday.format(DATE_FORMATTER);
     }
