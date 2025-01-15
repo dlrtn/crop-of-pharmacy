@@ -26,7 +26,7 @@ public class WeatherForecastService {
     private final WeeklyForecastManager weeklyForecastManager;
 
     public TodayWeatherForecastDto getTodayWeatherForecast(Coordinate coordinate) {
-        ForecastPoint gridNumber = gridNumberFetcher.fetchWeatherInformation(coordinate);
+        ForecastPoint gridNumber = gridNumberFetcher.fetchGridNumber(coordinate);
 
         List<ShortTermForecastItem> shortTermForecastItemList = todayTermForecastFetcher.fetchWeatherInformation(
                 gridNumber);

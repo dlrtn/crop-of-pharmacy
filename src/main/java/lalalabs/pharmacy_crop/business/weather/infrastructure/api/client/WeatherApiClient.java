@@ -16,11 +16,10 @@ public class WeatherApiClient {
     private final RestClient restClient = RestClient.create();
     private final WeatherApiUriBuilder weatherApiUriBuilder;
 
-    public ShortTermWeatherApiResponse getShortTermWeatherForecast(ForecastPoint forecastPoint,
-                                                                   WeatherApiDateTime weatherApiDateTime) {
+    public ShortTermWeatherApiResponse getShortTermWeatherForecast(ForecastPoint forecastPoint) {
         return restClient
                 .get()
-                .uri(weatherApiUriBuilder.buildShortTermForecastUri(forecastPoint, weatherApiDateTime))
+                .uri(weatherApiUriBuilder.buildShortTermForecastUri(forecastPoint))
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, ((request, response) -> {
                     throw new RuntimeException(String.valueOf(response.getStatusCode()));

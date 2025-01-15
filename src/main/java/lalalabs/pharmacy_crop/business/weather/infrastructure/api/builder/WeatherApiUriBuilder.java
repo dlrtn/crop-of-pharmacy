@@ -1,13 +1,16 @@
 package lalalabs.pharmacy_crop.business.weather.infrastructure.api.builder;
 
+import lalalabs.pharmacy_crop.business.weather.infrastructure.api.BaseDateTimeUtils;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.WeatherFetchProperty;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.WeatherApiDateTime;
 import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class WeatherApiUriBuilder {
@@ -27,13 +30,14 @@ public class WeatherApiUriBuilder {
                 .toUriString();
     }
 
-    public String buildShortTermForecastUri(ForecastPoint forecastPoint, WeatherApiDateTime weatherApiDateTime) {
+    public String buildShortTermForecastUri(ForecastPoint forecastPoint) {
+
         return initializeUriBuilder(weatherFetchProperty.getShortTermUri())
                 .queryParam("pageNo", 1)
                 .queryParam("numOfRows", 1000)
                 .queryParam("dataType", "JSON")
-                .queryParam("base_date", weatherApiDateTime.baseDate())
-                .queryParam("base_time", "0200")
+                .queryParam("base_date", BaseDateTimeUtils.getYesterday())
+                .queryParam("base_time", "2300")
                 .queryParam("nx", forecastPoint.nx())
                 .queryParam("ny", forecastPoint.ny())
                 .toUriString();

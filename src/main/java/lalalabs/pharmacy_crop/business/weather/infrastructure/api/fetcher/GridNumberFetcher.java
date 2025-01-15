@@ -19,7 +19,7 @@ public class GridNumberFetcher {
     private final WeatherApiClient weatherApiClient;
     private final WeatherFetchProperty weatherFetchProperty;
 
-    public ForecastPoint fetchWeatherInformation(Coordinate coordinate) {
+    public ForecastPoint fetchGridNumber(Coordinate coordinate) {
         String response = weatherApiClient.getGridNumber(coordinate);
 
         return parseResponse(response);

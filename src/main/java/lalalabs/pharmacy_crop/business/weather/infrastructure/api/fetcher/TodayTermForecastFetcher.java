@@ -1,7 +1,5 @@
 package lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher;
 
-import java.util.List;
-import lalalabs.pharmacy_crop.business.weather.application.ForecastConverter;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.BaseDateTimeUtils;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.client.WeatherApiClient;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
@@ -12,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -19,20 +19,18 @@ public class TodayTermForecastFetcher {
 
     private final WeatherApiClient apiClient;
     private final BaseDateTimeUtils baseDateTimeUtils;
-    private final ForecastConverter forecastConverter;
 
     public List<ShortTermForecastItem> fetchWeatherInformation(ForecastPoint forecastPoint) {
-        WeatherApiDateTime weatherApiDateTime = baseDateTimeUtils.calculateBaseDateTime();
+        ShortTermWeatherApiResponse response = apiClient.getShortTermWeatherForecast(forecastPoint);
 
-        ShortTermWeatherApiResponse response = apiClient.getShortTermWeatherForecast(forecastPoint, weatherApiDateTime);
+        log.info("ShortTermWeatherApiResponse: {}", response);
 
-        return filterForecastItems(response, weatherApiDateTime);
+        return filterForecastItems(response);
     }
 
-    private List<ShortTermForecastItem> filterForecastItems(ShortTermWeatherApiResponse response,
-                                                            WeatherApiDateTime weatherApiDateTime) {
-        return response.getShortTermForecastItems().stream()
-                .filter(item -> item.fcstDate().equals(weatherApiDateTime.baseDate()))
-                .toList();
+    private List<ShortTermForecastItem> filterForecastItems(ShortTermWeatherApiResponse response) {
+        WeatherApiDateTime weatherApiDateTime = baseDateTimeUtils.calculateBaseDateTime();
+
+        return response.getShortTermForecastItems().stream().filter(item -> item.fcstDate().equals(weatherApiDateTime.baseDate())).toList();
     }
 }

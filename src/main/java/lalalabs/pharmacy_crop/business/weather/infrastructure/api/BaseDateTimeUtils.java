@@ -36,4 +36,10 @@ public class BaseDateTimeUtils {
     private String calculateBaseDate(LocalDateTime now) {
         return now.format(DATE_FORMATTER);
     }
+
+    public static String getYesterday() {
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+
+        return yesterday.format(DATE_FORMATTER);
+    }
 }
