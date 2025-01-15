@@ -52,7 +52,7 @@ public class WeeklyForecastManager {
 
         List<ShortForecast> filteredShortForecasts = shortForecasts.stream().filter(weatherForecast -> weatherForecast.getTmEf().isAfter(now)).toList();
 
-        shortTermWeatherForecastRepository.saveAll(shortForecasts);
+        shortTermWeatherForecastRepository.saveAll(filteredShortForecasts);
 
         return filteredShortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
     }
