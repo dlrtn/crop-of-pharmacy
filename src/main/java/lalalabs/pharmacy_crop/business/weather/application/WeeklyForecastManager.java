@@ -1,9 +1,5 @@
 package lalalabs.pharmacy_crop.business.weather.application;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.TimeZone;
-
 import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.domain.ForecastAreaCode;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher.MediumTermForecastFetcher;
@@ -17,6 +13,9 @@ import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -34,13 +33,10 @@ public class WeeklyForecastManager {
         List<ShortForecast> shortForecasts = getShortTermForecast(forecastAreaCode.getCode());
 
 
-        List<MediumWeatherForecast> mediumWeatherForecasts = getMediumTermWeatherForecast(
-                forecastAreaCode.getGeneralCode());
-        List<MediumTemperatureForecast> mediumTemperatureForecasts = getMediumTermTemperatureForecast(
-                forecastAreaCode.getCode());
+        List<MediumWeatherForecast> mediumWeatherForecasts = getMediumTermWeatherForecast(forecastAreaCode.getGeneralCode());
+        List<MediumTemperatureForecast> mediumTemperatureForecasts = getMediumTermTemperatureForecast(forecastAreaCode.getCode());
 
-        return converter.convertWeeklyWeatherForecast(shortForecasts, mediumWeatherForecasts,
-                mediumTemperatureForecasts);
+        return converter.convertWeeklyWeatherForecast(shortForecasts, mediumWeatherForecasts, mediumTemperatureForecasts);
     }
 
     private List<ShortForecast> getShortTermForecast(String regionCode) {
@@ -52,17 +48,13 @@ public class WeeklyForecastManager {
 
         List<ShortForecast> shortForecasts = converter.convertShortTermWeatherForecast(response);
 
-        LocalDateTime now = LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId());
+        LocalDateTime now = shortForecasts.getFirst().getTmFc();
 
-        List<ShortForecast> filteredShortForecasts = shortForecasts.stream()
-                .filter(weatherForecast -> weatherForecast.getTmEf().isAfter(now)).toList();
-
-        filteredShortForecasts.forEach(filteredShortForecast -> log.info(filteredShortForecast.toString()));
+        List<ShortForecast> filteredShortForecasts = shortForecasts.stream().filter(weatherForecast -> weatherForecast.getTmEf().isAfter(now)).toList();
 
         shortTermWeatherForecastRepository.saveAll(shortForecasts);
 
-        return filteredShortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode))
-                .toList();
+        return filteredShortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
     }
 
     private List<MediumWeatherForecast> getMediumTermWeatherForecast(String regionCode) {
@@ -76,8 +68,7 @@ public class WeeklyForecastManager {
 
         weatherForecastRepository.saveAll(weatherForecasts);
 
-        return weatherForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode))
-                .toList();
+        return weatherForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
     }
 
     private List<MediumTemperatureForecast> getMediumTermTemperatureForecast(String regionCode) {
@@ -91,7 +82,6 @@ public class WeeklyForecastManager {
 
         temperatureForecastRepository.saveAll(temperatureForecasts);
 
-        return temperatureForecasts.stream()
-                .filter(temperatureForecast -> temperatureForecast.getRegId().equals(regionCode)).toList();
+        return temperatureForecasts.stream().filter(temperatureForecast -> temperatureForecast.getRegId().equals(regionCode)).toList();
     }
 }
