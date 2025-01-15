@@ -1,8 +1,6 @@
 package lalalabs.pharmacy_crop.common.push_notification.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lalalabs.pharmacy_crop.common.push_notification.domain.model.dto.PushNotificationToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserFcmToken {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
