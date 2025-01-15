@@ -2,6 +2,8 @@ package lalalabs.pharmacy_crop.business.weather.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.TimeZone;
+
 import lalalabs.pharmacy_crop.business.weather.api.dto.WeeklyWeatherForecastDto;
 import lalalabs.pharmacy_crop.business.weather.domain.ForecastAreaCode;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher.MediumTermForecastFetcher;
@@ -50,7 +52,7 @@ public class WeeklyForecastManager {
 
         List<ShortForecast> shortForecasts = converter.convertShortTermWeatherForecast(response);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(TimeZone.getTimeZone("Asia/Seoul").toZoneId());
 
         List<ShortForecast> filteredShortForecasts = shortForecasts.stream()
                 .filter(weatherForecast -> weatherForecast.getTmEf().isAfter(now)).toList();
