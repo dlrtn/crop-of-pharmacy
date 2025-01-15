@@ -23,8 +23,6 @@ public class TodayTermForecastFetcher {
     public List<ShortTermForecastItem> fetchWeatherInformation(ForecastPoint forecastPoint) {
         ShortTermWeatherApiResponse response = apiClient.getShortTermWeatherForecast(forecastPoint);
 
-        log.info("ShortTermWeatherApiResponse: {}", response);
-
         return filterForecastItems(response);
     }
 

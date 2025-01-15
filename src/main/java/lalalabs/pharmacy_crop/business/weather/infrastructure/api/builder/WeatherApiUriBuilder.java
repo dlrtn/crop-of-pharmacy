@@ -31,6 +31,7 @@ public class WeatherApiUriBuilder {
     }
 
     public String buildShortTermForecastUri(ForecastPoint forecastPoint) {
+        log.info("{}", BaseDateTimeUtils.getYesterday());
 
         return initializeUriBuilder(weatherFetchProperty.getShortTermUri())
                 .queryParam("pageNo", 1)
