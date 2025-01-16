@@ -13,13 +13,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// 병해충 잡초 찾기 도메인
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class FarmGuard extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
