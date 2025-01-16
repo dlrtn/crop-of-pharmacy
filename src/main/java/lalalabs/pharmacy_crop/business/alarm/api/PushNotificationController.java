@@ -1,6 +1,7 @@
 package lalalabs.pharmacy_crop.business.alarm.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.alarm.api.dto.NotificationDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
@@ -60,8 +61,9 @@ public class PushNotificationController {
     @ApiHeader
     @Operation(summary = "수신한 알림 조회", description = "수신한 알림을 조회합니다.")
     @GetMapping("/notification/")
-    public ResponseEntity<ApiResponse> getPushNotificationAgree(@AuthenticationPrincipal OauthUserDetails user) {
-        List<NotificationDto> notificationDtoList = pushNotificationService.getNotifications(user.getUserId());
+    public ResponseEntity<ApiResponse> getPushNotificationAgree(@AuthenticationPrincipal OauthUserDetails user, @Parameter(name = "page", description = "페이지 번호(0 ~ )", required = true) @RequestParam int page, @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size) {
+
+        List<NotificationDto> notificationDtoList = pushNotificationService.getNotifications(user.getUserId(), page, size);
 
         return ResponseEntity.ok(SuccessResponse.of(notificationDtoList));
     }

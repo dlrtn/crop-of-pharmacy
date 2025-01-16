@@ -14,10 +14,12 @@ import lalalabs.pharmacy_crop.common.push_notification.repository.UserFcmTokenRe
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -87,12 +89,13 @@ public class PushNotificationService {
         notificationRepository.save(notification);
     }
 
-    public List<NotificationDto> getNotifications(String userId) {
-        List<Notification> notifications = notificationRepository.findByUserId(userId);
+    public List<NotificationDto> getNotifications(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
+
+        List<Notification> notifications = notificationRepository.findByUserId(userId, pageable);
 
         return notifications.stream()
                 .map(NotificationDto::fromDomain)
-                .sorted((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()))
                 .toList();
     }
 
