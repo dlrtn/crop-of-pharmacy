@@ -1,11 +1,6 @@
 package lalalabs.pharmacy_crop.business.post.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardReportHistoryRequest;
 import lalalabs.pharmacy_crop.common.time.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -16,19 +11,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "farm_guard_report_history")
 public class FarmGuardReportHistory extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(name = "farm_guard_id")
     private Long farmGuardId;
 
-    @Column
+    @Column(name = "user_id")
     private String userId;
 
-    @Column
+    @Column(name = "content")
     @Enumerated
     private ReportReason content;
 

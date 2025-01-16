@@ -1,10 +1,6 @@
 package lalalabs.pharmacy_crop.business.post.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardRequest;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.common.time.BaseTimeEntity;
@@ -18,25 +14,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Table(name = "farm_guard")
 public class FarmGuard extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(name = "user_id")
     private String userId;
 
-    @Column
+    @Column(name = "title")
     private String title;
 
-    @Column
+    @Column(name = "content")
     private String content;
 
-    @Column
+    @Column(name = "picture_path")
     private String picturePath;
 
-    @Column
+    @Column(name = "often_viewed")
     private boolean oftenViewed;
 
     public static FarmGuard create(CommandFarmGuardRequest request, OauthUser user, String picturePath) {

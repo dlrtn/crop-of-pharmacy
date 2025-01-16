@@ -13,22 +13,23 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "notification")
 public class Notification extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column
+    @Column(name = "user_id")
     private String userId;
 
-    @Column
+    @Column(name = "title")
     private String title;
 
-    @Column
+    @Column(name = "body")
     private String body;
 
-    @Column
+    @Column(name = "is_read")
     private boolean isRead;
 
     public static Notification from(String userId, PushNotificationBody body) {

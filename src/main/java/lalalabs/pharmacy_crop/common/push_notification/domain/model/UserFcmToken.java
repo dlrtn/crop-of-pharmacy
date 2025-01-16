@@ -12,19 +12,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "user_fcm_token")
 public class UserFcmToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column
+    @Column(name = "user_id")
     private String userId;
 
-    @Column
+    @Column(name = "token")
     private String token;
 
-    @Column
+    @Column(name = "is_agree_push_notification")
     private Boolean isAgreePushNotification;
 
     public static UserFcmToken fromDto(String userId, PushNotificationToken token) {

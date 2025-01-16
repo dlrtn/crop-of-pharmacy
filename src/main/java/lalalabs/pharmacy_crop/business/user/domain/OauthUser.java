@@ -1,11 +1,6 @@
 package lalalabs.pharmacy_crop.business.user.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthId;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
@@ -20,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "oauth_user")
 public class OauthUser extends BaseTimeEntity {
 
     @Id
@@ -27,15 +23,16 @@ public class OauthUser extends BaseTimeEntity {
     private String id = String.valueOf(java.util.UUID.randomUUID());
 
     @Embedded
+    @Column(name = "oauth_id")
     private OauthId oauthId;
 
-    @Column
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column
+    @Column(name = "picture")
     private String picture;
 
-    @Column
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
