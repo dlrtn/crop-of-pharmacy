@@ -27,8 +27,6 @@ public class ShoppingCartService {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseGet(() -> shoppingCartRepository.save(ShoppingCart.emptyCart(userId)));
 
-        log.info("shoppingCart: {}", shoppingCart);
-
         // 상품 가져오기
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
@@ -52,7 +50,7 @@ public class ShoppingCartService {
     @Transactional(readOnly = true)
     public ShoppingCartDto getCart(String userId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다."));
+                .orElse(ShoppingCart.emptyCart(userId));
         return ShoppingCartDto.from(shoppingCart);
     }
 
