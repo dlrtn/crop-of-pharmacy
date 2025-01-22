@@ -24,7 +24,7 @@ public class ShoppingCartItemDto {
 
     public static ShoppingCartItemDto from(ShoppingCartItem item) {
         return ShoppingCartItemDto.builder()
-                .productId(item.getProduct().getFPcode())
+                .productId(item.getProduct().getProductId())
                 .productName(item.getProduct().getFname())
                 .quantity(item.getQuantity())
                 .unit(item.getUnit())

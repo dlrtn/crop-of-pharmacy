@@ -52,7 +52,7 @@ public class ShoppingCart {
     }
 
     public void addItem(ShoppingCartItem item) {
-        if (items.stream().anyMatch(i -> i.getProduct().getFPcode().equals(item.getProduct().getFPcode()))) {
+        if (items.stream().anyMatch(i -> i.getProduct().getProductId().equals(item.getProduct().getProductId()))) {
             item.setShoppingCart(this);
         } else {
             items.add(item);

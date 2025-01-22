@@ -20,7 +20,7 @@ public class Product {
 
     @Id
     @Column(name = "fPcode", length = 12, nullable = false)
-    private String fPcode;
+    private String productId;
 
     @Column(name = "FSCODE", length = 3)
     private String fscode;

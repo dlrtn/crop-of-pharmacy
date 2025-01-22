@@ -18,7 +18,7 @@ public class ProductSummaryDto {
 
     public static ProductSummaryDto from(Product product) {
         return ProductSummaryDto.builder()
-                .productId(product.getFPcode())
+                .productId(product.getProductId())
                 .productName(product.getFname())
                 .productPrice(product.getFtdanga())
                 .productDiscountPrice(product.getFcdanga())

@@ -30,7 +30,7 @@ public class ProductDetailDto {
         String modelName = product.getModelName();
 
         return ProductDetailDto.builder()
-                .productId(product.getFPcode())
+                .productId(product.getProductId())
                 .productName(product.getFname())
                 .productPrice(product.getFtdanga())
                 .productDiscountPrice(product.getFcdanga())
