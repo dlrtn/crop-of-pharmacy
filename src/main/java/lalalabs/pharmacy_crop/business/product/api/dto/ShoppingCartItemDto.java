@@ -18,6 +18,10 @@ public class ShoppingCartItemDto {
 
     private String boxUnit;
 
+    private Integer originalPrice;
+
+    private Integer discountPrice;
+
     private Integer originalTotalPrice;
 
     private Integer discountTotalPrice;
@@ -29,6 +33,8 @@ public class ShoppingCartItemDto {
                 .quantity(item.getQuantity())
                 .unit(item.getUnit())
                 .boxUnit(item.getProduct().getPack())
+                .originalPrice(item.getOriginalPrice())
+                .discountPrice(item.getDiscountPrice())
                 .originalTotalPrice(item.getOriginalTotalPrice())
                 .discountTotalPrice(item.getDiscountTotalPrice())
                 .build();
