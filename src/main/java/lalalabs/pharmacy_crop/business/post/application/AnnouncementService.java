@@ -9,6 +9,8 @@ import lalalabs.pharmacy_crop.business.post.infrastructure.repository.Announceme
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.common.file.DirectoryType;
+import lalalabs.pharmacy_crop.common.push_notification.application.PushNotificationService;
+import lalalabs.pharmacy_crop.common.push_notification.domain.model.PushNotificationBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -24,12 +26,15 @@ public class AnnouncementService {
 
     private final LocalFileUploader localFileUploader;
     private final AnnouncementRepository announcementRepository;
+    private final AnnouncementPushNotificationSender pushNotificationSender;
 
     @Transactional
     public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
         Announcement announcement = Announcement.builder().userId(userId.getId()).title(request.getTitle())
                 .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
                 .build();
+
+        pushNotificationSender.sendAnnouncementPushNotification();
 
         announcementRepository.save(announcement);
     }
