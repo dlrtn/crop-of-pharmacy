@@ -31,8 +31,6 @@ public class WeeklyForecastManager {
 
     public List<WeeklyWeatherForecastDto> getWeeklyWeatherForecast(ForecastAreaCode forecastAreaCode) {
         List<ShortForecast> shortForecasts = getShortTermForecast(forecastAreaCode.getCode());
-
-
         List<MediumWeatherForecast> mediumWeatherForecasts = getMediumTermWeatherForecast(forecastAreaCode.getGeneralCode());
         List<MediumTemperatureForecast> mediumTemperatureForecasts = getMediumTermTemperatureForecast(forecastAreaCode.getCode());
 
@@ -44,6 +42,12 @@ public class WeeklyForecastManager {
             return shortTermWeatherForecastRepository.findByRegId(regionCode);
         }
 
+        List<ShortForecast> filteredShortForecasts = fetchShortForecast();
+
+        return filteredShortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
+    }
+
+    public List<ShortForecast> fetchShortForecast() {
         String response = shortTermForecastFetcher.getShortOverlandForecast();
 
         List<ShortForecast> shortForecasts = converter.convertShortTermWeatherForecast(response);
@@ -53,8 +57,7 @@ public class WeeklyForecastManager {
         List<ShortForecast> filteredShortForecasts = shortForecasts.stream().filter(weatherForecast -> weatherForecast.getTmEf().isAfter(now)).toList();
 
         shortTermWeatherForecastRepository.saveAll(filteredShortForecasts);
-
-        return filteredShortForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
+        return filteredShortForecasts;
     }
 
     private List<MediumWeatherForecast> getMediumTermWeatherForecast(String regionCode) {
@@ -62,13 +65,18 @@ public class WeeklyForecastManager {
             return weatherForecastRepository.findByRegId(regionCode);
         }
 
+        List<MediumWeatherForecast> weatherForecasts = fetchMediumWeatherForecast();
+
+        return weatherForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
+    }
+
+    public List<MediumWeatherForecast> fetchMediumWeatherForecast() {
         String response = mediumTermForecastFetcher.getWeatherForecastResponse();
 
         List<MediumWeatherForecast> weatherForecasts = converter.convertMediumWeatherForecast(response);
 
         weatherForecastRepository.saveAll(weatherForecasts);
-
-        return weatherForecasts.stream().filter(weatherForecast -> weatherForecast.getRegId().equals(regionCode)).toList();
+        return weatherForecasts;
     }
 
     private List<MediumTemperatureForecast> getMediumTermTemperatureForecast(String regionCode) {
@@ -76,12 +84,23 @@ public class WeeklyForecastManager {
             return temperatureForecastRepository.findByRegId(regionCode);
         }
 
+        List<MediumTemperatureForecast> temperatureForecasts = fetchMediumTemperatureForecast();
+
+        return temperatureForecasts.stream().filter(temperatureForecast -> temperatureForecast.getRegId().equals(regionCode)).toList();
+    }
+
+    public List<MediumTemperatureForecast> fetchMediumTemperatureForecast() {
         String response = mediumTermForecastFetcher.getTemperatureForecastResponse();
 
         List<MediumTemperatureForecast> temperatureForecasts = converter.convertMediumTemperatureForecast(response);
 
         temperatureForecastRepository.saveAll(temperatureForecasts);
+        return temperatureForecasts;
+    }
 
-        return temperatureForecasts.stream().filter(temperatureForecast -> temperatureForecast.getRegId().equals(regionCode)).toList();
+    public void fetchForecast() {
+        fetchShortForecast();
+        fetchMediumWeatherForecast();
+        fetchMediumTemperatureForecast();
     }
 }

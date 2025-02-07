@@ -9,11 +9,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class WeatherDataCleanUpService {
+public class WeatherDataManager {
 
     private final ShortTermWeatherForecastRepository shortTermWeatherForecastRepository;
     private final MediumWeatherForecastRepository mediumWeatherForecastRepository;
     private final MediumTemperatureForecastRepository mediumTemperatureForecastRepository;
+    private final WeeklyForecastManager weeklyForecastManager;
+
+    @Transactional
+    public void cacheWeatherData() {
+        weeklyForecastManager.fetchForecast();
+    }
 
     @Transactional
     public void cleanUp() {
