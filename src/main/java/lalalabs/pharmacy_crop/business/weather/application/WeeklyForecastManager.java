@@ -98,9 +98,15 @@ public class WeeklyForecastManager {
         return temperatureForecasts;
     }
 
-    public void fetchForecast() {
+    public void fetch() {
         fetchShortForecast();
         fetchMediumWeatherForecast();
         fetchMediumTemperatureForecast();
+    }
+
+    public void delete() {
+        shortTermWeatherForecastRepository.deleteAll();
+        weatherForecastRepository.deleteAll();
+        temperatureForecastRepository.deleteAll();
     }
 }

@@ -16,12 +16,15 @@ public class WeatherDataCleanUpScheduler {
 
     @Scheduled(cron = "0 0 6,18 * * ?")
     public void cleanUp() {
-        weatherDataManager.cleanUp();
+        weatherDataManager.refreshWeeklyForecast();
 
-        log.info("Weather data clean up completed");
+        log.info("Weekly forecast refresh completed");
+    }
 
-        weatherDataManager.cacheWeatherData();
+    @Scheduled(cron = "0 5 23 * * ?")
+    public void cacheWeatherData() {
+        weatherDataManager.refreshTodayForecast();
 
-        log.info("Weather data cache completed");
+        log.info("Today forecast data refresh completed");
     }
 }

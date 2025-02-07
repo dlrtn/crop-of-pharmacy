@@ -1,8 +1,9 @@
 package lalalabs.pharmacy_crop.business.weather.infrastructure.api.fetcher;
 
-import lalalabs.pharmacy_crop.business.weather.infrastructure.api.WeatherFetchProperty;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.client.WeatherApiClient;
 import lalalabs.pharmacy_crop.business.weather.infrastructure.api.dto.ForecastPoint;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.GridRepository;
+import lalalabs.pharmacy_crop.business.weather.infrastructure.repository.entity.Grid;
 import lalalabs.pharmacy_crop.common.coordinate.Coordinate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,23 @@ public class GridNumberFetcher {
     private static final int Y_INDEX = 3;
 
     private final WeatherApiClient weatherApiClient;
-    private final WeatherFetchProperty weatherFetchProperty;
+    private final GridRepository gridRepository;
+
+    public ForecastPoint getGridNumberFromDatabase(Coordinate coordinate) {
+        double minDistance = Double.MAX_VALUE;
+        ForecastPoint gridNumber = null;
+
+        for (Grid grid : gridRepository.findAll()) {
+            double distance = coordinate.calculateDistanceWith(new Coordinate(grid.getLatitude(), grid.getLongitude()));
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                gridNumber = new ForecastPoint(grid.getNx(), grid.getNy());
+            }
+        }
+
+        return gridNumber;
+    }
 
     public ForecastPoint fetchGridNumber(Coordinate coordinate) {
         String response = weatherApiClient.getGridNumber(coordinate);
