@@ -29,12 +29,8 @@ public class PushNotificationService {
     private final UserFcmTokenRepository userFcmTokenRepository;
     private final NotificationRepository notificationRepository;
 
-    @SneakyThrows
-    public void send(String userId, PushNotificationBody body) {
-        // send push notification
-        UserFcmToken userFcmToken = userFcmTokenRepository.findByUserId(userId);
-
-        saveNotification(userId, body);
+    public void send(UserFcmToken userFcmToken, PushNotificationBody body) {
+        saveNotification(userFcmToken.getUserId(), body);
 
         Message message = Message.builder()
                 .setToken(userFcmToken.getToken())
@@ -48,10 +44,25 @@ public class PushNotificationService {
                 // 토큰이 유효하지 않은 경우, 오류 코드를 반환
             } else if (e.getMessagingErrorCode().equals(MessagingErrorCode.UNREGISTERED)) {
                 // 재발급된 이전 토큰인 경우, 오류 코드를 반환
-            }
-            else { // 그 외, 오류는 런타임 예외로 처리
+            } else { // 그 외, 오류는 런타임 예외로 처리
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @SneakyThrows
+    public void sendNotificationByUserId(String userId, PushNotificationBody body) {
+        UserFcmToken userFcmToken = userFcmTokenRepository.findByUserId(userId);
+
+        send(userFcmToken, body);
+    }
+
+    @SneakyThrows
+    public void sendAll(PushNotificationBody body) {
+        List<UserFcmToken> userFcmTokens = userFcmTokenRepository.findAllByIsAgreePushNotification(Boolean.TRUE);
+
+        for (UserFcmToken userFcmToken : userFcmTokens) {
+            send(userFcmToken, body);
         }
     }
 

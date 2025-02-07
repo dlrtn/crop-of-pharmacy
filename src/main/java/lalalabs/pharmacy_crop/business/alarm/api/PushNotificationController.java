@@ -41,7 +41,7 @@ public class PushNotificationController {
     @Operation(summary = "푸시 알림 발송", description = "푸시 알림을 발송합니다.")
     @PostMapping("/push-notification/send")
     public ResponseEntity<ApiResponse> sendPushNotification(@AuthenticationPrincipal OauthUserDetails user, @RequestBody PushNotificationBody body) {
-        pushNotificationService.send(user.getUser().getId(), body);
+        pushNotificationService.sendNotificationByUserId(user.getUser().getId(), body);
 
         return ResponseEntity.ok(SuccessResponse.of());
     }

@@ -116,7 +116,7 @@ public class FarmGuardService {
         if (pushNotificationService.isAgreePushNotification(farmGuard.getUserId())) {
             PushNotificationBody notification = PushNotificationBody.builder().title("병충해 찾기 게시글에 답변이 등록되었습니다.").body("병충해 찾기 게시글에 답변이 등록되었습니다.").build();
 
-            pushNotificationService.send(answer.getUserId(), notification);
+            pushNotificationService.sendNotificationByUserId(answer.getUserId(), notification);
         }
     }
 
