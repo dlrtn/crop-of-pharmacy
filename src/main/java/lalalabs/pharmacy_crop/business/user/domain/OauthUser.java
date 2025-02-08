@@ -1,14 +1,17 @@
 package lalalabs.pharmacy_crop.business.user.domain;
 
 import jakarta.persistence.*;
+import lalalabs.pharmacy_crop.business.authorization.domain.model.UsernamePassword;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthId;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
+import lalalabs.pharmacy_crop.business.user.api.dto.RegisterAdminRequest;
 import lalalabs.pharmacy_crop.common.time.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Builder
@@ -25,6 +28,10 @@ public class OauthUser extends BaseTimeEntity {
     @Embedded
     @Column(name = "oauth_id")
     private OauthId oauthId;
+
+    @Embedded
+    @Column(name = "username_password")
+    private UsernamePassword usernamePassword;
 
     @Column(name = "nickname")
     private String nickname;
@@ -43,6 +50,14 @@ public class OauthUser extends BaseTimeEntity {
                 .nickname(oauthUserInfoDto.nickname())
                 .picture(oauthUserInfoDto.picture())
                 .role(Role.ROLE_OAUTH_USER)
+                .build();
+    }
+
+    public static OauthUser createAdmin(RegisterAdminRequest request, String encodedPassword) {
+        return OauthUser.builder()
+                .usernamePassword(new UsernamePassword(request.username(), encodedPassword))
+                .nickname(request.nickname())
+                .role(Role.ROLE_ADMIN)
                 .build();
     }
 
