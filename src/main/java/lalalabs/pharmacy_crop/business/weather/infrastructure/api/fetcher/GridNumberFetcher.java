@@ -23,6 +23,7 @@ public class GridNumberFetcher {
     public ForecastPoint getGridNumberFromDatabase(Coordinate coordinate) {
         double minDistance = Double.MAX_VALUE;
         ForecastPoint gridNumber = null;
+        Grid nowGrid = null;
 
         for (Grid grid : gridRepository.findAll()) {
             double distance = coordinate.calculateDistanceWith(new Coordinate(grid.getLatitude(), grid.getLongitude()));
@@ -30,8 +31,12 @@ public class GridNumberFetcher {
             if (distance < minDistance) {
                 minDistance = distance;
                 gridNumber = new ForecastPoint(grid.getNx(), grid.getNy());
+                nowGrid = grid;
             }
         }
+
+        nowGrid.updateIsUsedTrue();
+        gridRepository.save(nowGrid);
 
         return gridNumber;
     }

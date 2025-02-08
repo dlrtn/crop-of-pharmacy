@@ -27,4 +27,11 @@ public class Grid {
 
     @Column(name = "longitude", nullable = false)
     private Double longitude;
+
+    @Column(name = "is_used", nullable = false)
+    private Boolean isUsed;
+
+    public void updateIsUsedTrue() {
+        this.isUsed = true;
+    }
 }

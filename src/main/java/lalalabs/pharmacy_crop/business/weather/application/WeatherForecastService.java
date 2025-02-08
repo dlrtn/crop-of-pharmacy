@@ -38,8 +38,9 @@ public class WeatherForecastService {
         List<ShortTermForecastItem> shortTermForecastItemList;
 
         if (!shortTermForecastRepository.existsByNxAndNy(gridNumber.nx(), gridNumber.ny())) {
-            shortTermForecastItemList = todayTermForecastFetcher.fetchWeatherInformation(
-                    gridNumber);
+            shortTermForecastItemList = todayTermForecastFetcher.fetchWeatherInformation(gridNumber);
+
+            shortTermForecastItemList.forEach(item -> shortTermForecastRepository.save(ShortTermForecast.of(item)));
         } else {
             shortTermForecastItemList = shortTermForecastRepository.findAllByNxAndNy(gridNumber.nx(), gridNumber.ny());
         }
@@ -48,7 +49,7 @@ public class WeatherForecastService {
     }
 
     public void fetchTodayWeatherForecast() {
-        List<Grid> grids = gridRepository.findAll();
+        List<Grid> grids = gridRepository.findAllByIsUsed(true);
 
         for (Grid grid : grids) {
             ForecastPoint gridNumber = new ForecastPoint(grid.getNx(), grid.getNy());
