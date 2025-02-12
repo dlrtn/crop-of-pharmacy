@@ -1,7 +1,6 @@
 package lalalabs.pharmacy_crop.business.post.application;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.domain.Announcement;
@@ -9,8 +8,6 @@ import lalalabs.pharmacy_crop.business.post.infrastructure.repository.Announceme
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.common.file.DirectoryType;
-import lalalabs.pharmacy_crop.common.push_notification.application.PushNotificationService;
-import lalalabs.pharmacy_crop.common.push_notification.domain.model.PushNotificationBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -34,7 +33,8 @@ public class AnnouncementService {
                 .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
                 .build();
 
-        pushNotificationSender.sendAnnouncementPushNotification();
+        // TODO: 푸시 알림 전송 추후 테스트 완료 시 활성화
+        // pushNotificationSender.sendAnnouncementPushNotification();
 
         announcementRepository.save(announcement);
     }
