@@ -18,4 +18,7 @@ public final class ApiDescriptions {
 
     public static final String REFRESH_TOKEN_SUMMARY = "사용자 토큰 갱신";
     public static final String REFRESH_TOKEN_DESCRIPTION = "사용자의 Access 토큰을 갱신합니다. 이 때, 유효한 Refresh 토큰이 필요합니다.";
+
+    public static final String GET_USER_LIST_SUMMARY = "사용자 목록 조회";
+    public static final String GET_USER_LIST_DESCRIPTION = "사용자 목록을 조회합니다.";
 }

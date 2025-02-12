@@ -6,14 +6,12 @@ import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
 import lalalabs.pharmacy_crop.business.user.api.dto.LoginAdminRequest;
 import lalalabs.pharmacy_crop.business.user.api.dto.RegisterAdminRequest;
 import lalalabs.pharmacy_crop.business.user.application.AdminService;
+import lalalabs.pharmacy_crop.business.user.domain.Role;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "관리자", description = "관리자의 회원 가입, 정보 변경, 관리를 수행합니다.")
@@ -37,5 +35,13 @@ public class AdminController {
         JwtTokensDto jwtTokensDto = adminService.login(request);
 
         return ResponseEntity.ok().body(SuccessResponse.of(jwtTokensDto));
+    }
+
+    @Operation(summary = "관리자 권한 변경", description = "관리자 및 회원의 권한을 변경합니다.")
+    @PatchMapping("/authority")
+    public ResponseEntity<ApiResponse> changeAuthority(@RequestParam String userId, @RequestParam Role authority) {
+        adminService.changeAuthority(userId, authority);
+
+        return ResponseEntity.ok().build();
     }
 }

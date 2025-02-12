@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Builder
@@ -49,7 +48,7 @@ public class OauthUser extends BaseTimeEntity {
                         OauthServiceType.valueOf(oauthUserInfoDto.oauthServiceType())))
                 .nickname(oauthUserInfoDto.nickname())
                 .picture(oauthUserInfoDto.picture())
-                .role(Role.ROLE_OAUTH_USER)
+                .role(Role.ROLE_USER)
                 .build();
     }
 
@@ -63,5 +62,9 @@ public class OauthUser extends BaseTimeEntity {
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void changeAuthority(Role authority) {
+        this.role = authority;
     }
 }

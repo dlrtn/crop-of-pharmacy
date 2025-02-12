@@ -1,13 +1,15 @@
 package lalalabs.pharmacy_crop.business.user.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.authorization.api.docs.ApiDescriptions;
 import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
 import lalalabs.pharmacy_crop.business.user.api.dto.UpdateUserRequest;
+import lalalabs.pharmacy_crop.business.user.api.dto.UserDto;
 import lalalabs.pharmacy_crop.business.user.application.UserCommandService;
 import lalalabs.pharmacy_crop.business.user.application.UserQueryService;
-import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
+import lalalabs.pharmacy_crop.business.user.application.UserService;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
@@ -26,6 +28,7 @@ public class UserController {
     private final UserCommandService userCommandService;
     private final OauthService oauthService;
     private final UserQueryService userQueryService;
+    private final UserService userService;
 
     @ApiHeader
     @Operation(summary = "닉네임 변경", description = "사용자의 닉네임을 변경합니다.")
@@ -71,8 +74,18 @@ public class UserController {
     )
     @GetMapping()
     public ResponseEntity<ApiResponse> getUserInfo(@AuthenticationPrincipal OauthUserDetails oauthUser) {
-        OauthUser user = userQueryService.findByUserId(oauthUser.getUser().getId());
+        UserDto userDto = userService.getUser(oauthUser.getUser().getId());
 
-        return ResponseEntity.ok(SuccessResponse.of(user));
+        return ResponseEntity.ok(SuccessResponse.of(userDto));
+    }
+
+    @ApiHeader
+    @Operation(
+            summary = ApiDescriptions.GET_USER_LIST_SUMMARY,
+            description = ApiDescriptions.GET_USER_LIST_DESCRIPTION
+    )
+    @GetMapping("/list")
+    public ResponseEntity<ApiResponse> getUserList(@AuthenticationPrincipal OauthUserDetails oauthUser, @Parameter(name = "page", description = "페이지 번호(0 ~ )", required = true) @RequestParam int page, @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size) {
+        return ResponseEntity.ok(SuccessResponse.of(userService.getUserList(page, size)));
     }
 }

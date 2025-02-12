@@ -6,6 +6,7 @@ import lalalabs.pharmacy_crop.business.authorization.application.TokenService;
 import lalalabs.pharmacy_crop.business.user.api.dto.LoginAdminRequest;
 import lalalabs.pharmacy_crop.business.user.api.dto.RegisterAdminRequest;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
+import lalalabs.pharmacy_crop.business.user.domain.Role;
 import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,5 +38,14 @@ public class AdminService {
         }
 
         return tokenService.issueTokensByUserId(user.getId());
+    }
+
+    public void changeAuthority(String userId, Role authority) {
+        OauthUser user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        user.changeAuthority(authority);
+
+        userRepository.save(user);
     }
 }
