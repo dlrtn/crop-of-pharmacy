@@ -18,27 +18,25 @@ public class ProductDetailDto {
 
     private String productUnit;
 
-    private String productUnitGub;
-
     private String productBox;
 
     private String productBoxGub;
 
     private String modelName;
 
-    public static ProductDetailDto from(Product product) {
-        String modelName = product.getModelName();
+    private String productCategory;
 
+    public static ProductDetailDto from(Product product) {
         return ProductDetailDto.builder()
-                .productId(product.getProductId())
-                .productName(product.getFname())
-                .productPrice(product.getFtdanga())
-                .productDiscountPrice(product.getFcdanga())
-                .productUnit(product.getFunit())
-                .productUnitGub(product.getFunitGubDescription())
-                .productBox(product.getFbox())
-                .productBoxGub(product.getFboxGubDescription())
-                .modelName(modelName)
+                .productId(product.getProductCode())
+                .productName(product.getName())
+                .productPrice(product.getNormalPrice())
+                .productDiscountPrice(product.getReleasePaymentUnitPrice())
+                .productUnit(product.getVolume())
+                .productBox(product.getQuantityPerBox())
+                .productBoxGub(product.getBoxUnitDescription())
+                .modelName(product.getProductCode())
+                .productCategory(product.getPurpose().name())
                 .build();
     }
 }

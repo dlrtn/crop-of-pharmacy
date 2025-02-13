@@ -51,8 +51,8 @@ public class OrderItem {
 
     public static OrderItem fromCartItem(ShoppingCartItem cartItem) {
         return OrderItem.builder()
-                .productId(cartItem.getProduct().getProductId())
-                .productName(cartItem.getProduct().getFname())
+                .productId(cartItem.getProduct().getProductCode())
+                .productName(cartItem.getProduct().getName())
                 .productUnit(cartItem.getUnit())
                 .productPack(cartItem.getPack())
                 .quantity(cartItem.getQuantity())

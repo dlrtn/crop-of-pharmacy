@@ -28,8 +28,8 @@ public class ShoppingCartItemDto {
 
     public static ShoppingCartItemDto from(ShoppingCartItem item) {
         return ShoppingCartItemDto.builder()
-                .productId(item.getProduct().getProductId())
-                .productName(item.getProduct().getFname())
+                .productId(item.getProduct().getProductCode())
+                .productName(item.getProduct().getName())
                 .quantity(item.getQuantity())
                 .unit(item.getUnit())
                 .boxUnit(item.getProduct().getPack())

@@ -1,9 +1,7 @@
 package lalalabs.pharmacy_crop.business.product.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lalalabs.pharmacy_crop.common.ProductPurposeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,84 +12,60 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TbPum039")
+@Table(name = "product")
 // 회계기에 따라 테이블 데이터가 변경됩니다. 인지 후, 지속적으로 마이그레이션 해주어야 합니다.
 public class Product {
 
     @Id
-    @Column(name = "fPcode", length = 12, nullable = false)
-    private String productId;
+    @Column(name = "product_code", length = 12, nullable = false)
+    private String productCode;
 
-    @Column(name = "FSCODE", length = 3)
-    private String fscode;
-
-    @Column(name = "FCODE", length = 3)
-    private String fcode;
-
-    @Column(name = "FNAME")
-    private String fname;
+    @Column(name = "name")
+    private String name;
 
     // 출고 단가
-    @Column(name = "FCDANGA")
-    private Integer fcdanga;
+    @Column(name = "release_invoice_unit_price")
+    private Integer releasePaymentUnitPrice;
 
     // 정상 단가
-    @Column(name = "FTDANGA")
-    private Integer ftdanga;
+    @Column(name = "normal_price")
+    private Integer normalPrice;
 
-    @Column(name = "FUNIT", length = 4)
-    private String funit;
+    @Column(name = "volume")
+    private String volume;
 
-    @Column(name = "FUNITGUB")
-    private String funitgub;
+    @Column(name = "quantity_per_box", length = 4)
+    private String quantityPerBox;
 
-    @Column(name = "FBOX", length = 4)
-    private String fbox;
+    @Column(name = "box_unit")
+    private String boxUnit;
 
-    @Column(name = "FBOXGUB")
-    private String fboxgub;
+    @Column(name = "purpose")
+    @Convert(converter = ProductPurposeConverter.class)
+    private ProductPurpose purpose;
 
-    public String getFunitGubDescription() {
-        switch (funitgub) {
-            case "1": return "㎖";  // ml
-            case "2": return "ℓ";   // L
-            case "3": return "g";
-            case "4": return "㎏";  // kg
-            case "5": return "Ex";
-            case "6": return "m";
-            case "7": return "t";
-            case "8": return "mm";
+    public String getBoxUnitDescription() {
+        switch (boxUnit) {
+            case "1":
+                return "병";
+            case "2":
+                return "봉";
+            case "3":
+                return "EA";
+            case "4":
+                return "포";
+            case "5":
+                return "통";
+            case "6":
+                return "Ex";
+            case "7":
+                return "롤";
             default:
                 return "Unknown";
         }
-    }
-
-    public String getFboxGubDescription() {
-        switch (fboxgub) {
-            case "1": return "병";
-            case "2": return "봉";
-            case "3": return "EA";
-            case "4": return "포";
-            case "5": return "통";
-            case "6": return "Ex";
-            case "7": return "롤";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public String getModelName() {
-        if (fscode == null || fcode == null) {
-            return "Unknown";
-        }
-        return fscode + fcode;
-    }
-
-    public String getUnit() {
-        return funit + getFunitGubDescription();
     }
 
     public String getPack() {
-        return fbox + getFboxGubDescription();
+        return quantityPerBox + " " + getBoxUnitDescription();
     }
 }

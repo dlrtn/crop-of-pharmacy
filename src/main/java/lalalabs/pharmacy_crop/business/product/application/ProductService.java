@@ -18,7 +18,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public List<ProductSummaryDto> read(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("productId").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("productCode").ascending());
 
         return productRepository.findAll(pageable).stream()
                 .map(ProductSummaryDto::from)

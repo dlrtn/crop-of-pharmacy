@@ -28,5 +28,5 @@ public class FarmGuardAnswer {
     private String content;
 
     @Column(name = "product_id")
-    private int productId;
+    private String productId;
 }

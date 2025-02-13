@@ -21,7 +21,7 @@ public class ShoppingCartItem {
     private ShoppingCart shoppingCart;
 
     @ManyToOne
-    @JoinColumn(name = "fPcode", nullable = false)
+    @JoinColumn(name = "product_code", nullable = false)
     private Product product;
 
     @Column(name = "quantity")
@@ -56,11 +56,11 @@ public class ShoppingCartItem {
                 .shoppingCart(shoppingCart)
                 .product(product)
                 .quantity(0)
-                .discountPrice(product.getFcdanga())
-                .originalPrice(product.getFtdanga())
+                .discountPrice(product.getReleasePaymentUnitPrice())
+                .originalPrice(product.getNormalPrice())
                 .originalTotalPrice(0)
                 .discountTotalPrice(0)
-                .unit(product.getUnit())
+                .unit(product.getVolume())
                 .pack(product.getPack())
                 .build();
     }

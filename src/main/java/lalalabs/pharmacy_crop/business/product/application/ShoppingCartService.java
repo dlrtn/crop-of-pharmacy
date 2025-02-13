@@ -31,7 +31,7 @@ public class ShoppingCartService {
 
         // 장바구니에 상품 추가
         ShoppingCartItem item = shoppingCart.getItems().stream()
-                .filter(i -> i.getProduct().getProductId().equals(productId))
+                .filter(i -> i.getProduct().getProductCode().equals(productId))
                 .findFirst()
                 .orElse(ShoppingCartItem.from(shoppingCart, product));
 
@@ -57,7 +57,7 @@ public class ShoppingCartService {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다."));
 
-        shoppingCart.getItems().removeIf(item -> item.getProduct().getProductId().equals(productId));
+        shoppingCart.getItems().removeIf(item -> item.getProduct().getProductCode().equals(productId));
         shoppingCart.calculateTotalPrice();
         shoppingCartRepository.save(shoppingCart);
     }

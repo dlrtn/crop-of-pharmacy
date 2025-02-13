@@ -18,10 +18,10 @@ public class ProductSummaryDto {
 
     public static ProductSummaryDto from(Product product) {
         return ProductSummaryDto.builder()
-                .productId(product.getProductId())
-                .productName(product.getFname())
-                .productPrice(product.getFtdanga())
-                .productDiscountPrice(product.getFcdanga())
+                .productId(product.getProductCode())
+                .productName(product.getName())
+                .productPrice(product.getNormalPrice())
+                .productDiscountPrice(product.getReleasePaymentUnitPrice())
                 .build();
     }
 }
