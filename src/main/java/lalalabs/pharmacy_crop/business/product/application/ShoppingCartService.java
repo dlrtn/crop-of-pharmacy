@@ -52,6 +52,14 @@ public class ShoppingCartService {
         return ShoppingCartDto.from(shoppingCart);
     }
 
+    @Transactional(readOnly = true)
+    public int getCartItemCount(String userId) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
+                .orElse(ShoppingCart.emptyCart(userId));
+
+        return ShoppingCartDto.from(shoppingCart).getItemCount();
+    }
+
     @Transactional
     public void removeFromCart(String userId, String productId) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)

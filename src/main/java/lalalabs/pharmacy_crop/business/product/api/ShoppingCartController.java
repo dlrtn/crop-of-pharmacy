@@ -31,6 +31,15 @@ public class ShoppingCartController {
     }
 
     @ApiHeader
+    @Operation(summary = "장바구니 담긴 상품 갯수 조회", description = "사용자의 장바구니에 담긴 상품 갯수를 조회합니다.")
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponse> getShoppingCartItemCount(@AuthenticationPrincipal OauthUserDetails user) {
+        int serviceCartItemCount = shoppingCartService.getCartItemCount(user.getUserId());
+
+        return ResponseEntity.ok(SuccessResponse.of(serviceCartItemCount));
+    }
+
+    @ApiHeader
     @Operation(summary = "장바구니에 상품 추가", description = "사용자의 장바구니에 상품을 추가합니다.")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addToCart(@AuthenticationPrincipal OauthUserDetails user,
