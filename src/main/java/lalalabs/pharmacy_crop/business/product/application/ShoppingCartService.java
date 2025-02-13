@@ -26,7 +26,7 @@ public class ShoppingCartService {
                 .orElseGet(() -> shoppingCartRepository.save(ShoppingCart.emptyCart(userId)));
 
         // 상품 가져오기
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findByProductCode(productId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
         // 장바구니에 상품 추가
