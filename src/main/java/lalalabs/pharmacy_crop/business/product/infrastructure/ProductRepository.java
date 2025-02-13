@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.nio.channels.FileChannel;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +16,13 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByNameContaining(String keyword, Pageable pageable);
 
-    List<Product> findByCategoryNotIn(List<ProductCategory> categoryList, Pageable pageable);
+    List<Product> findByCategoryNotInAndNormalPriceIsNotNull(List<ProductCategory> categoryList, Pageable pageable);
 
     List<Product> findByCategory(ProductCategory category, Pageable pageable);
 
     List<Product> findAllByNormalPriceIsNotNull(Pageable pageable);
 
     Optional<Product> findByProductCode(String productCode);
+
+    List<Product> findByCategoryAndNormalPriceIsNotNull(ProductCategory category, Pageable pageable);
 }

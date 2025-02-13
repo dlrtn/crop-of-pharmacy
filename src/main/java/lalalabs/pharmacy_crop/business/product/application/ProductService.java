@@ -49,12 +49,12 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("productCode").ascending());
 
         if (category == ProductCategory.기타) {
-            return productRepository.findByCategoryNotIn(List.of(ProductCategory.농약, ProductCategory.농자재, ProductCategory.방역품, ProductCategory.비료), pageable).stream()
+            return productRepository.findByCategoryNotInAndNormalPriceIsNotNull(List.of(ProductCategory.농약, ProductCategory.농자재, ProductCategory.방역품, ProductCategory.비료), pageable).stream()
                     .map(ProductSummaryDto::from)
                     .toList();
         }
 
-        return productRepository.findByCategory(category, pageable).stream()
+        return productRepository.findByCategoryAndNormalPriceIsNotNull(category, pageable).stream()
                 .map(ProductSummaryDto::from)
                 .toList();
     }
