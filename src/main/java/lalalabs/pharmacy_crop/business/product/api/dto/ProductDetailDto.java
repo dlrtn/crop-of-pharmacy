@@ -36,7 +36,7 @@ public class ProductDetailDto {
                 .productBox(product.getQuantityPerBox())
                 .productBoxGub(product.getBoxUnitDescription())
                 .modelName(product.getProductCode())
-                .productPurpose(product.getPurpose().name())
+                .productPurpose(product.getCategory().name())
                 .build();
     }
 }

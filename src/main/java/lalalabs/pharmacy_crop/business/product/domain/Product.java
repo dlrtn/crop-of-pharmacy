@@ -1,7 +1,6 @@
 package lalalabs.pharmacy_crop.business.product.domain;
 
 import jakarta.persistence.*;
-import lalalabs.pharmacy_crop.common.ProductPurposeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,19 +16,33 @@ import lombok.NoArgsConstructor;
 public class Product {
 
     @Id
-    @Column(name = "product_code", length = 12, nullable = false)
+    @Column(name = "id", nullable = false)
+    private int id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private ProductCategory category;
+
+    @Column(name = "item_code")
+    private String itemCode;
+
+    @Column(name = "product_code", length = 12)
     private String productCode;
+
+    @Column(name = "confirm")
+    private String confirm;
+
+    @Column(name = "purchaser")
+    private String purchaser;
+
+    @Column(name = "registered")
+    private String registered;
+
+    @Column(name = "remark")
+    private String remark;
 
     @Column(name = "name")
     private String name;
-
-    // 출고 단가
-    @Column(name = "release_invoice_unit_price")
-    private Integer releasePaymentUnitPrice;
-
-    // 정상 단가
-    @Column(name = "normal_price")
-    private Integer normalPrice;
 
     @Column(name = "volume")
     private String volume;
@@ -37,32 +50,29 @@ public class Product {
     @Column(name = "quantity_per_box", length = 4)
     private String quantityPerBox;
 
-    @Column(name = "box_unit")
-    private String boxUnit;
+    @Column(name = "color")
+    private String color;
 
-    @Column(name = "purpose")
-    @Convert(converter = ProductPurposeConverter.class)
-    private ProductPurpose purpose;
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "mechanism")
+    private String mechanism;
+
+    @Column(name = "product_name")
+    private String productName;
+
+    // 출고 단가
+    @Column(name = "release_price")
+    private Integer releasePaymentUnitPrice;
+
+    // 정상 단가
+    @Column(name = "normal_price")
+    private Integer normalPrice;
+
 
     public String getBoxUnitDescription() {
-        switch (boxUnit) {
-            case "1":
-                return "병";
-            case "2":
-                return "봉";
-            case "3":
-                return "EA";
-            case "4":
-                return "포";
-            case "5":
-                return "통";
-            case "6":
-                return "Ex";
-            case "7":
-                return "롤";
-            default:
-                return "Unknown";
-        }
+        return "개";
     }
 
     public String getPack() {
