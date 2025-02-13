@@ -40,4 +40,12 @@ public class ProductService {
                 .map(ProductDetailDto::from)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
     }
+
+    public List<ProductSummaryDto> search(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("productCode").ascending());
+
+        return productRepository.findByProductNameContaining(keyword, pageable).stream()
+                .map(ProductSummaryDto::from)
+                .toList();
+    }
 }

@@ -25,14 +25,12 @@ public enum ProductPurpose {
     살충_선충("IN"),
     살충_포괄("IP"),
 
-    생조("PG"),
-
-    종자("SE"),
-
     유기농업_살균제("OF"),
     유기농업_살충제("OI"),
     유기농업_제초제("OH"),
 
+    생조("PG"),
+    종자("SE"),
     농자재("XA"),
     편의용품("XC"),
     농기계("XE"),
@@ -41,7 +39,6 @@ public enum ProductPurpose {
     보호장구("XS"),
     배양토_상토("XV"),
     기타("XX"),
-
     미등록("##");
 
     public final String code;

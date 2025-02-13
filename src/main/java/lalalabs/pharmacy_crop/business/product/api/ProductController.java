@@ -45,4 +45,16 @@ public class ProductController {
 
         return ResponseEntity.ok(SuccessResponse.of(productDetailDto));
     }
+
+    @ApiHeader
+    @Operation(summary = "상품 검색", description = "상품을 검색합니다.")
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchProduct(
+            @Parameter(name = "keyword", description = "검색어", required = true) @RequestParam String keyword,
+            @Parameter(name = "page", description = "페이지 번호(0 ~ )", required = true) @RequestParam int page,
+            @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size) {
+        List<ProductSummaryDto> productSummaryDtoList = productService.search(keyword, page, size);
+
+        return ResponseEntity.ok(SuccessResponse.of(productSummaryDtoList));
+    }
 }

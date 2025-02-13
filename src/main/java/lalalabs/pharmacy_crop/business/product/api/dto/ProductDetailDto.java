@@ -24,7 +24,7 @@ public class ProductDetailDto {
 
     private String modelName;
 
-    private String productCategory;
+    private String productPurpose;
 
     public static ProductDetailDto from(Product product) {
         return ProductDetailDto.builder()
@@ -36,7 +36,7 @@ public class ProductDetailDto {
                 .productBox(product.getQuantityPerBox())
                 .productBoxGub(product.getBoxUnitDescription())
                 .modelName(product.getProductCode())
-                .productCategory(product.getPurpose().name())
+                .productPurpose(product.getPurpose().name())
                 .build();
     }
 }
