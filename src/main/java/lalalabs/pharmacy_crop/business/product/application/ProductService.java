@@ -44,7 +44,7 @@ public class ProductService {
     public List<ProductSummaryDto> search(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("productCode").ascending());
 
-        return productRepository.findByProductNameContaining(keyword, pageable).stream()
+        return productRepository.findByNameContaining(keyword, pageable).stream()
                 .map(ProductSummaryDto::from)
                 .toList();
     }
