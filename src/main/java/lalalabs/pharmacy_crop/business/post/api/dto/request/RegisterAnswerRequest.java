@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class RegisterAnswerRequest {
     private String content;
-    private int productId;
+    private String productId;
 }

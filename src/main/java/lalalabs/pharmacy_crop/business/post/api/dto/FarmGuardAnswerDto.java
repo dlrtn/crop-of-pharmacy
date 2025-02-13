@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FarmGuardAnswerDto {
     private String content;
-    private int productId;
+    private String productId;
 
-    public FarmGuardAnswerDto(String content, int productId) {
+    public FarmGuardAnswerDto(String content, String productId) {
         this.content = content;
         this.productId = productId;
     }
