@@ -60,7 +60,7 @@ public class ProductService {
     }
 
     public ProductDetailDto readById(String productId) {
-        return productRepository.findById(productId)
+        return productRepository.findByProductCode(productId)
                 .map(ProductDetailDto::from)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
     }
