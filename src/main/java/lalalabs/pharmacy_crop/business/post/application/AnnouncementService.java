@@ -33,7 +33,7 @@ public class AnnouncementService {
                 .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
                 .build();
 
-        pushNotificationSender.sendAnnouncementPushNotification();
+//        pushNotificationSender.sendAnnouncementPushNotification();
 
         announcementRepository.save(announcement);
     }
