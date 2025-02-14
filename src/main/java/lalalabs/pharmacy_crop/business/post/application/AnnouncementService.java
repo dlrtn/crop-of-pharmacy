@@ -33,8 +33,7 @@ public class AnnouncementService {
                 .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
                 .build();
 
-        // TODO: 푸시 알림 전송 추후 테스트 완료 시 활성화
-        // pushNotificationSender.sendAnnouncementPushNotification();
+        pushNotificationSender.sendAnnouncementPushNotification();
 
         announcementRepository.save(announcement);
     }
