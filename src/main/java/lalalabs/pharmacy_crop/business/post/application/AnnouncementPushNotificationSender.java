@@ -19,6 +19,4 @@ public class AnnouncementPushNotificationSender {
 
         pushNotificationService.sendAll(body);
     }
-
-
 }
