@@ -19,6 +19,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final AuthorityChecker authorityChecker;
 
     @Transactional
     public void createUser(RegisterAdminRequest request) {
@@ -40,12 +41,16 @@ public class AdminService {
         return tokenService.issueTokensByUserId(user.getId());
     }
 
-    public void changeAuthority(String userId, Role authority) {
-        OauthUser user = userRepository.findById(userId)
+    public void changeAuthority(OauthUser user, String userId, Role authority) {
+        OauthUser targetUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        user.changeAuthority(authority);
+        if (authority == Role.ROLE_MASTER) {
+            authorityChecker.isMaster(user);
+        }
 
-        userRepository.save(user);
+        targetUser.changeAuthority(authority);
+
+        userRepository.save(targetUser);
     }
 }

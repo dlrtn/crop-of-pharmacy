@@ -1,6 +1,5 @@
 package lalalabs.pharmacy_crop.business.post.application;
 
-import jakarta.transaction.Transactional;
 import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDetailDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.FarmGuardDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandFarmGuardReportHistoryRequest;
@@ -13,6 +12,7 @@ import lalalabs.pharmacy_crop.business.post.infrastructure.repository.FarmGuardA
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.FarmGuardReportRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.FarmGuardRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
+import lalalabs.pharmacy_crop.business.user.application.AuthorityChecker;
 import lalalabs.pharmacy_crop.business.user.application.UserQueryService;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.common.file.DirectoryType;
@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -39,6 +40,8 @@ public class FarmGuardService {
     private final FarmGuardReportRepository reportRepository;
     private final FarmGuardAnswerRepository farmGuardAnswerRepository;
     private final UserQueryService userQueryService;
+    private final AuthorityChecker authorityChecker;
+    private final FarmGuardQueryService farmGuardQueryService;
 
     @Transactional
     public void create(OauthUser user, CommandFarmGuardRequest request, MultipartFile file) {
@@ -50,52 +53,56 @@ public class FarmGuardService {
     }
 
     @Transactional
-    public void delete(String userId, Long farmGuardId) {
-        FarmGuard farmGuard = getOrElseThrow(farmGuardId);
+    public void delete(OauthUser user, Long farmGuardId) {
+        FarmGuard farmGuard = farmGuardQueryService.getOrElseThrow(farmGuardId);
 
-        if (!farmGuard.isOwner(userId)) {
+        if (!farmGuard.isOwner(user.getId()) && !authorityChecker.isAdmin(user)) {
             throw new IllegalArgumentException("해당 병충해 찾기 게시글을 삭제할 권한이 없습니다.");
         }
 
         guardRepository.deleteById(farmGuardId);
     }
 
-    private FarmGuard getOrElseThrow(Long farmGuardId) {
-        return guardRepository.findById(farmGuardId).orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
-    }
 
+    @Transactional(readOnly = true)
     public List<FarmGuardDto> read(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        List<FarmGuard> farmGuards = guardRepository.findAll(pageable).getContent().stream().toList();
+        List<FarmGuard> farmGuards = farmGuardQueryService.findAll(pageable);
 
         return farmGuards.stream().map(this::getFarmGuardDto).toList();
     }
 
+    @Transactional(readOnly = true)
     public FarmGuardDetailDto readById(Long farmGuardId) {
         return guardRepository.findById(farmGuardId).map(this::getFarmGuardDetailDto).orElseThrow(() -> new IllegalArgumentException("해당 병충해 찾기 게시글이 존재하지 않습니다."));
     }
 
-    private FarmGuardDto getFarmGuardDto(FarmGuard farmGuard) {
+    @Transactional(readOnly = true)
+    public FarmGuardDto getFarmGuardDto(FarmGuard farmGuard) {
         boolean isReported = reportRepository.existsByFarmGuardId(farmGuard.getId());
         boolean isAnswered = farmGuardAnswerRepository.existsFarmGuardAnswerByFarmGuardId(farmGuard.getId());
+
         OauthUser user = userQueryService.findByUserId(farmGuard.getUserId());
 
         return FarmGuardDto.fromDomain(farmGuard, isReported, isAnswered, user);
     }
 
-    private FarmGuardDetailDto getFarmGuardDetailDto(FarmGuard farmGuard) {
+    @Transactional(readOnly = true)
+    public FarmGuardDetailDto getFarmGuardDetailDto(FarmGuard farmGuard) {
         OauthUser user = userQueryService.findByUserId(farmGuard.getUserId());
 
         if (farmGuardAnswerRepository.existsFarmGuardAnswerByFarmGuardId(farmGuard.getId())) {
             FarmGuardAnswer answer = farmGuardAnswerRepository.findFarmGuardAnswerByFarmGuardId(farmGuard.getId());
             return FarmGuardDetailDto.fromDomain(farmGuard, answer, user);
         }
+
         return FarmGuardDetailDto.fromDomain(farmGuard, user);
     }
 
+    @Transactional
     public void report(CommandFarmGuardReportHistoryRequest reportHistoryDto) {
-        FarmGuard farmGuard = getOrElseThrow(reportHistoryDto.getFarmGuardId());
+        FarmGuard farmGuard = farmGuardQueryService.getOrElseThrow(reportHistoryDto.getFarmGuardId());
 
         if (farmGuard.isOwner(reportHistoryDto.getUserId())) {
             throw new IllegalArgumentException("자신의 병충해 찾기 게시글은 신고할 수 없습니다.");
@@ -106,8 +113,9 @@ public class FarmGuardService {
         reportRepository.save(history);
     }
 
+    @Transactional
     public void answer(Long farmGuardId, RegisterAnswerRequest content) {
-        FarmGuard farmGuard = getOrElseThrow(farmGuardId);
+        FarmGuard farmGuard = farmGuardQueryService.getOrElseThrow(farmGuardId);
 
         FarmGuardAnswer answer = FarmGuardAnswer.builder().farmGuardId(farmGuardId).userId(farmGuard.getUserId()).content(content.getContent()).productId(content.getProductId()).build();
 
@@ -120,6 +128,7 @@ public class FarmGuardService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<FarmGuardDto> readFrequently(int size) {
         Pageable pageable = PageRequest.of(0, size, Sort.by("id").descending());
 
@@ -128,8 +137,9 @@ public class FarmGuardService {
         return farmGuards.stream().map(this::getFarmGuardDto).toList();
     }
 
+    @Transactional
     public void updateFarmGuardOftenViewedStatus(Long farmGuardId) {
-        FarmGuard farmGuard = getOrElseThrow(farmGuardId);
+        FarmGuard farmGuard = farmGuardQueryService.getOrElseThrow(farmGuardId);
 
         farmGuard.updateOftenViewedStatus();
     }

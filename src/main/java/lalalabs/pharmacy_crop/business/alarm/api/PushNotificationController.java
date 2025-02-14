@@ -10,6 +10,7 @@ import lalalabs.pharmacy_crop.common.push_notification.domain.model.PushNotifica
 import lalalabs.pharmacy_crop.common.push_notification.domain.model.dto.PushNotificationToken;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
+import lalalabs.pharmacy_crop.common.security.OnlyAdmin;
 import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class PushNotificationController {
     }
 
     @ApiHeader
+    @OnlyAdmin
     @Operation(summary = "푸시 알림 발송", description = "푸시 알림을 발송합니다.")
     @PostMapping("/push-notification/send")
     public ResponseEntity<ApiResponse> sendPushNotification(@AuthenticationPrincipal OauthUserDetails user, @RequestBody PushNotificationBody body) {

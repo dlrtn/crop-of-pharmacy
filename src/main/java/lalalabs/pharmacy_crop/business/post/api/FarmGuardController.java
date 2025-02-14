@@ -15,6 +15,7 @@ import lalalabs.pharmacy_crop.business.post.domain.ReportReason;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
+import lalalabs.pharmacy_crop.common.security.OnlyAdmin;
 import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -74,9 +75,7 @@ public class FarmGuardController {
     @Operation(summary = "병충해 삭제", description = "병충해를 삭제합니다.")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteFarmGuard(@AuthenticationPrincipal OauthUserDetails userDetails, @Parameter(name = "id", description = "병충해 ID", required = true) @PathVariable("id") Long id) {
-        String userId = userDetails.getUser().getId();
-
-        service.delete(userId, id);
+        service.delete(userDetails.getUser(), id);
 
         return ResponseEntity.ok(SuccessResponse.of());
     }
@@ -92,8 +91,8 @@ public class FarmGuardController {
         return ResponseEntity.ok(SuccessResponse.of());
     }
 
-    // todo: 관리자 전용 기능
     @ApiHeader
+    @OnlyAdmin
     @Operation(summary = "병충해 답변", description = "병충해에 답변합니다.")
     @PostMapping("/{id}/answers")
     public ResponseEntity<ApiResponse> answerFarmGuard(@Parameter(name = "id", description = "병충해 ID", required = true) @PathVariable("id") Long id, @Parameter(name = "content", description = "답변 내용", required = true) @RequestBody RegisterAnswerRequest content) {
@@ -102,8 +101,8 @@ public class FarmGuardController {
         return ResponseEntity.ok(SuccessResponse.of());
     }
 
-    // todo: 관리자 전용 기능
     @ApiHeader
+    @OnlyAdmin
     @Operation(summary = "자주 찾는 병충해 등록 또는 삭제", description = "자주 찾는 병충해를 등록 또는 삭제합니다.")
     @PostMapping("/frequently")
     public ResponseEntity<ApiResponse> createFrequentlyFarmGuard(@Parameter(name = "farmGuardId", description = "병충해 ID", required = true) @RequestParam Long farmGuardId) {

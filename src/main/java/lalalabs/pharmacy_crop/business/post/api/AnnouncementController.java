@@ -10,6 +10,7 @@ import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
+import lalalabs.pharmacy_crop.common.security.OnlyAdmin;
 import lalalabs.pharmacy_crop.common.swagger.ApiHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,7 @@ public class AnnouncementController {
     }
 
     @ApiHeader
+    @OnlyAdmin
     @Operation(summary = "공지사항 생성", description = "공지사항을 생성합니다.")
     @PostMapping(value = "/announcements", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> create(
@@ -77,6 +79,7 @@ public class AnnouncementController {
     }
 
     @ApiHeader
+    @OnlyAdmin
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
     @PutMapping("/announcements/{id}")
     public ResponseEntity<ApiResponse> update(
@@ -96,6 +99,7 @@ public class AnnouncementController {
     }
 
     @ApiHeader
+    @OnlyAdmin
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제합니다.")
     @DeleteMapping("/announcements/{id}")
     public ResponseEntity<ApiResponse> delete(
