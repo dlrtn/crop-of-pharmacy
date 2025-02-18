@@ -45,6 +45,7 @@ public class OrderDto {
         return orders.stream()
                 .map(order -> OrderDto.builder()
                         .orderId(order.getId())
+                        .nickname(order.getUserName())
                         .originalTotalPrice(order.getOriginalTotalPrice())
                         .discountTotalPrice(order.getDiscountTotalPrice())
                         .status(order.getStatus())
