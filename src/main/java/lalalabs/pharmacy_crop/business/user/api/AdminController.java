@@ -29,7 +29,7 @@ public class AdminController {
     public ResponseEntity<ApiResponse> createUser(@RequestBody RegisterAdminRequest request) {
         adminService.createUser(request);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(SuccessResponse.of());
     }
 
     @Operation(summary = "관리자 로그인", description = "관리자 회원을 로그인합니다.")
@@ -46,6 +46,6 @@ public class AdminController {
     public ResponseEntity<ApiResponse> changeAuthority(@AuthenticationPrincipal OauthUserDetails oauthUserDetails, @RequestParam String userId, @RequestParam Role authority) {
         adminService.changeAuthority(oauthUserDetails.getUser(), userId, authority);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(SuccessResponse.of());
     }
 }
