@@ -48,7 +48,7 @@ public class OauthUser extends BaseTimeEntity {
                         OauthServiceType.valueOf(oauthUserInfoDto.oauthServiceType())))
                 .nickname(oauthUserInfoDto.nickname())
                 .picture(oauthUserInfoDto.picture())
-                .role(Role.ROLE_USER)
+                .role(Role.ROLE_MEMBER)
                 .build();
     }
 

@@ -1,7 +1,6 @@
 package lalalabs.pharmacy_crop.business.user.api.dto;
 
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,7 +21,7 @@ public class UserDto {
                 .id(user.getId())
                 .nickname(user.getNickname())
                 .picture(user.getPicture())
-                .role(user.getRole().name())
+                .role(user.getRole().getName())
                 .build();
     }
 }
