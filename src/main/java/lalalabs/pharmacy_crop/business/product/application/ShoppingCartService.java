@@ -20,18 +20,18 @@ public class ShoppingCartService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ShoppingCartDto addToCart(String userId, String productId, int quantity) {
+    public ShoppingCartDto addToCart(String userId, String productCode, int quantity) {
         // 장바구니 가져오기 (존재하지 않으면 생성)
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseGet(() -> shoppingCartRepository.save(ShoppingCart.emptyCart(userId)));
 
         // 상품 가져오기
-        Product product = productRepository.findByProductCode(productId)
+        Product product = productRepository.findByProductCode(productCode)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
         // 장바구니에 상품 추가
         ShoppingCartItem item = shoppingCart.getItems().stream()
-                .filter(i -> i.getProduct().getProductCode().equals(productId))
+                .filter(i -> i.getProduct().getProductCode().equals(productCode))
                 .findFirst()
                 .orElse(ShoppingCartItem.from(shoppingCart, product));
 
@@ -47,8 +47,8 @@ public class ShoppingCartService {
 
     @Transactional(readOnly = true)
     public ShoppingCartDto getCart(String userId) {
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
-                .orElse(ShoppingCart.emptyCart(userId));
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElse(ShoppingCart.emptyCart(userId));
+
         return ShoppingCartDto.from(shoppingCart);
     }
 

@@ -46,6 +46,7 @@ public class ShoppingCartController {
             @Parameter(name = "productId", description = "상품 ID", required = true) @RequestParam String productId,
             @Parameter(name = "quantity", description = "수량", required = true) @RequestParam int quantity) {
         ShoppingCartDto updatedCart = shoppingCartService.addToCart(user.getUserId(), productId, quantity);
+
         return ResponseEntity.ok(SuccessResponse.of(updatedCart));
     }
 
@@ -55,6 +56,7 @@ public class ShoppingCartController {
     public ResponseEntity<ApiResponse> removeFromCart(@AuthenticationPrincipal OauthUserDetails user,
             @Parameter(name = "productId", description = "상품 ID", required = true) @RequestParam String productId) {
         shoppingCartService.removeFromCart(user.getUserId(), productId);
+
         return ResponseEntity.ok(SuccessResponse.of("상품이 장바구니에서 제거되었습니다."));
     }
 

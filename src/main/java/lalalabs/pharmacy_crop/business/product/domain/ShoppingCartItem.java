@@ -56,7 +56,7 @@ public class ShoppingCartItem {
                 .shoppingCart(shoppingCart)
                 .product(product)
                 .quantity(0)
-                .discountPrice(product.getReleasePaymentUnitPrice())
+                .discountPrice(product.getDiscountPrice())
                 .originalPrice(product.getNormalPrice())
                 .originalTotalPrice(0)
                 .discountTotalPrice(0)

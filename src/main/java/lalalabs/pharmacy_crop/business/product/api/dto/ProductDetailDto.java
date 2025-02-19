@@ -18,25 +18,37 @@ public class ProductDetailDto {
 
     private String productUnit;
 
-    private String productBox;
-
-    private String productBoxGub;
+    private Integer productBox;
 
     private String modelName;
 
     private String productPurpose;
+
+    private String productImage;
+
+    private String company;
+
+    private String mechanism;
+
+    private String itemName;
+
+    private String etc;
 
     public static ProductDetailDto from(Product product) {
         return ProductDetailDto.builder()
                 .productId(product.getProductCode())
                 .productName(product.getName())
                 .productPrice(product.getNormalPrice())
-                .productDiscountPrice(product.getReleasePaymentUnitPrice())
+                .productDiscountPrice(product.getDiscountPrice())
                 .productUnit(product.getVolume())
-                .productBox(product.getQuantityPerBox())
-                .productBoxGub(product.getBoxUnitDescription())
+                .productBox(product.getQuantityPerBox() == null ? 1 : product.getQuantityPerBox())
                 .modelName(product.getProductCode())
                 .productPurpose(product.getCategory().name())
+                .productImage(product.getPicture())
+                .company(product.getCompany())
+                .mechanism(product.getMechanism())
+                .itemName(product.getItemName())
+                .etc(product.getEtc())
                 .build();
     }
 }

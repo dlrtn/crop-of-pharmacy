@@ -1,16 +1,21 @@
 package lalalabs.pharmacy_crop.business.product.application;
 
+import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
+import lalalabs.pharmacy_crop.business.product.api.dto.ProductCommandRequest;
 import lalalabs.pharmacy_crop.business.product.api.dto.ProductDetailDto;
 import lalalabs.pharmacy_crop.business.product.api.dto.ProductSummaryDto;
+import lalalabs.pharmacy_crop.business.product.domain.Product;
 import lalalabs.pharmacy_crop.business.product.domain.ProductCategory;
 import lalalabs.pharmacy_crop.business.product.domain.ProductInquiryCount;
 import lalalabs.pharmacy_crop.business.product.infrastructure.ProductInquiryCountRepository;
 import lalalabs.pharmacy_crop.business.product.infrastructure.ProductRepository;
+import lalalabs.pharmacy_crop.common.file.DirectoryType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +26,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductInquiryCountRepository productInquiryCountRepository;
+    private final LocalFileUploader localFileUploader;
 
     public List<ProductSummaryDto> read(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("productCode").ascending());
@@ -80,5 +86,27 @@ public class ProductService {
         productInquiryCount.updateInquiryCount();
 
         productInquiryCountRepository.save(productInquiryCount);
+    }
+
+    public void create(ProductCommandRequest product, MultipartFile file) {
+        Product newProduct = Product.createProduct(product, file != null ? Optional.ofNullable(localFileUploader.upload(file, DirectoryType.PRODUCT)) : Optional.empty());
+
+        productRepository.save(newProduct);
+    }
+
+    public void update(String productId, ProductCommandRequest productDetailDto, MultipartFile file) {
+        Product product = productRepository.findByProductCode(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+        product.update(productDetailDto, file != null ? localFileUploader.upload(file, DirectoryType.PRODUCT) : null);
+
+        productRepository.save(product);
+    }
+
+    public void delete(String productId) {
+        Product product = productRepository.findByProductCode(productId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+        productRepository.delete(product);
     }
 }

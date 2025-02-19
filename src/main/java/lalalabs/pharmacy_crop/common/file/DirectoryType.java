@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum DirectoryType {
     ANNOUNCEMENT("announcement"),
-    FARM_GUARD("farm-guard");
+    FARM_GUARD("farm-guard"),
+    PRODUCT("product");
 
     private final String directoryName;
 

@@ -81,7 +81,7 @@ public class AnnouncementController {
     @ApiHeader
     @OnlyAdmin
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정합니다.")
-    @PutMapping("/announcements/{id}")
+    @PutMapping(value = "/announcements/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> update(
             @Parameter(name = "id", description = "공지사항 ID", required = true) @PathVariable("id") Long id,
             @Parameter(name = "file", description = "파일") @RequestPart(value = "file", required = false) MultipartFile file,
