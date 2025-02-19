@@ -44,7 +44,7 @@ public class ProductDetailDto {
                 .productBox(product.getQuantityPerBox() == null ? 1 : product.getQuantityPerBox())
                 .modelName(product.getProductCode())
                 .productPurpose(product.getCategory().name())
-                .productImage(product.getPicture())
+                .productImage("http://1.234.83.196:8080" + product.getPicture().substring(4))
                 .company(product.getCompany())
                 .mechanism(product.getMechanism())
                 .itemName(product.getItemName())
