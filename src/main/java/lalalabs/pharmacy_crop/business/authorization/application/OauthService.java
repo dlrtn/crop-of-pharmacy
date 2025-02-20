@@ -6,7 +6,6 @@ import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecodePayload;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ public class OauthService {
 
     private final OauthHelperComposite oauthHelperComposite;
     private final UserRepository userRepository;
-    private final OauthTokenRepository oauthTokenRepository;
     private final TokenService tokenService;
 
     @Transactional
@@ -39,7 +37,6 @@ public class OauthService {
             OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType, oauthToken);
 
             oauthUser.restore(oauthUserInfo);
-            userRepository.flush();
         }
     }
 
