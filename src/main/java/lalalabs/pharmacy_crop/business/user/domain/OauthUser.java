@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 public class OauthUser extends BaseTimeEntity {
 
     @Id
-    @Builder.Default
-    private String id = String.valueOf(java.util.UUID.randomUUID());
+    @Column(name = "id")
+    private String id;
 
     @Embedded
     @Column(name = "oauth_id")
@@ -47,6 +47,7 @@ public class OauthUser extends BaseTimeEntity {
 
     public static OauthUser create(OauthUserInfoDto oauthUserInfoDto) {
         return OauthUser.builder()
+                .id(String.valueOf(java.util.UUID.randomUUID()))
                 .oauthId(new OauthId(oauthUserInfoDto.oauthServerId(),
                         OauthServiceType.valueOf(oauthUserInfoDto.oauthServiceType())))
                 .nickname(oauthUserInfoDto.nickname())
@@ -58,6 +59,7 @@ public class OauthUser extends BaseTimeEntity {
 
     public static OauthUser createAdmin(RegisterAdminRequest request, String encodedPassword) {
         return OauthUser.builder()
+                .id(String.valueOf(java.util.UUID.randomUUID()))
                 .usernamePassword(new UsernamePassword(request.username(), encodedPassword))
                 .nickname(request.nickname())
                 .role(Role.ROLE_ADMIN)

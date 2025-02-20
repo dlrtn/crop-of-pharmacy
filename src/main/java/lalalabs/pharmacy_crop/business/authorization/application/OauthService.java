@@ -37,7 +37,7 @@ public class OauthService {
     }
 
     private void restoreWithdrawUser(OauthServiceType oauthServiceType, OauthTokenDto oauthToken, OauthUser oauthUser) {
-        if (oauthUser.getIsDeleted()) {
+        if (oauthUser != null && Boolean.TRUE.equals(oauthUser.getIsDeleted())) {
             OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType, oauthToken);
 
             oauthUser.restore(oauthUserInfo);
