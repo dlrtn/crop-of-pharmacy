@@ -1,6 +1,7 @@
 package lalalabs.pharmacy_crop.business.post.domain;
 
 import jakarta.persistence.*;
+import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.common.time.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,9 +32,22 @@ public class Announcement extends BaseTimeEntity {
     @Column(name = "picture_path")
     private String picturePath;
 
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
+    @Column(name = "product_id")
+    private String productId;
+
+    public static Announcement create(String userId, CommandAnnouncementRequest request) {
+        return Announcement.builder()
+                .userId(userId)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .productId(request.getProductId())
+                .build();
+    }
+
+    public void update(CommandAnnouncementRequest request) {
+        this.title = request.getTitle() == null ? this.title : request.getTitle();
+        this.content = request.getContent() == null ? this.content : request.getContent();
+        this.productId = request.getProductId() == null ? this.productId : request.getProductId();
     }
 
     public void updatePicturePath(String picturePath) {

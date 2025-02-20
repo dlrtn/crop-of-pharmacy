@@ -28,10 +28,10 @@ public class AnnouncementService {
     private final AnnouncementPushNotificationSender pushNotificationSender;
 
     @Transactional
-    public void create(OauthUser userId, CommandAnnouncementRequest request, MultipartFile file) {
-        Announcement announcement = Announcement.builder().userId(userId.getId()).title(request.getTitle())
-                .content(request.getContent()).picturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT))
-                .build();
+    public void create(OauthUser user, CommandAnnouncementRequest request, MultipartFile file) {
+        Announcement announcement = Announcement.create(user.getId(), request);
+
+        uploadImageFileIfNotNull(file == null, announcement, file);
 
         pushNotificationSender.sendAnnouncementPushNotification();
 
@@ -43,14 +43,18 @@ public class AnnouncementService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
 
         if (request != null) {
-            announcement.update(request.getTitle(), request.getContent());
+            announcement.update(request);
         }
 
-        if (file != null) {
-            announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT));
-        }
+        uploadImageFileIfNotNull(file != null, announcement, file);
 
         announcementRepository.save(announcement);
+    }
+
+    private void uploadImageFileIfNotNull(boolean file, Announcement announcement, MultipartFile file1) {
+        if (file) {
+            announcement.updatePicturePath(localFileUploader.upload(file1, DirectoryType.ANNOUNCEMENT));
+        }
     }
 
     @Transactional

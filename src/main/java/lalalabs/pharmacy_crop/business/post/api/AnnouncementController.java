@@ -66,11 +66,13 @@ public class AnnouncementController {
             @AuthenticationPrincipal OauthUserDetails user,
             @Parameter(name = "file", description = "파일", required = true) @RequestPart("file") MultipartFile file,
             @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
-            @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content
+            @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content,
+            @Parameter(name = "productId", description = "제품 코드") @RequestPart(value = "productId", required = false) String productId
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)
                 .content(content)
+                .productId(productId)
                 .build();
 
         service.create(user.getUser(), request, file);
@@ -86,11 +88,13 @@ public class AnnouncementController {
             @Parameter(name = "id", description = "공지사항 ID", required = true) @PathVariable("id") Long id,
             @Parameter(name = "file", description = "파일") @RequestPart(value = "file", required = false) MultipartFile file,
             @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
-            @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content
+            @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content,
+            @Parameter(name = "productId", description = "제품 코드") @RequestPart(value = "productId", required = false) String productId
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)
                 .content(content)
+                .productId(productId)
                 .build();
 
         service.update(id, request, file);
