@@ -9,7 +9,6 @@ import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OIDCDecode
 import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserInfoDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.exception.InvalidGoogleIdTokenException;
 import lalalabs.pharmacy_crop.business.authorization.infrastructure.api.client.GoogleApiClient;
-import lalalabs.pharmacy_crop.business.authorization.infrastructure.repository.OauthTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ public class GoogleOauthHelper implements OauthHelper {
 
     private final GoogleApiClient googleApiClient;
     private final GoogleIdTokenVerifier googleIdTokenVerifier;
-    private final OauthTokenRepository oauthTokenRepository;
 
     public OauthServiceType supportServer() {
         return OauthServiceType.GOOGLE;
@@ -36,7 +34,6 @@ public class GoogleOauthHelper implements OauthHelper {
 
     public void unlink(String userId, OauthTokenDto oauthTokenDto) {
         googleApiClient.unlink(oauthTokenDto.getAccessToken());
-        oauthTokenRepository.deleteById(userId);
     }
 
     @SneakyThrows
