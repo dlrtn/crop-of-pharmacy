@@ -31,17 +31,11 @@ public class OauthService {
 
         restoreWithdrawUser(oauthServiceType, oauthToken, oauthUser);
 
-        if (oauthTokenRepository.existsById(oauthUser.getId())) {
-            oauthTokenRepository.deleteById(oauthUser.getId());
-        }
-
-        oauthTokenRepository.save(oauthToken.toEntity(oauthUser.getId()));
-
         return tokenService.issueTokensByUserId(oauthUser.getId());
     }
 
     private void restoreWithdrawUser(OauthServiceType oauthServiceType, OauthTokenDto oauthToken, OauthUser oauthUser) {
-        if (oauthUser != null && Boolean.TRUE.equals(oauthUser.getIsDeleted())) {
+        if (Boolean.TRUE.equals(oauthUser.getIsDeleted())) {
             OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType, oauthToken);
 
             oauthUser.restore(oauthUserInfo);
