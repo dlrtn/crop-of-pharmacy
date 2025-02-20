@@ -36,6 +36,14 @@ public class ProductService {
                 .toList();
     }
 
+    public List<ProductSummaryDto> readAdminProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("productCode").ascending());
+
+        return productRepository.findAll(pageable).stream()
+                .map(ProductSummaryDto::from)
+                .toList();
+    }
+
     public List<ProductSummaryDto> readMonthlyBest() {
         List<ProductInquiryCount> productInquiryCounts = productInquiryCountRepository.findTop10ByOrderByInquiryCountDesc();
 

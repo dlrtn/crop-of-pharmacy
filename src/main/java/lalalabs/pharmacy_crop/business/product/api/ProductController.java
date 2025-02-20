@@ -42,6 +42,17 @@ public class ProductController {
     }
 
     @ApiHeader
+    @Operation(summary = "상품 목록 조회", description = "상품 목록을 조회합니다.")
+    @GetMapping("/admin")
+    public ResponseEntity<ApiResponse> getAdminProducts(
+            @Parameter(name = "page", description = "페이지 번호(0 ~ )", required = true) @RequestParam int page,
+            @Parameter(name = "size", description = "페이지 크기", required = true) @RequestParam int size) {
+        List<ProductSummaryDto> productSummaryDtoList = productService.readAdminProducts(page, size);
+
+        return ResponseEntity.ok(SuccessResponse.of(productSummaryDtoList));
+    }
+
+    @ApiHeader
     @Operation(summary = "상품 상세 조회", description = "상품 상세를 조회합니다.")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getProductDetail(@Parameter(name = "id", description = "상품 ID", required = true) @RequestParam String id) {

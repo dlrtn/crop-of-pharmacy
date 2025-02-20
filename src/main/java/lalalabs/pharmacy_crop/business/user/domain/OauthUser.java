@@ -43,7 +43,7 @@ public class OauthUser extends BaseTimeEntity {
     private Role role;
 
     @Column(name = "deleted")
-    private boolean deleted;
+    private Boolean deleted;
 
     public static OauthUser create(OauthUserInfoDto oauthUserInfoDto) {
         return OauthUser.builder()
@@ -76,5 +76,11 @@ public class OauthUser extends BaseTimeEntity {
     public void delete() {
         this.nickname = "탈퇴한 사용자";
         this.deleted = true;
+    }
+
+    public void restore(OauthUserInfoDto oauthUserInfo) {
+        this.nickname = oauthUserInfo.nickname();
+        this.picture = oauthUserInfo.picture();
+        this.deleted = false;
     }
 }

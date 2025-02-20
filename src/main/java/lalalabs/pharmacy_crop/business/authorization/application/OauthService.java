@@ -1,5 +1,6 @@
 package lalalabs.pharmacy_crop.business.authorization.application;
 
+import jakarta.transaction.Transactional;
 import lalalabs.pharmacy_crop.business.authorization.api.dto.JwtTokensDto;
 import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.domain.model.OauthServiceType;
@@ -20,15 +21,28 @@ public class OauthService {
     private final OauthTokenRepository oauthTokenRepository;
     private final TokenService tokenService;
 
+    @Transactional
     public JwtTokensDto login(OauthServiceType oauthServiceType, OauthTokenDto oauthToken) {
         OIDCDecodePayload oidcPayload = oauthHelperComposite.decode(oauthServiceType, oauthToken);
         String oauthId = oidcPayload.sub();
 
         OauthUser oauthUser = userRepository.findByOauthId(oauthId, oauthServiceType)
                 .orElseGet(() -> signUpUser(oauthServiceType, oauthToken));
+
+        restoreWithdrawUser(oauthServiceType, oauthToken, oauthUser);
+
         oauthTokenRepository.save(oauthToken.toEntity(oauthUser.getId()));
 
         return tokenService.issueTokensByUserId(oauthUser.getId());
+    }
+
+    private void restoreWithdrawUser(OauthServiceType oauthServiceType, OauthTokenDto oauthToken, OauthUser oauthUser) {
+        if (oauthUser.getDeleted()) {
+            OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType, oauthToken);
+
+            oauthUser.restore(oauthUserInfo);
+            userRepository.save(oauthUser);
+        }
     }
 
     private OauthUser signUpUser(OauthServiceType oauthServiceType, OauthTokenDto oauthTokenDto) {
