@@ -9,9 +9,11 @@ import lalalabs.pharmacy_crop.business.authorization.domain.model.dto.OauthUserI
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OauthService {
 
@@ -41,6 +43,8 @@ public class OauthService {
     }
 
     private OauthUser signUpUser(OauthServiceType oauthServiceType, OauthTokenDto oauthTokenDto) {
+        log.info("Sign up new user with oauth service type: {}", oauthServiceType);
+
         OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType,
                 oauthTokenDto);
         OauthUser newUser = OauthUser.create(oauthUserInfo);
