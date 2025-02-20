@@ -31,6 +31,10 @@ public class OauthService {
 
         restoreWithdrawUser(oauthServiceType, oauthToken, oauthUser);
 
+        if (oauthTokenRepository.existsById(oauthUser.getId())) {
+            oauthTokenRepository.deleteById(oauthUser.getId());
+        }
+
         oauthTokenRepository.save(oauthToken.toEntity(oauthUser.getId()));
 
         return tokenService.issueTokensByUserId(oauthUser.getId());
@@ -41,7 +45,7 @@ public class OauthService {
             OauthUserInfoDto oauthUserInfo = oauthHelperComposite.fetchUserInfo(oauthServiceType, oauthToken);
 
             oauthUser.restore(oauthUserInfo);
-            userRepository.save(oauthUser);
+            userRepository.flush();
         }
     }
 
