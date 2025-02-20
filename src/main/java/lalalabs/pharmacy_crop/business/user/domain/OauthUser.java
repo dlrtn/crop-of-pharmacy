@@ -42,6 +42,9 @@ public class OauthUser extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     public static OauthUser create(OauthUserInfoDto oauthUserInfoDto) {
         return OauthUser.builder()
                 .oauthId(new OauthId(oauthUserInfoDto.oauthServerId(),
@@ -49,6 +52,7 @@ public class OauthUser extends BaseTimeEntity {
                 .nickname(oauthUserInfoDto.nickname())
                 .picture(oauthUserInfoDto.picture())
                 .role(Role.ROLE_MEMBER)
+                .deleted(false)
                 .build();
     }
 
@@ -57,14 +61,20 @@ public class OauthUser extends BaseTimeEntity {
                 .usernamePassword(new UsernamePassword(request.username(), encodedPassword))
                 .nickname(request.nickname())
                 .role(Role.ROLE_ADMIN)
+                .deleted(false)
                 .build();
     }
 
-    public void updateNickname(String nickname) {
+    public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
 
     public void changeAuthority(Role authority) {
         this.role = authority;
+    }
+
+    public void delete() {
+        this.nickname = "탈퇴한 사용자";
+        this.deleted = true;
     }
 }

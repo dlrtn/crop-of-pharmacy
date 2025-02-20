@@ -1,5 +1,7 @@
 package lalalabs.pharmacy_crop.business.user.application;
 
+import jakarta.transaction.Transactional;
+import lalalabs.pharmacy_crop.business.user.api.dto.UpdateUserRequest;
 import lalalabs.pharmacy_crop.business.user.api.dto.UserDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
@@ -19,6 +21,7 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserQueryService userQueryService;
+    private final UserCommandService userCommandService;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -37,5 +40,19 @@ public class UserService implements UserDetailsService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdDate").descending());
 
         return userQueryService.findAll(pageable);
+    }
+
+    @Transactional
+    public void withdrawUser(OauthUser user) {
+        user.delete();
+
+        userCommandService.save(user);
+    }
+
+    @Transactional
+    public void updateUserNickname(OauthUser user, UpdateUserRequest updateUserRequest) {
+        user.changeNickname(updateUserRequest.nickname());
+
+        userCommandService.save(user);
     }
 }

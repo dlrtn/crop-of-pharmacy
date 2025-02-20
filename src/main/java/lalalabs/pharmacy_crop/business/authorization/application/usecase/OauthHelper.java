@@ -13,5 +13,5 @@ public interface OauthHelper {
 
     OauthUserInfoDto fetchUserInfo(OauthTokenDto accessToken);
 
-    void unlink(String oauthId);
+    void unlink(String oauthId, OauthTokenDto oauthTokenDto);
 }

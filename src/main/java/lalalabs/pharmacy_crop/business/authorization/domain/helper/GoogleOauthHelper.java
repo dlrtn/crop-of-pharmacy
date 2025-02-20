@@ -36,12 +36,9 @@ public class GoogleOauthHelper implements OauthHelper {
         return googleApiClient.fetchUserInfo(oauthTokenDto);
     }
 
-    public void unlink(String oauthId) {
-        OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(oauthId)
-                .orElseThrow(() -> new InvalidOauthTokenException(oauthId));
-
-        googleApiClient.unlink(oauthTokenEntity.getAccessToken());
-        oauthTokenRepository.delete(oauthTokenEntity);
+    public void unlink(String userId, OauthTokenDto oauthTokenDto) {
+        googleApiClient.unlink(oauthTokenDto.getAccessToken());
+        oauthTokenRepository.deleteById(userId);
     }
 
     @SneakyThrows

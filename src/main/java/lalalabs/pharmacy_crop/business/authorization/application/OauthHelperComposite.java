@@ -40,7 +40,7 @@ public class OauthHelperComposite {
         return getHelper(serviceType).fetchUserInfo(accessToken);
     }
 
-    public void unlink(OauthUser user) {
-        getHelper(user.getOauthId().getOauthServiceType()).unlink(user.getId());
+    public void unlink(OauthUser user, OauthTokenDto oauthTokenDto) {
+        getHelper(user.getOauthId().getOauthServiceType()).unlink(user.getId(), oauthTokenDto);
     }
 }

@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lalalabs.pharmacy_crop.business.authorization.api.docs.ApiDescriptions;
+import lalalabs.pharmacy_crop.business.authorization.api.dto.OauthTokenDto;
 import lalalabs.pharmacy_crop.business.authorization.application.OauthService;
 import lalalabs.pharmacy_crop.business.user.api.dto.UpdateUserRequest;
 import lalalabs.pharmacy_crop.business.user.api.dto.UserDto;
-import lalalabs.pharmacy_crop.business.user.application.UserCommandService;
 import lalalabs.pharmacy_crop.business.user.application.UserQueryService;
 import lalalabs.pharmacy_crop.business.user.application.UserService;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserCommandService userCommandService;
     private final OauthService oauthService;
     private final UserQueryService userQueryService;
     private final UserService userService;
@@ -37,7 +36,7 @@ public class UserController {
             @AuthenticationPrincipal OauthUserDetails oauthUser,
             @RequestBody UpdateUserRequest nickname
     ) {
-        userCommandService.updateUserNickname(oauthUser.getUser(), nickname);
+        userService.updateUserNickname(oauthUser.getUser(), nickname);
 
         return ResponseEntity.ok().build();
     }
@@ -48,9 +47,11 @@ public class UserController {
             description = ApiDescriptions.WITHDRAW_SOCIAL_USER_DESCRIPTION
     )
     @DeleteMapping("/withdraw")
-    public ResponseEntity<ApiResponse> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser) {
-        userCommandService.withdrawUser(oauthUser.getUser());
-        oauthService.unlink(oauthUser.getUser());
+    public ResponseEntity<ApiResponse> withdrawUser(@AuthenticationPrincipal OauthUserDetails oauthUser,
+                                                    @RequestBody OauthTokenDto oauthTokenDto
+    ) {
+        userService.withdrawUser(oauthUser.getUser());
+        oauthService.unlink(oauthUser.getUser(), oauthTokenDto);
 
         return ResponseEntity.ok().body(SuccessResponse.of());
     }

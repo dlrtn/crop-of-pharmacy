@@ -35,16 +35,13 @@ public class KakaoOauthHelper implements OauthHelper {
         return kakaoOauthClient.fetchUserInfo(oauthTokenDto.getAccessToken());
     }
 
-    public void unlink(String userId) {
-        OauthTokenEntity oauthTokenEntity = oauthTokenRepository.findById(userId)
-                .orElseThrow(() -> new InvalidOauthTokenException(userId));
-
-        KakaoUnlinkResponse response = kakaoOauthClient.unlink(oauthTokenEntity.getAccessToken());
+    public void unlink(String userId, OauthTokenDto oauthTokenDto) {
+        KakaoUnlinkResponse response = kakaoOauthClient.unlink(oauthTokenDto.getAccessToken());
         if (!Objects.equals(response.id(), userId)) {
             throw new KakaoUnlinkFailedException(userId);
         }
 
-        oauthTokenRepository.delete(oauthTokenEntity);
+        oauthTokenRepository.deleteById(userId);
     }
 
     public OIDCDecodePayload decode(OauthTokenDto kakaoToken) {

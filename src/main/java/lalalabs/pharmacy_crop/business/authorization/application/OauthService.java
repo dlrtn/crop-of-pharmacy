@@ -39,8 +39,8 @@ public class OauthService {
         return userRepository.save(newUser);
     }
 
-    public void unlink(OauthUser user) {
-        oauthHelperComposite.unlink(user);
+    public void unlink(OauthUser user, OauthTokenDto oauthTokenDto) {
+        oauthHelperComposite.unlink(user, oauthTokenDto);
     }
 
     public JwtTokensDto refreshToken(JwtTokensDto jwtTokensDto) {

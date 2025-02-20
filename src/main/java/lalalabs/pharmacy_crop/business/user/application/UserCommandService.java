@@ -14,14 +14,7 @@ public class UserCommandService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void updateUserNickname(OauthUser user, UpdateUserRequest updateUserRequest) {
-        user.updateNickname(updateUserRequest.nickname());
-
+    public void save(OauthUser user) {
         userRepository.save(user);
-    }
-
-    public void withdrawUser(OauthUser user) {
-        userRepository.delete(user);
-        // Todo: delete user's related data
     }
 }
