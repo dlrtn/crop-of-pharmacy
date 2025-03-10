@@ -35,7 +35,7 @@ public class AnnouncementService {
             announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT));
         }
 
-        // pushNotificationSender.sendAnnouncementPushNotification();
+        pushNotificationSender.sendAnnouncementPushNotification();
 
         announcementRepository.save(announcement);
     }
