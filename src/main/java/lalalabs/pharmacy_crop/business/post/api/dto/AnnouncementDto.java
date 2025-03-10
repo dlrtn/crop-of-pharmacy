@@ -28,7 +28,7 @@ public class AnnouncementDto {
                 .id(announcement.getId())
                 .title(announcement.getTitle())
                 .content(announcement.getContent())
-                .picture("http://1.234.83.196:8080" + announcement.getPicturePath().substring(4))
+                .picture(String.format("http://1.234.83.196:8080%s", announcement.getPicturePath() != null ? announcement.getPicturePath().substring(4) : null))
                 .createdAt(TimeUtils.convertToDateFormat(announcement.getCreatedDate()))
                 .build();
     }
