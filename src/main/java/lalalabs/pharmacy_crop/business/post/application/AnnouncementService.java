@@ -31,7 +31,9 @@ public class AnnouncementService {
     public void create(OauthUser user, CommandAnnouncementRequest request, MultipartFile file) {
         Announcement announcement = Announcement.create(user.getId(), request);
 
-        uploadImageFileIfNotNull(file == null, announcement, file);
+        if (file != null) {
+            announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT));
+        }
 
         // pushNotificationSender.sendAnnouncementPushNotification();
 
@@ -46,16 +48,13 @@ public class AnnouncementService {
             announcement.update(request);
         }
 
-        uploadImageFileIfNotNull(file != null, announcement, file);
+        if (file != null) {
+            announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT));
+        }
 
         announcementRepository.save(announcement);
     }
 
-    private void uploadImageFileIfNotNull(boolean file, Announcement announcement, MultipartFile file1) {
-        if (file) {
-            announcement.updatePicturePath(localFileUploader.upload(file1, DirectoryType.ANNOUNCEMENT));
-        }
-    }
 
     @Transactional
     public void delete(Long announcementId) {
