@@ -33,7 +33,7 @@ public class AnnouncementService {
 
         uploadImageFileIfNotNull(file == null, announcement, file);
 
-        pushNotificationSender.sendAnnouncementPushNotification();
+        // pushNotificationSender.sendAnnouncementPushNotification();
 
         announcementRepository.save(announcement);
     }
