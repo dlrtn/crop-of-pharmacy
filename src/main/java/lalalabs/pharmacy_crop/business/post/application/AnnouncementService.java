@@ -8,6 +8,8 @@ import lalalabs.pharmacy_crop.business.post.domain.AnnouncementProduct;
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.AnnouncementProductRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.AnnouncementRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
+import lalalabs.pharmacy_crop.business.product.domain.Product;
+import lalalabs.pharmacy_crop.business.product.infrastructure.ProductRepository;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
 import lalalabs.pharmacy_crop.common.file.DirectoryType;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class AnnouncementService {
     private final LocalFileUploader localFileUploader;
     private final AnnouncementRepository announcementRepository;
     private final AnnouncementProductRepository announcementProductRepository;
+    private final ProductRepository productRepository;
     private final AnnouncementPushNotificationSender pushNotificationSender;
 
     @Transactional
@@ -79,11 +82,21 @@ public class AnnouncementService {
     public List<AnnouncementDto> read(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        return announcementRepository.findAll(pageable).getContent().stream().map(AnnouncementDto::fromDomain).toList();
+        return announcementRepository.findAll(pageable).getContent().stream().map(AnnouncementDto::from).toList();
     }
 
     public AnnouncementDto readById(Long announcementId) {
-        return announcementRepository.findById(announcementId).map(AnnouncementDto::fromDomain)
-                .orElseThrow(() -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
+        Announcement announcement = announcementRepository.findById(announcementId).orElseThrow(
+                () -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
+
+        List<AnnouncementProduct> announcementProducts = announcementProductRepository.findByAnnouncementId(announcementId);
+
+        List<Product> products = productRepository.findAllById(
+                announcementProducts.stream().map(AnnouncementProduct::getProductId).toList()
+        );
+
+        return AnnouncementDto.fromDomain(announcement, products);
+
+
     }
 }
