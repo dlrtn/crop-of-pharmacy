@@ -3,10 +3,9 @@ package lalalabs.pharmacy_crop.business.post.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
+import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.application.AnnouncementService;
-import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUserDetails;
 import lalalabs.pharmacy_crop.common.response.ApiResponse;
 import lalalabs.pharmacy_crop.common.response.SuccessResponse;
@@ -17,15 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
 
 @Slf4j
 @Tag(name = "공지사항", description = "공지사항을 생성, 조회, 수정, 삭제합니다.")
@@ -67,7 +62,7 @@ public class AnnouncementController {
             @Parameter(name = "file", description = "파일", required = true) @RequestPart("file") MultipartFile file,
             @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
             @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content,
-            @Parameter(name = "productIds", description = "제품 코드") @RequestPart(value = "productId", required = false) List<String> productIds
+            @Parameter(name = "productIds", description = "제품 코드") @RequestParam(value = "productIds", required = false) List<String> productIds
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)
@@ -89,7 +84,7 @@ public class AnnouncementController {
             @Parameter(name = "file", description = "파일") @RequestPart(value = "file", required = false) MultipartFile file,
             @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
             @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content,
-            @Parameter(name = "productId", description = "제품 코드") @RequestPart(value = "productId", required = false) List<String> productIds
+            @Parameter(name = "productIds", description = "제품 코드") @RequestPart(value = "productIds", required = false) List<String> productIds
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)

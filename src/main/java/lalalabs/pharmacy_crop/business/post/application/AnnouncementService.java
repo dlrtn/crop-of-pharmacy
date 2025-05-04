@@ -44,6 +44,7 @@ public class AnnouncementService {
 
         if (request.getProductIds() != null) {
             for (String productId : request.getProductIds()) {
+                log.info("productId: {}", productId);
                 AnnouncementProduct announcementProduct = AnnouncementProduct.builder()
                         .announcementId(newAnnouncement.getId())
                         .productId(productId)
