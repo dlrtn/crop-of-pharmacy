@@ -32,22 +32,17 @@ public class Announcement extends BaseTimeEntity {
     @Column(name = "picture_path")
     private String picturePath;
 
-    @Column(name = "product_id")
-    private String productId;
-
     public static Announcement create(String userId, CommandAnnouncementRequest request) {
         return Announcement.builder()
                 .userId(userId)
                 .title(request.getTitle())
                 .content(request.getContent())
-                .productId(request.getProductId())
                 .build();
     }
 
     public void update(CommandAnnouncementRequest request) {
         this.title = request.getTitle() == null ? this.title : request.getTitle();
         this.content = request.getContent() == null ? this.content : request.getContent();
-        this.productId = request.getProductId() == null ? this.productId : request.getProductId();
     }
 
     public void updatePicturePath(String picturePath) {

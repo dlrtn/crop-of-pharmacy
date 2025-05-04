@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lalalabs.pharmacy_crop.business.post.api.dto.AnnouncementDto;
 import lalalabs.pharmacy_crop.business.post.api.dto.request.CommandAnnouncementRequest;
 import lalalabs.pharmacy_crop.business.post.domain.Announcement;
+import lalalabs.pharmacy_crop.business.post.domain.AnnouncementProduct;
+import lalalabs.pharmacy_crop.business.post.infrastructure.repository.AnnouncementProductRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.repository.AnnouncementRepository;
 import lalalabs.pharmacy_crop.business.post.infrastructure.upload.LocalFileUploader;
 import lalalabs.pharmacy_crop.business.user.domain.OauthUser;
@@ -25,6 +27,7 @@ public class AnnouncementService {
 
     private final LocalFileUploader localFileUploader;
     private final AnnouncementRepository announcementRepository;
+    private final AnnouncementProductRepository announcementProductRepository;
     private final AnnouncementPushNotificationSender pushNotificationSender;
 
     @Transactional
@@ -35,9 +38,20 @@ public class AnnouncementService {
             announcement.updatePicturePath(localFileUploader.upload(file, DirectoryType.ANNOUNCEMENT));
         }
 
-        pushNotificationSender.sendAnnouncementPushNotification();
+        // pushNotificationSender.sendAnnouncementPushNotification();
 
-        announcementRepository.save(announcement);
+        Announcement newAnnouncement = announcementRepository.save(announcement);
+
+        if (request.getProductIds() != null) {
+            for (String productId : request.getProductIds()) {
+                AnnouncementProduct announcementProduct = AnnouncementProduct.builder()
+                        .announcementId(newAnnouncement.getId())
+                        .productId(productId)
+                        .build();
+
+                announcementProductRepository.save(announcementProduct);
+            }
+        }
     }
 
     public void update(Long announcementId, CommandAnnouncementRequest request, MultipartFile file) {
