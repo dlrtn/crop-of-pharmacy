@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -71,6 +72,17 @@ public class AnnouncementService {
         }
 
         announcementRepository.save(announcement);
+
+        if (Objects.requireNonNull(request).getProductIds() != null) {
+            for (String productId : request.getProductIds()) {
+                AnnouncementProduct announcementProduct = AnnouncementProduct.builder()
+                        .announcementId(announcement.getId())
+                        .productId(productId)
+                        .build();
+
+                announcementProductRepository.save(announcementProduct);
+            }
+        }
     }
 
 

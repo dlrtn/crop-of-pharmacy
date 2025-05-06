@@ -84,7 +84,7 @@ public class AnnouncementController {
             @Parameter(name = "file", description = "파일") @RequestPart(value = "file", required = false) MultipartFile file,
             @Parameter(name = "title", description = "제목", required = true) @RequestPart("title") String title,
             @Parameter(name = "content", description = "내용", required = true) @RequestPart("content") String content,
-            @Parameter(name = "productIds", description = "제품 코드") @RequestPart(value = "productIds", required = false) List<String> productIds
+            @Parameter(name = "productIds", description = "제품 코드") @RequestParam(value = "productIds", required = false) List<String> productIds
     ) {
         CommandAnnouncementRequest request = CommandAnnouncementRequest.builder()
                 .title(title)
