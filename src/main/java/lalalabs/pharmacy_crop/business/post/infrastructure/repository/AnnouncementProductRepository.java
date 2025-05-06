@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface AnnouncementProductRepository extends JpaRepository<AnnouncementProduct, Integer> {
     List<AnnouncementProduct> findByAnnouncementId(Long announcementId);
+
+    void deleteByAnnouncementId(Long announcementId);
 }

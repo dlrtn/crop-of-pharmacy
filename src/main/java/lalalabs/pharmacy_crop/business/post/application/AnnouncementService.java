@@ -73,6 +73,8 @@ public class AnnouncementService {
 
         announcementRepository.save(announcement);
 
+        announcementProductRepository.deleteByAnnouncementId(announcementId);
+
         if (Objects.requireNonNull(request).getProductIds() != null) {
             for (String productId : request.getProductIds()) {
                 AnnouncementProduct announcementProduct = AnnouncementProduct.builder()
