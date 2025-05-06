@@ -59,6 +59,7 @@ public class AnnouncementService {
         }
     }
 
+    @Transactional
     public void update(Long announcementId, CommandAnnouncementRequest request, MultipartFile file) {
         Announcement announcement = announcementRepository.findById(announcementId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 공지사항이 존재하지 않습니다."));
