@@ -91,9 +91,11 @@ public class AnnouncementService {
 
         List<AnnouncementProduct> announcementProducts = announcementProductRepository.findByAnnouncementId(announcementId);
 
-        List<Product> products = productRepository.findAllById(
-                announcementProducts.stream().map(AnnouncementProduct::getProductId).toList()
-        );
+        List<Product> products = productRepository.findAllByProductCodeIn((
+                announcementProducts.stream()
+                        .map(AnnouncementProduct::getProductId)
+                        .toList()
+        ));
 
         return AnnouncementDto.fromDomain(announcement, products);
 
